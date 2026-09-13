@@ -1,0 +1,43 @@
+schema_version: 1
+id: maintenance-session
+name: Maintenance Session
+mirror_skill: maintenance-session
+description: "Inspect project health, diagnose drift, and close maintenance gaps from an isolated worktree. gap-analysis runs with --dalio --converge --fix at end of session. Mirrored by skill: ~/.dev-os/.claude/skills/maintenance-session/SKILL.md"
+when_to_use: "Use for scheduled project hygiene — typically weekly or after a sprint. Covers intake preflight, project status, health signals, doc sync, context audit, and a full gap-analysis pass. Distinct from repair-session (reactive: something is broken) and convergence (targeted: close known gaps from a report). Choose maintenance-session when: you want a full proactive sweep, nothing is known to be broken, and you want docs/cleanup included."
+category: maintenance
+work_intake_policy: runtime-aware
+skills:
+  - {name: work-intake-preflight, args: "--auto"}
+  - worktrees
+  - checkpoint
+  - worktree-sessions
+  - project-status
+  - health
+  - {name: work-intake-reconcile, args: "--check"}
+  - context-surface-audit
+  - docs-coverage-audit
+  - docs-sync
+  - docs-verify
+  - audit-docs
+  - {name: project-artifacts-audit, args: "--apply --yes"}
+  - {name: gap-analysis, args: "--dalio --converge --fix"}
+  - {name: commit, args: "--all"}
+  - {name: commit, args: "--stage-only"}
+  - summarize
+  - project-cleanup
+confirm: false
+model_route: standard
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+intent_keywords:
+  - maintenance
+  - health
+  - stale
+  - gaps
+source_doc: profiles/general/workflows/pipelines/maintenance-session.md

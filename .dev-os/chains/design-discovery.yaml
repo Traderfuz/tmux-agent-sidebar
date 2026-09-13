@@ -1,0 +1,39 @@
+schema_version: 1
+id: design-discovery
+name: Design Discovery
+mirror_skill: design-discovery
+description: "Shape a new UI direction before implementation by mapping journeys, drafting visual concepts, generating a design system, and validating the design baseline. Mirrored by skill: ~/.dev-os/.claude/skills/design-discovery/SKILL.md"
+category: development
+work_intake_policy: runtime-aware
+skills:
+  - { name: work-intake-preflight, args: "--auto" }
+  - worktrees
+  - checkpoint
+  - worktree-sessions
+  - ui-journey-audit
+  - frontend-design
+  - ai-design-draft
+  - ui-superdesign
+  - ui-design-system
+  - ui-review
+  - {name: commit, args: "--all"}
+  - {name: commit, args: "--stage-only"}
+confirm: false
+model_route: standard
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+intent_keywords:
+  - design discovery
+  - design this page
+  - create visual direction
+  - plan ui design
+  - design before implementation
+  - create design baseline
+  - generate design system from brief
+source_doc: docs/guides/chains.md

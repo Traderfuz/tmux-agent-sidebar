@@ -1,0 +1,43 @@
+schema_version: 1
+id: post-deploy-qa
+name: Post-Deploy QA
+mirror_skill: post-deploy-qa
+description: "Live QA audit from an isolated worktree of a deployed or staging web app — exercises real flows, finds bugs via site-audit and functional testing via site-audit-tester, then produces structured issue documentation, closes matching QA debt from dogfood manifest evidence, finalizes evidence-backed user docs, and produces a verified summary. Runs after a deploy to confirm the production surface matches expected behavior. Distinct from design-qa (which runs against a local dev server) and e2e (which runs automated Playwright tests). Mirrored by skill: ~/.dev-os/.claude/skills/post-deploy-qa/SKILL.md"
+category: testing
+work_intake_policy: runtime-aware
+confirm: false
+model_route: standard
+skills:
+  - {name: work-intake-preflight, args: "--auto"}
+  - worktrees
+  - checkpoint
+  - worktree-sessions
+  - site-audit
+  - site-audit-tester
+  - dogfood
+  - devos-verify
+  - user-facing-docs
+  - docs-sync
+  - audit-docs
+  - {name: commit, args: "--all"}
+  - {name: commit, args: "--stage-only"}
+  - summarize
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+intent_keywords:
+  - post deploy qa
+  - live qa
+  - staging qa
+  - qa deployed app
+  - test deployed site
+  - audit live app
+  - production qa
+  - smoke test production
+  - test the live site
+source_doc: docs/guides/chains.md

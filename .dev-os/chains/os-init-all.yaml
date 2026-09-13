@@ -1,0 +1,32 @@
+schema_version: 1
+id: os-init-all
+name: Initialize All OSes
+mirror_skill: os-init-all
+description: >-
+  Initialize every installed DevOS OS package in one optimize-ordered run. Detect
+  installed OSes, preserve Research → Marketing → Creative → Design dependencies,
+  run each canonical initializer, stop on failure, and verify the resulting fleet.
+category: maintenance
+work_intake_policy: runtime-aware
+confirm: true
+worktree_policy_exception: bootstrap
+model_route: standard
+skills:
+  - os-init-all
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+intent_keywords:
+  - initialize all oses
+  - init all oses
+  - bootstrap all oses
+  - initialize os fleet
+  - run all os init
+  - setup all operating systems
+  - os init all
+source_doc: docs/guides/chains.md

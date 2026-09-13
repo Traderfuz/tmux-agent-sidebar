@@ -1,0 +1,59 @@
+schema_version: 1
+id: build-slice
+name: Build Slice
+mirror_skill: build-slice
+description: "Implement, devos-verify, and review a product slice in an isolated worktree. Assumes an approved spec exists; if tasks.md is missing, runs the required gap-analysis --dalio --fix gate on the spec, creates tasks, verifies planning, then proceeds into implementation. work-intake-preflight preserves existing dirty work before worktrees; worktrees is the first branch-isolation step and owns branch/worktree creation; downstream steps consume the returned workspace identity and actual path instead of deriving layout. checkpoint runs after worktrees to preserve workspace identity and actual path for mid-chain recovery. Refreshes the codebase map before implementation. audit-deps output feeds knowledge-pull; architecture-creator runs after both for current dependency context. commit --grouped --local-only captures every safe non-ignored worktree change before devos-code-review; files that should not be committed must be ignored or explicitly excluded before this step. A second commit --grouped --local-only runs after sync-completed-work so task-sync or review-fix dirtiness is not carried into create-pr or merge-feature. create-pr owns branch push, upstream setup, pull request creation/update, and readiness handoff. IMPORTANT: Worktree cleanup is automatic inside merge-feature after a successful full merge. Cleanup remains omitted from this chain because the chain schema has no conditional execution; merge-feature owns cleanup so failed merges and MVP merges do not destroy active work. Mirrored by skill: ~/.dev-os/.claude/skills/build-slice/SKILL.md"
+category: development
+work_intake_policy: runtime-aware
+skills:
+  - {name: work-intake-preflight, args: "--auto"}
+  - worktrees
+  - checkpoint
+  - {name: gap-analysis, args: "--dalio --fix --spec <slug>"}
+  - {name: create-tasks, args: "--spec <slug>"}
+  - devos-verify
+  - {name: map, args: "--update"}
+  - audit-deps
+  - knowledge-pull
+  - architecture-creator
+  - ui-journey-audit
+  - implement-tasks
+  - ai-slop-polish
+  - ui-design-system-audit
+  - harden
+  - devos-security-review
+  - e2e
+  - test
+  - devos-verify
+  - user-facing-docs
+  - docs-sync
+  - audit-docs
+  - {name: commit, args: "--grouped --local-only"}
+  - devos-code-review
+  - {name: devos-agent, args: "architect-review"}
+  - {name: sync-completed-work, args: "--unattended"}
+  - {name: commit, args: "--grouped --local-only"}
+  - create-pr
+  - {name: sync-completed-work, args: "--unattended"}
+  - merge-feature
+  - {name: post-deploy-qa, args: "--record-debt-only --reason pending_no_url --source-chain build-slice"}
+  - {name: commit, args: "--stage-only"}
+  - summarize
+confirm: false
+model_route: standard
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+intent_keywords:
+  - build
+  - implement
+  - slice
+  - feature
+  - build slice
+  - worktree build
+source_doc: docs/guides/chains.md

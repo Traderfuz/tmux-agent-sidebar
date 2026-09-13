@@ -1,0 +1,36 @@
+schema_version: 1
+id: docs-full-maintenance
+name: Docs Full Maintenance
+description: Full documentation quality loop — inventory and create missing docs, repair structural drift, verify content accuracy against code, final audit, then summarize the work completed.
+category: maintenance
+work_intake_policy: runtime-aware
+skills:
+  - {name: work-intake-preflight, args: "--auto"}
+  - worktrees
+  - worktree-sessions
+  - docs-coverage-audit
+  - docs-sync
+  - docs-verify
+  - audit-docs
+  - {name: commit, args: "--all"}
+  - {name: commit, args: "--stage-only"}
+  - summarize
+confirm: false
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+intent_keywords:
+  - docs
+  - documentation
+  - maintenance
+  - audit
+  - coverage
+  - verify
+  - accuracy
+  - drift
+source_doc: profiles/general/workflows/pipelines/docs-full-maintenance.md

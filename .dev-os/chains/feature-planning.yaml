@@ -1,0 +1,42 @@
+schema_version: 1
+id: feature-planning
+name: Feature Planning
+mirror_skill: feature-planning
+description: "Design and task a feature — create an isolated worktree, refresh the codebase map, audit deps, pull knowledge, architect, write spec, close gaps (gap-analysis --dalio --converge --fix), then create tasks. Include cleanup polish before final summary. Mirrored by skill: ~/.dev-os/.claude/skills/feature-planning/SKILL.md"
+category: development
+work_intake_policy: runtime-aware
+skills:
+  - {name: work-intake-preflight, args: "--auto"}
+  - worktrees
+  - checkpoint
+  - worktree-sessions
+  - brainstorm
+  - {name: map, args: "--update"}
+  - shape-spec
+  - audit-deps
+  - knowledge-pull
+  - architecture-creator
+  - write-spec
+  - {name: gap-analysis, args: "--dalio --converge --fix"}
+  - devos-verify
+  - create-tasks
+  - ai-slop-polish
+  - {name: commit, args: "--all"}
+  - {name: commit, args: "--stage-only"}
+  - summarize
+confirm: false
+model_route: standard
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+intent_keywords:
+  - plan
+  - spec
+  - requirements
+  - tasks
+source_doc: docs/guides/chains.md

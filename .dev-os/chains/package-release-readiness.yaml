@@ -1,0 +1,44 @@
+schema_version: 1
+id: package-release-readiness
+name: Package Release Readiness
+mirror_skill: package-release-readiness
+description: "Verify a package, library, extension, GitHub Release, or DevOS OS package is ready to publish without publishing it. Runs project state, dependency, test, hardening, implementation, security, standards, and documentation gates, then finishes with release --dry-run. This is distinct from ship-safely, which deploys apps/servers, and release-onboarding, which sets up first-time release infrastructure. Mirrored by skill: ~/.dev-os/.claude/skills/package-release-readiness/SKILL.md"
+category: development
+work_intake_policy: runtime-aware
+confirm: false
+model_route: standard
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+skills:
+  - {name: work-intake-preflight, args: "--auto"}
+  - worktrees
+  - checkpoint
+  - worktree-sessions
+  - project-status
+  - audit-deps
+  - test
+  - harden
+  - implementation-review
+  - devos-security-review
+  - standards-validator
+  - docs-sync
+  - audit-docs
+  - {name: commit, args: "--all"}
+  - {name: release, args: "--dry-run"}
+intent_keywords:
+  - package release readiness
+  - prepare package release
+  - prepare release
+  - pre-release
+  - publish readiness
+  - package release check
+  - library release check
+  - release dry run
+  - cut release safely
+source_doc: product/specs/2026-05-25-package-release-readiness-chain/spec.md

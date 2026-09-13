@@ -1,0 +1,30 @@
+schema_version: 1
+id: docs-full-sync
+name: Docs Full Sync
+description: Sync project docs and refresh generated agent context from an isolated worktree.
+category: maintenance
+work_intake_policy: runtime-aware
+skills:
+  - {name: work-intake-preflight, args: "--auto"}
+  - worktrees
+  - worktree-sessions
+  - docs-sync
+  - generate-agents-md
+  - context-full-refresh
+  - {name: commit, args: "--all"}
+  - {name: commit, args: "--stage-only"}
+confirm: false
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+intent_keywords:
+  - docs
+  - documentation
+  - sync
+  - stale
+source_doc: profiles/general/workflows/pipelines/docs-full-sync.md

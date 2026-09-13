@@ -1,0 +1,37 @@
+schema_version: 1
+id: security-hardening
+name: Security Hardening
+mirror_skill: security-hardening
+description: "Full security posture pass from an isolated worktree — audit deps first to surface vulnerable packages, then review code with that context, validate standards, and devos-verify. Mirrored by skill: ~/.dev-os/.claude/skills/security-hardening/SKILL.md"
+category: development
+work_intake_policy: runtime-aware
+skills:
+  - {name: work-intake-preflight, args: "--auto"}
+  - worktrees
+  - checkpoint
+  - worktree-sessions
+  - audit-deps
+  - devos-security-review
+  - standards-validator
+  - {name: commit, args: "--all"}
+  - devos-verify
+  - pr-lifecycle
+  - {name: commit, args: "--stage-only"}
+confirm: false
+model_route: complex
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+intent_keywords:
+  - security
+  - security review
+  - security hardening
+  - audit deps
+  - harden security
+  - security pass
+source_doc: docs/guides/chains.md

@@ -1,0 +1,34 @@
+schema_version: 1
+id: os-update
+name: Update All OSes
+mirror_skill: os-update
+description: >-
+  Update every OS package installed in a project to its current source version.
+  Show per-OS drift first, sync each stale OS through its own delegate, invoke
+  post-update backfill through the skill surface, record a resumable ledger,
+  and verify the fleet. Project-scoped by default; --all-projects widens.
+category: maintenance
+work_intake_policy: runtime-aware
+confirm: true
+worktree_policy_exception: none
+model_route: standard
+skills:
+  - os-update
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+intent_keywords:
+  - update oses
+  - update all oses
+  - sync os versions
+  - update content oses
+  - refresh os installs
+  - os versions stale
+  - update os fleet
+  - os update project
+source_doc: docs/runbooks/os-version-sync.md

@@ -1,0 +1,29 @@
+schema_version: 1
+id: session-start
+name: Session Start
+description: Orient a new session — daily review, project status, and next-action routing.
+category: maintenance
+work_intake_policy: runtime-aware
+worktree_policy_exception: branch-only
+skills:
+  - daily-start
+  - project-status
+  - orchestrate
+  - {name: commit, args: "--stage-only"}
+confirm: false
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+intent_keywords:
+  - session start
+  - start session
+  - orient
+  - daily start
+  - what to work on
+  - begin work
+source_doc: docs/guides/chains.md

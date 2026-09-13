@@ -1,0 +1,50 @@
+schema_version: 1
+id: refactor
+name: Refactor
+mirror_skill: refactor
+description: >-
+  Improve code structure from an isolated worktree while preserving behavior — systematic refactoring with
+  scope detection, safety gates, complexity analysis, and full test verification
+  before and after. Runs harden and devos-security-review to catch regressions
+  introduced during restructuring.
+category: development
+work_intake_policy: runtime-aware
+confirm: false
+model_route: standard
+skills:
+  - {name: work-intake-preflight, args: "--auto"}
+  - worktrees
+  - checkpoint
+  - worktree-sessions
+  - {name: map, args: "--update"}
+  - improve-codebase-architecture
+  - refactor
+  - test
+  - harden
+  - devos-security-review
+  - devos-verify
+  - ai-slop-polish
+  - {name: commit, args: "--all"}
+  - devos-code-review
+  - pr-lifecycle
+  - {name: commit, args: "--stage-only"}
+  - summarize
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+intent_keywords:
+  - refactor
+  - clean up code
+  - restructure code
+  - improve code quality
+  - code cleanup
+  - refactoring pass
+  - technical debt
+  - simplify code
+  - restructure module
+source_doc: docs/guides/chains.md

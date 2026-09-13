@@ -1,0 +1,35 @@
+schema_version: 1
+id: post-merge-refresh
+name: Post-Merge Refresh
+description: Refresh docs, user flows, roadmap, and stale worktrees/branches after a feature merge from an isolated worktree.
+category: maintenance
+work_intake_policy: runtime-aware
+skills:
+  - {name: work-intake-preflight, args: "--auto"}
+  - worktrees
+  - checkpoint
+  - docs-sync
+  - audit-docs
+  - generate-agents-md
+  - generate-user-flows
+  - {name: post-deploy-qa, args: "--record-debt-only --reason pending_no_url --source-chain post-merge-refresh"}
+  - orchestrate
+  - {name: commit, args: "--stage-only"}
+  - summarize
+  - {name: commit, args: "--all"}
+confirm: false
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+intent_keywords:
+  - post-merge
+  - after merge
+  - refresh docs
+  - pmrq
+  - merge refresh
+source_doc: docs/guides/chains.md

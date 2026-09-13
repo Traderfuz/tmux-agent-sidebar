@@ -1,0 +1,296 @@
+profile: cli
+project: tmux-agent-sidebar
+version: 1.0.0
+devos_version: 1.132.15
+runtime_state_root: null
+mode: advisor
+model_posture: sonnet
+lifecycle: prelaunch
+orchestrator:
+  mode: triage
+ui:
+  status_widget:
+    fold_state: null
+    shortcut: null
+    row_budget: null
+    modules:
+      enabled: null
+      order: null
+    version: null
+providers:
+  default: claude
+  eco_tiers:
+    simple: claude-haiku-4-5-20251001
+    standard: claude-sonnet-4-6
+    complex: claude-opus-4-8
+  eco_threshold_simple: 20
+  eco_threshold_complex: 70
+agent_dispatch:
+  default_runtime: auto
+  implementation_runtime: auto
+  review_runtime: auto
+  probe_precedence:
+  - omp
+  - pi
+  - codex
+  - opencode
+  - hermes
+  - claude-headless
+  fallback_runtime: auto
+  probe_timeout_seconds: 5
+  require_diff_review_for_non_claude: true
+  context_budget_tokens: 16000
+  decision_telemetry: true
+  council:
+    default_mode: pipeline
+    phase_timeout_seconds: 900
+cli_clients:
+  active: auto
+  detection_precedence:
+  - pi
+  - omp
+  - claude-code
+  - codex
+  - opencode
+  - hermes
+model_connections:
+  claude-sonnet:
+    client: claude-code
+    connection: default
+    model: claude-sonnet-4-6
+  claude-opus:
+    client: claude-code
+    connection: default
+    model: claude-opus-4-8
+  claude-fable:
+    client: claude-code
+    connection: default
+    model: claude-fable-4-8
+  codex-standard:
+    client: codex
+    connection: default
+    model: default
+  pi-default:
+    client: pi
+    connection: default
+    model: default
+  omp-smol:
+    client: omp
+    connection: role
+    role: smol
+  omp-default:
+    client: omp
+    connection: role
+    role: default
+  omp-slow:
+    client: omp
+    connection: role
+    role: slow
+  omp-plan:
+    client: omp
+    connection: role
+    role: plan
+routing_modes:
+  eco:
+    simple: omp-smol
+    standard: omp-default
+    complex: omp-slow
+  agent:
+    simple: omp-smol
+    standard: omp-default
+    complex: omp-slow
+  advisor:
+    simple: omp-default
+    standard: omp-plan
+    complex: omp-slow
+  sonnet:
+    simple: claude-sonnet
+    standard: claude-sonnet
+    complex: claude-sonnet
+  opus:
+    simple: claude-opus
+    standard: claude-opus
+    complex: claude-opus
+  fable:
+    simple: claude-fable
+    standard: claude-fable
+    complex: claude-fable
+skill_routes:
+  quick-fix: simple
+  implement-tasks: standard
+  brainstorm: complex
+  clarify: complex
+  shape-spec: complex
+  architecture-creator: complex
+  write-spec: complex
+  create-tasks: complex
+  feature-planning: complex
+  knowledge-pull: complex
+  gap-analysis: complex
+  code-review: complex
+  devos-security-review: complex
+chain_routes:
+  feature-branch-lifecycle: standard
+  build-slice: standard
+  maintenance-session: standard
+  security-hardening: complex
+  project-audit: complex
+  autonomous-build-slice: standard
+  convergence: standard
+  cross-os-skill-audit: complex
+  deliver-product-slice: standard
+  deploy-onboarding: standard
+  design-discovery: standard
+  devos-onboarding: standard
+  feature-branch: standard
+  feature-planning: standard
+  full-project-onboarding: standard
+  go-live: complex
+  os-init-all: standard
+  os-update: standard
+  package-release-readiness: standard
+  parallel-build-slice: standard
+  post-deploy-qa: standard
+  pr-lifecycle: standard
+  project-complete: standard
+  refactor: standard
+  release-onboarding: standard
+  skill-authoring: standard
+  system-ops-visibility: standard
+visual_review_gate:
+  enabled: true
+  emit_events: true
+  auto_open: true
+  open_provider: auto
+  provider_order: browser-cdp,browser,lavish,lavish-in-orca,orca
+  open_max_artifacts: 1
+agent_routes:
+  implementer: standard
+  code-reviewer: complex
+  security-review: complex
+  architect-review: complex
+  performance-review: complex
+advisor_mode:
+  orchestrator: claude-sonnet-4-6
+  consultant: claude-fable-5
+  worker: claude-sonnet-4-6
+  max_consultant_calls: 2
+  max_worker_parallel: 3
+  max_consultant_context_tokens: 2000
+  worker_max_tokens: 4096
+  consultant_max_tokens: 8192
+  telemetry:
+    session_log: product/runtime/learnings-log.jsonl
+    event: advisor_session
+  sha_tool: auto
+  worker_wait_strategy: auto
+standards_injection:
+  enabled: true
+  mode: index
+  target: both
+  injection_mode: pointer
+  max_tokens: 12000
+  priority:
+  - global
+  - testing
+  - backend
+  - frontend
+  - deployment
+  - maintenance
+  - product
+  - integration
+  - architecture
+  - root
+  categories:
+    agents: false
+    skills: false
+bundles_injection:
+  enabled: true
+  mode: index
+  target: both
+  injection_mode: pointer
+project_brief:
+  enabled: true
+  guidance_path: docs/context/DEVOS_PROJECT_GUIDANCE.md
+  exclude: []
+codebase_map:
+  enabled: true
+  mode: index
+  target: both
+  injection_mode: pointer
+skills_index:
+  enabled: true
+  target: both
+  injection_mode: pointer
+chains_index:
+  enabled: true
+  target: both
+  injection_mode: pointer
+workflows_index:
+  enabled: true
+  target: both
+  injection_mode: pointer
+os_packages_index:
+  enabled: true
+  target: both
+  injection_mode: pointer
+session:
+  provider: herdr
+  fallback_order:
+  - herdr
+  - tmux
+  - orca
+  migration:
+    offer_restart: true
+    auto_restart_flag: --restart
+  required_capabilities:
+  - session
+  - command
+  - capture
+mcp_index:
+  enabled: true
+  target: both
+  injection_mode: pointer
+capture:
+  sync_on_capture: true
+  sync_timeout_seconds: 5
+  sync_targets:
+    github: true
+    flowstate: true
+    linear: true
+  github:
+    enabled: true
+    auto_push_types:
+    - idea
+    - bug
+    - feature
+    - issue
+    - future-work
+    completion_sync: true
+  flowstate:
+    enabled: true
+    auto_push_types:
+    - idea
+    - bug
+    - feature
+    - issue
+    - future-work
+    completion_sync: true
+  linear:
+    enabled: true
+    team_key: ''
+    project_id: ''
+    auto_push_types:
+    - idea
+    - bug
+    - feature
+    - issue
+    - future-work
+    completion_sync: true
+  sync_modes:
+    on_write: full
+    on_show: none
+    on_list: reconcile
+    on_next: reconcile
+    on_delete: completion
+    on_repair: reconcile

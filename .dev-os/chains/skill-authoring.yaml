@@ -1,0 +1,35 @@
+schema_version: 1
+id: skill-authoring
+name: Skill Authoring
+description: Create, validate, and publish a new DevOS skill end-to-end from an isolated worktree.
+category: development
+work_intake_policy: runtime-aware
+skills:
+  - {name: work-intake-preflight, args: "--auto"}
+  - worktrees
+  - checkpoint
+  - worktree-sessions
+  - bx-skill-creator
+  - skill-release-validator
+  - sync-skills
+  - audit-docs
+  - context-full-refresh
+  - {name: commit, args: "--all"}
+  - {name: commit, args: "--stage-only"}
+confirm: false
+model_route: standard
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+intent_keywords:
+  - new skill
+  - create skill
+  - author skill
+  - publish skill
+  - skill authoring
+source_doc: docs/guides/chains.md

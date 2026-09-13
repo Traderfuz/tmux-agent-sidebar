@@ -1,0 +1,67 @@
+schema_version: 1
+id: project-audit
+name: Project Audit
+description: Comprehensive isolated-worktree project audit chain covering state, runtime health, context drift, artifact coverage, standards, security, code quality, UI/UX, deployment readiness, and gap synthesis.
+category: maintenance
+work_intake_policy: runtime-aware
+skills:
+  - {name: work-intake-preflight, args: "--auto"}
+  - worktrees
+  - checkpoint
+  - worktree-sessions
+  - project-status
+  - triage
+  - health
+  - devos-doctor
+  - runtime-diagnostics
+  - context-surface-audit
+  - contract-drift-audit
+  - ownership-audit
+  - project-artifacts-audit
+  - optimize-process
+  - docs-coverage-audit
+  - docs-sync
+  - docs-verify
+  - audit-docs
+  - standards-validator
+  - profile-standards-inheritance-audit
+  - audit-deps
+  - devos-security-review
+  - test
+  - devos-verify
+  - devos-code-review
+  - implementation-review
+  - improve-codebase-architecture
+  - project-health-audit
+  - usability-audit
+  - ux-audit
+  - ui-design-system-audit
+  - ui-preflight
+  - predeploy-check
+  - {name: gap-analysis, args: "--dalio --converge --fix"}
+  - {name: commit, args: "--all"}
+  - {name: commit, args: "--stage-only"}
+  - summarize
+confirm: false
+model_route: complex
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+intent_keywords:
+  - project audit
+  - audit project
+  - process optimization
+  - optimize process
+  - comprehensive audit
+  - full audit
+  - project health audit
+  - audit everything
+  - readiness audit
+  - quality audit
+  - drift audit
+source_doc: docs/guides/chains.md
