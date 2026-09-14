@@ -1,0 +1,114 @@
+<!-- source: profile:general -->
+<!-- EXTRACTED — do not edit directly. Edit source at profiles/general/standards/global/golangci.yml and re-run profile-sync. -->
+<!-- source: profile:default -->
+<!-- EXTRACTED — do not edit directly. Edit source at profiles/default/standards/global/golangci.yml and re-run profile-sync. -->
+# Golangci-lint Strict Configuration Template for DevOS Projects
+# Copy this file to your project root as .golangci.yml
+
+linters:
+  # Enable all recommended linters for strict type checking
+  enable:
+    - govet              # Go vet analyzer
+    - staticcheck        # Go static analysis (go vet on steroids)
+    - gosimple           # Simplify code
+    - ineffassign        # Detect ineffectual assignments
+    - unused             # Check for unused code
+    - structcheck        # Find unused struct fields
+    - varcheck           # Find unused global variables
+    - typecheck          # Type-check Go code
+    - gosec              # Security issues
+    - errcheck           # Check unchecked errors
+    - gofmt              # Format code
+    - goimports          # Fix import order
+    - misspell           # Fix spelling mistakes
+    - gocritic           # Code style linter
+    - prealloc           # Find slice preallocations
+    - exportloopref      # Check for loopvar capturing
+    - nilerr             # Find errors that are never checked
+    - noctx              # Find functions that require context
+    - asciicheck         # Check for non-ASCII identifiers
+    - bodyclose          # Check whether HTTP response body is closed
+    - contextcheck       # Check for proper context usage
+    - durationcheck      # Check for duration calculation issues
+    - errorlint          # Find code that will cause problems with error wrapping
+    - exhaustive         # Check exhaustiveness of enum switch statements
+    - forcetypeassert    # Find forced type assertions
+    - makezero           # Find slice declarations with non-zero initial length
+    - nilnil             # Checks that there is no simultaneous return of nil error and nil value
+    - predeclared        # Finds code that shadows predeclared identifiers
+    - rowerrors          # Check whether ErrRow rows errors are checked
+    - sqlclosecheck      # Checks that sql.Rows and sql.Stmt are closed
+    - tenv               # Detect using t.SetEnv instead of os.Setenv
+    - unconvert          # Remove unnecessary type conversions
+    - unparam            # Detect unused function parameters
+
+linters-settings:
+  govet:
+    enable-all: true
+    disable:
+      - shadow  # Can be noisy, enable if needed
+
+  staticcheck:
+    checks: ["all"]
+    go: "1.21"
+
+  errcheck:
+    check-blank: true
+    check-type-assertions: true
+    check assignments: true
+
+  gocritic:
+    enabled-tags:
+      - diagnostic
+      - style
+      - performance
+      - experimental
+    disabled-checks:
+      - sloppyLen       # Can be opinionated
+      - whyNoLint       # Not useful in strict mode
+
+  goimports:
+    local-prefixes: ["github.com/your-org/"]
+
+  misspell:
+    locale: "US"
+    ignore-words:
+      - someword
+
+  prealloc:
+    simple-result: true
+
+  unused:
+    go: "1.21"
+
+run:
+  timeout: 5m
+  go: "1.21"
+  tests: true
+  skip-dirs:
+    - vendor
+    - third_party
+    - testdata
+    - examples
+    - Godeps
+    - builtin
+
+# Output settings
+output:
+  formats:
+    - format: colored-line-number
+  print-issued-lines: true
+  print-linter-name: true
+  uniq-by-line: true
+  sort-results: true
+
+# Severity settings (treat most as errors)
+severity:
+  default-severity: error
+  rules:
+    - linters:
+        - gosec
+      severity: warning
+    - linters:
+        - misspell
+      severity: warning

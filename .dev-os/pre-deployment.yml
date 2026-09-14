@@ -1,0 +1,5 @@
+# Pre-deployment validation configuration
+# Add every secret that must exist before local startup, deploy, or release checks pass.
+required_vars: []
+
+optional_vars: {}

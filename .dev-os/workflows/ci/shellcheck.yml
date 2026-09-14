@@ -1,0 +1,59 @@
+name: ShellCheck
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  shellcheck:
+    name: ShellCheck + Shell Safety
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install ShellCheck
+        run: sudo apt-get install -y shellcheck
+
+      - name: ShellCheck library files (error level)
+        run: |
+          if ls scripts/lib/*.sh 2>/dev/null | head -1 > /dev/null; then
+            shellcheck --severity=error \
+              --exclude=SC2034,SC1083,SC1078,SC1010,SC1090 \
+              scripts/lib/*.sh
+          else
+            echo "No library files found at scripts/lib/"
+          fi
+
+      - name: ShellCheck all scripts (warning level)
+        run: |
+          find scripts/ -name "*.sh" -not -path "scripts/lib/*" | while read -r f; do
+            shellcheck --severity=warning \
+              --exclude=SC2034,SC1090 \
+              "$f" || true
+          done
+
+      - name: Shebang correctness check
+        run: |
+          WRONG=()
+          while IFS= read -r f; do
+            first=$(head -1 "$f")
+            if [[ "$first" == "#!/bin/bash" ]]; then
+              WRONG+=("$f")
+            fi
+          done < <(find scripts/ -name "*.sh" 2>/dev/null)
+          if [ ${#WRONG[@]} -gt 0 ]; then
+            echo "::warning::Scripts using #!/bin/bash instead of #!/usr/bin/env bash:"
+            printf '  %s\n' "${WRONG[@]}"
+          fi
+          echo "✓ Shebang check complete"
+
+      - name: Hardcoded home path check
+        run: |
+          if grep -rn '/home/[^/]*/' --include="*.sh" scripts/ | grep -v '^\s*#\|example\|test\|spec'; then
+            echo "::warning::Hardcoded home paths detected. Use \$HOME or \$DEVOS_DIR instead."
+          fi
+          echo "✓ Home path check complete"

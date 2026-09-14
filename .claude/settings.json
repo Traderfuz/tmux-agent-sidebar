@@ -1,0 +1,44 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"\\$(git rev-parse --show-toplevel)/.claude/hooks/review-gate-stop-hook.sh\""
+          },
+          {
+            "type": "command",
+            "command": "bash \"\\$(git rev-parse --show-toplevel)/.claude/hooks/verification-gate.sh\""
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash|Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"\\$(git rev-parse --show-toplevel)/.claude/hooks/systematic-debugging-gate.sh\""
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"\\$(git rev-parse --show-toplevel)/.claude/hooks/visual-review-gate-posttooluse.sh\""
+          },
+          {
+            "type": "command",
+            "command": "bash \"\\$(git rev-parse --show-toplevel)/.claude/hooks/posttooluse-session-state-refresh.sh\""
+          }
+        ]
+      }
+    ]
+  }
+}

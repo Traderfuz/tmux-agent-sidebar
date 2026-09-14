@@ -6,3 +6,87 @@
 dist
 .astro
 node_modules
+
+# DevOS runtime artifacts (generated — do not track)
+# runtime/ is NOT ignored as a directory; scoped file patterns keep portable
+# context state trackable via explicit negations.
+.dev-os/runtime/*.json
+.dev-os/runtime/*.jsonl
+.dev-os/runtime/*.yml
+.dev-os/runtime/*.yaml
+.dev-os/runtime/*.txt
+.dev-os/runtime/*.ack
+.dev-os/runtime/*.db
+.dev-os/runtime/*-current
+.dev-os/runtime/sessions/
+.dev-os/runtime/checkpoints/
+.dev-os/runtime/session-mode
+.dev-os/runtime/DEVOS_*
+.dev-os/runtime/system-ops/
+!.dev-os/runtime/context-ledger.json
+# context-refresh-state.json is intentionally NOT negated: it is machine-local
+# runtime state, not portable context. A tracked copy would report whichever
+# machine last refreshed it and then remain stale after a clone.
+# init-sync-state.json is intentionally NOT negated: it is a per-machine sync
+# marker; clones must self-heal instead of trusting another machine's marker.
+.dev-os/state/
+.dev-os/logs/
+.dev-os/cache/
+.dev-os/patches/
+.dev-os/reports/
+.dev-os/sessions/
+.dev-os/checkpoints/
+# Recovery snapshots are durable by design. Ignore scratch entries inside each
+# recovery directory while keeping checkpoint, session, and closeout YAML trackable.
+.dev-os/recovery/*/*
+!.dev-os/recovery/*/checkpoint-*.yml
+!.dev-os/recovery/*/session-state.yml
+!.dev-os/recovery/*/ARCHIVED.yml
+.dev-os/profile
+.dev-os/README.md
+.dev-os/.claude/
+.dev-os/hooks/
+
+# DevOS standards: extracted standards are generated runtime artifacts.
+.dev-os/standards/auth/
+.dev-os/standards/backend/
+.dev-os/standards/cli/
+.dev-os/standards/deployment/
+.dev-os/standards/frontend/
+.dev-os/standards/integration/
+.dev-os/standards/architecture/
+.dev-os/standards/testing/
+.dev-os/standards/product/
+.dev-os/standards/.last-extracted
+.dev-os/standards/.profile-sync
+
+# Per-machine backup and conflict snapshots (generated — do not track)
+.dev-os/config.yml.bak*
+.gitignore.bak.*
+.dev-os/standards/profile/.conflicts/
+
+# Third-party agent runtime artifacts (generated — do not track)
+.omx/
+.omp/
+.worktrees/
+
+# Product runtime artifacts are nested; top-level *.json rules do not cover
+# child directories.
+product/runtime/session-journal/
+product/runtime/skill-surface-impact/
+product/runtime/agent-telemetry/
+product/runtime/pi-agents/
+product/runtime/accomplishments/
+product/runtime/*.json
+product/runtime/*.jsonl
+product/runtime/*.yml
+product/runtime/*.yaml
+product/runtime/*.db
+
+# Common dependency/build outputs (generated — do not track)
+node_modules/
+.astro/
+.wrangler/
+dist/
+build/
+target/
