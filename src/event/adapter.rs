@@ -2,7 +2,7 @@ use serde_json::Value;
 
 use super::AgentEvent;
 use crate::adapter;
-use crate::tmux::{CLAUDE_AGENT, CODEX_AGENT, OPENCODE_AGENT};
+use crate::tmux::{CLAUDE_AGENT, CODEX_AGENT, OMP_AGENT, OPENCODE_AGENT};
 
 /// Adapter that converts external agent events into internal `AgentEvent`.
 pub trait EventAdapter {
@@ -13,6 +13,7 @@ pub fn resolve_adapter(agent_name: &str) -> Option<Box<dyn EventAdapter>> {
     match agent_name {
         CLAUDE_AGENT => Some(Box::new(adapter::claude::ClaudeAdapter)),
         CODEX_AGENT => Some(Box::new(adapter::codex::CodexAdapter)),
+        OMP_AGENT => Some(Box::new(adapter::omp::OmpAdapter)),
         OPENCODE_AGENT => Some(Box::new(adapter::opencode::OpenCodeAdapter)),
         _ => None,
     }
@@ -39,6 +40,12 @@ mod tests {
     #[test]
     fn resolve_codex() {
         let adapter = resolve_adapter("codex");
+        assert!(adapter.is_some());
+    }
+
+    #[test]
+    fn resolve_omp() {
+        let adapter = resolve_adapter("omp");
         assert!(adapter.is_some());
     }
 
@@ -76,6 +83,18 @@ mod tests {
             .unwrap();
         match event {
             AgentEvent::UserPromptSubmit { agent, .. } => assert_eq!(agent, "codex"),
+            other => panic!("expected UserPromptSubmit, got {:?}", other),
+        }
+    }
+
+    #[test]
+    fn omp_adapter_sets_agent_omp() {
+        let adapter = resolve_adapter("omp").unwrap();
+        let event = adapter
+            .parse("user-prompt-submit", &json!({"prompt": "hi"}))
+            .unwrap();
+        match event {
+            AgentEvent::UserPromptSubmit { agent, .. } => assert_eq!(agent, "omp"),
             other => panic!("expected UserPromptSubmit, got {:?}", other),
         }
     }

@@ -7,7 +7,7 @@ pub const AGENT_OPTION: &str = "@agent-sidebar-default-agent";
 pub const BRANCH_PREFIX_OPTION: &str = "@agent-sidebar-branch-prefix";
 pub const WORKTREE_DIR_OPTION: &str = "@agent-sidebar-worktree-dir";
 
-pub const AGENTS: &[&str] = &["claude", "codex", "opencode"];
+pub const AGENTS: &[&str] = &["claude", "codex", "omp", "opencode"];
 pub const CLAUDE_MODES: &[&str] = &[
     "default",
     "plan",
@@ -16,11 +16,13 @@ pub const CLAUDE_MODES: &[&str] = &[
     "bypassPermissions",
 ];
 pub const CODEX_MODES: &[&str] = &["default", "auto", "bypassPermissions"];
+pub const OMP_MODES: &[&str] = &["default", "smol", "slow", "plan"];
 pub const OPENCODE_MODES: &[&str] = &["default"];
 
 pub fn modes_for(agent: &str) -> &'static [&'static str] {
     match agent {
         "codex" => CODEX_MODES,
+        "omp" => OMP_MODES,
         "opencode" => OPENCODE_MODES,
         _ => CLAUDE_MODES,
     }
@@ -43,6 +45,8 @@ pub fn agent_command(agent: &str, mode: &str) -> String {
         ("codex", "auto") => "codex --full-auto".into(),
         ("codex", "bypassPermissions") => "codex --dangerously-bypass-approvals-and-sandbox".into(),
         ("codex", _) => "codex".into(),
+        ("omp", "smol" | "slow" | "plan") => format!("omp --{mode}"),
+        ("omp", _) => "omp".into(),
         ("opencode", _) => "opencode".into(),
         (a, _) => a.to_string(),
     }
@@ -72,10 +76,14 @@ mod tests {
     }
 
     #[test]
+    fn modes_for_omp_returns_omp_modes() {
+        assert_eq!(modes_for("omp"), OMP_MODES);
+    }
+
+    #[test]
     fn modes_for_opencode_returns_opencode_modes() {
         assert_eq!(modes_for("opencode"), OPENCODE_MODES);
     }
-
     #[test]
     fn modes_for_unknown_agent_falls_back_to_claude_modes() {
         assert_eq!(modes_for("gemini"), CLAUDE_MODES);
@@ -105,6 +113,15 @@ mod tests {
             agent_command("codex", "bypassPermissions"),
             "codex --dangerously-bypass-approvals-and-sandbox"
         );
+    }
+
+    #[test]
+    fn agent_command_omp_variants() {
+        assert_eq!(agent_command("omp", "default"), "omp");
+        assert_eq!(agent_command("omp", "smol"), "omp --smol");
+        assert_eq!(agent_command("omp", "slow"), "omp --slow");
+        assert_eq!(agent_command("omp", "plan"), "omp --plan");
+        assert_eq!(agent_command("omp", ""), "omp");
     }
 
     #[test]
