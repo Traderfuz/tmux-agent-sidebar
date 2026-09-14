@@ -1,0 +1,32 @@
+schema_version: 1
+id: repair-session
+name: Repair Session
+mirror_skill: repair-session
+description: "Diagnose, fix, and devos-verify a broken work session. Mirrored by skill: ~/.dev-os/.claude/skills/repair-session/SKILL.md"
+when_to_use: "Use when something is actively broken — tests fail, the build is red, a hook errors, or a skill invocation throws unexpected output. Distinct from convergence (systematic gap closure from a report) and maintenance-session (proactive health audit). Choose repair-session when: you have a specific breakage in hand, you want to diagnose root cause and fix it now, and you need verification that the fix holds."
+category: recovery
+work_intake_policy: runtime-aware
+worktree_policy_exception: branch-only
+skills:
+  - {step_id: diagnose, name: diagnose-first, args: "", depends_on: "", parallel_safe: false, evidence_contract: "repair-step-check@v1:diagnose-first", excluded_scope: "mutation"}
+  - {step_id: hooks, name: repair-hooks, args: "", depends_on: diagnose, parallel_safe: false, evidence_contract: "repair-step-check@v1:repair-hooks", excluded_scope: "non-hook repair"}
+  - {step_id: investigate, name: systematic-debugging, args: "", depends_on: hooks, parallel_safe: false, evidence_contract: "repair-step-check@v1:systematic-debugging", excluded_scope: "mutation before root cause"}
+  - {step_id: fix, name: quick-fix, args: "", depends_on: investigate, parallel_safe: false, evidence_contract: "repair-step-check@v1:quick-fix", excluded_scope: "migrations, API changes, or work outside the approved repair"}
+  - {step_id: verify, name: devos-verify, args: "", depends_on: fix, parallel_safe: false, evidence_contract: "repair-step-check@v1:devos-verify", excluded_scope: "stale or unrelated verification"}
+  - {step_id: commit, name: commit, args: "--all", depends_on: verify, parallel_safe: false, evidence_contract: "repair-step-check@v1:commit", applicability: "closeout_mode=commit", excluded_scope: "stage-only closeout"}
+  - {step_id: stage, name: commit, args: "--stage-only", depends_on: verify, parallel_safe: false, evidence_contract: "repair-step-check@v1:commit", applicability: "closeout_mode=stage", excluded_scope: "commit closeout"}
+confirm: false
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+intent_keywords:
+  - repair
+  - debug
+  - broken
+  - fix
+source_doc: docs/guides/chains.md

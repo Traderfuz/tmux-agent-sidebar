@@ -1,0 +1,38 @@
+schema_version: 1
+id: design-system-hardening
+name: Design System Hardening
+mirror_skill: design-system-hardening
+description: "Audit, align, and devos-verify design-token adoption from an isolated worktree before release so UI changes stay consistent across brand, code, and visual regression baselines. Mirrored by skill: ~/.dev-os/.claude/skills/design-system-hardening/SKILL.md"
+category: testing
+work_intake_policy: runtime-aware
+skills:
+  - {name: work-intake-preflight, args: "--auto"}
+  - worktrees
+  - checkpoint
+  - worktree-sessions
+  - ui-design-system-audit
+  - ui-design-alignment
+  - ui-preflight
+  - dev-server
+  - visual-regression-qa
+  - {name: commit, args: "--all"}
+  - devos-verify
+  - {name: commit, args: "--stage-only"}
+confirm: true
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+intent_keywords:
+  - harden design system
+  - audit design system
+  - token adoption audit
+  - align design tokens
+  - fix design drift
+  - check visual consistency
+  - design system release check
+source_doc: docs/guides/chains.md

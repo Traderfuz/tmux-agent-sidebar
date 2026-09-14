@@ -1,0 +1,75 @@
+schema_version: 1
+id: parallel-build-slice
+name: Parallel Build Slice
+description: >-
+  Split a spec into independent implementation tracks, refresh the codebase map, pull current
+  knowledge, review architecture, create isolated worktrees for multi-agent execution, implement,
+  harden, test, devos-verify, refresh docs (user-facing-docs, docs-sync, audit-docs)
+  inside the worktree, commit all changes, and merge. Merge-dependent artifacts (codebase
+  map, user-flows, roadmap) are regenerated inline by merge-feature on merged main before
+  its single push — main stays clean afterward.
+  Use when several agents should work without file collisions.
+  The worktrees step provisions all tracks in one invocation with per-track suffixes
+  (for example, slug-track-1, slug-track-2) to prevent path collisions when multiple agents run concurrently.
+  Checkpoint runs after worktrees to preserve track paths for mid-chain recovery.
+  commit --grouped --local-only captures every safe non-ignored worktree change before devos-code-review; files that should not be
+  committed must be ignored or explicitly excluded before this step. A second commit --grouped --local-only runs after sync-completed-work
+  so task-sync or review-fix dirtiness is not carried into create-pr or merge-feature.
+  create-pr owns the branch push, upstream setup, pull request creation/update, and readiness handoff.
+  IMPORTANT: Worktree cleanup is automatic inside merge-feature after a successful full merge.
+  Cleanup remains omitted from this chain because the chain schema has no conditional execution;
+  failed merges and MVP merges preserve active track worktrees.
+category: development
+work_intake_policy: runtime-aware
+skills:
+  - {name: work-intake-preflight, args: "--auto"}
+  - worktrees
+  - orchestrate
+  - {name: map, args: "--update"}
+  - audit-deps
+  - knowledge-pull
+  - architecture-creator
+  - {name: gap-analysis, args: "--dalio --converge --fix"}
+  - create-tasks
+  - checkpoint
+  - worktree-sessions
+  - agent-dispatch
+  - implement-tasks
+  - ai-slop-polish
+  - harden
+  - devos-security-review
+  - test
+  - devos-verify
+  - user-facing-docs
+  - docs-sync
+  - audit-docs
+  - {name: commit, args: "--grouped --local-only"}
+  - devos-code-review
+  - {name: sync-completed-work, args: "--unattended"}
+  - {name: commit, args: "--grouped --local-only"}
+  - create-pr
+  - {name: sync-completed-work, args: "--unattended"}
+  - merge-feature
+  - {name: post-deploy-qa, args: "--record-debt-only --reason pending_no_url --source-chain parallel-build-slice"}
+  - orchestrate
+  - {name: commit, args: "--stage-only"}
+  - summarize
+confirm: false
+model_route: standard
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+intent_keywords:
+  - parallel build
+  - multi agent implementation
+  - worktree slice
+  - avoid collisions
+  - split into tracks
+  - worktree cleanup
+  - agent worktrees
+source_doc: product/gap-analysis/2026-05-21-chains-worktree-orchestration-dalio.md

@@ -1,0 +1,54 @@
+schema_version: 1
+id: go-live
+name: Go Live
+mirror_skill: go-live
+description: >-
+  Transition a project from pre-launch to live — runs the full quality gate
+  (predeploy-check, security, tests), deploys safely via ship-safely, updates
+  lifecycle posture, runs post-deploy QA, and finalizes evidence-backed user docs
+  before docs-sync/audit-docs. Distinct from ship-safely (which is the deploy
+  gate only) and package-release-readiness (which is for library/package
+  publishing without deployment).
+category: development
+work_intake_policy: runtime-aware
+confirm: true
+model_route: complex
+skills:
+  - {name: work-intake-preflight, args: "--auto"}
+  - worktrees
+  - checkpoint
+  - worktree-sessions
+  - predeploy-check
+  - harden
+  - devos-security-review
+  - test
+  - devos-verify
+  - db-migrate
+  - ship-safely
+  - go-live
+  - post-deploy-qa
+  - user-facing-docs
+  - docs-sync
+  - audit-docs
+  - {name: commit, args: "--all"}
+  - {name: commit, args: "--stage-only"}
+  - summarize
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+intent_keywords:
+  - go live
+  - launch
+  - ship to production
+  - deploy to prod
+  - take to production
+  - launch the app
+  - production deploy
+  - release to production
+  - make it live
+source_doc: docs/guides/chains.md

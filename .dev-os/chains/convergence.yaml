@@ -1,0 +1,42 @@
+schema_version: 1
+id: convergence
+name: Convergence
+mirror_skill: convergence
+description: "Close all gaps end-to-end. Invoke gap-analysis with --dalio --converge --fix, refresh codebase map before tasking, pull current knowledge, then use architecture-creator to resolve architectural gaps before implementation. Worktrees can isolate independent remediation tracks. Mirrored by skill: ~/.dev-os/.claude/skills/convergence/SKILL.md"
+when_to_use: "Use when a gap-analysis report already exists and you want to close ALL found gaps in one pipeline. Distinct from repair-session (which fixes a broken work session) and maintenance-session (which is a full health audit including docs/cleanup, not just gap closure). Choose convergence when: you know there are gaps, you want them closed systematically, and you have time for full architectural review."
+category: development
+work_intake_policy: runtime-aware
+skills:
+  - { name: work-intake-preflight, args: "--auto" }
+  - worktrees
+  - worktree-sessions
+  - { name: gap-analysis, args: "--dalio --converge --fix" }
+  - close-all-gaps
+  - { name: map, args: "--update" }
+  - knowledge-pull
+  - architecture-creator
+  - create-tasks
+  - worktrees
+  - implement-tasks
+  - { name: commit, args: "--all" }
+  - devos-verify
+  - pr-lifecycle
+  - {name: commit, args: "--stage-only"}
+confirm: false
+model_route: standard
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+intent_keywords:
+  - convergence
+  - close gaps
+  - gap closure
+  - converge
+  - fix all gaps
+  - gap analysis to implementation
+source_doc: docs/guides/chains.md

@@ -1,0 +1,33 @@
+schema_version: 1
+id: ship-safely
+name: Ship Safely
+mirror_skill: ship-safely
+description: Run deployment confidence checks before promoting an app/server release; produce product/runtime/deploy/latest.json metadata for downstream post-deploy QA. Ship-safely remains the deploy gate only; standalone user-facing web deploys must leave QA debt if no caller runs post-deploy-qa.
+category: operations
+work_intake_policy: runtime-aware
+worktree_policy_exception: deploy
+skills:
+  - test
+  - harden
+  - predeploy-check
+  - db-migrate
+  - deploy
+  - {name: commit, args: "--stage-only"}
+confirm: false
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+intent_keywords:
+  - ship
+  - ship safely
+  - gated deploy
+  - safe deploy
+  - deploy
+  - deployment preflight
+  - rollback deploy
+source_doc: profiles/general/workflows/pipelines/ship-safely.md

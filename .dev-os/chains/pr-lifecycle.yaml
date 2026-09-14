@@ -1,0 +1,46 @@
+schema_version: 1
+id: pr-lifecycle
+name: PR Lifecycle
+description: >-
+  Prepare an implemented branch for pull request review, choose flat versus stacked PR shape,
+  run verification and code-review gates, commit review-ready state, create or update the PR,
+  and report merge readiness without creating a new feature worktree.
+category: development
+work_intake_policy: runtime-aware
+confirm: false
+worktree_policy_exception: branch-only
+mirror_skill: pr-lifecycle
+model_route: standard
+skills:
+  - {name: work-intake-preflight, args: "--auto"}
+  - {name: sync-completed-work, args: "--unattended"}
+  - ai-slop-polish
+  - harden
+  - test
+  - devos-verify
+  - devos-code-review
+  - {name: sync-completed-work, args: "--unattended"}
+  - {name: commit, args: "--grouped --local-only"}
+  - create-pr
+  - {name: commit, args: "--stage-only"}
+  - summarize
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+intent_keywords:
+  - pr lifecycle
+  - pull request lifecycle
+  - pr sdl
+  - agentic pr
+  - prepare pr
+  - open pr with gates
+  - review ready pr
+  - create review ready pr
+  - pr readiness
+  - branch to pr
+source_doc: docs/guides/chains.md

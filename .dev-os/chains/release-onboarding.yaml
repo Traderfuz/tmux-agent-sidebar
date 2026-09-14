@@ -1,0 +1,36 @@
+schema_version: 1
+id: release-onboarding
+name: Release Onboarding
+mirror_skill: release-onboarding
+description: "First-time package/library release onboarding: initialize DevOS, audit dependencies, configure CI/CD release workflows, devos-verify tests and build, then publish only as the final onboarding action. For recurring pre-publish verification without publishing, use package-release-readiness. Mirrored by skill: ~/.dev-os/.claude/skills/release-onboarding/SKILL.md"
+category: development
+work_intake_policy: runtime-aware
+confirm: false
+worktree_policy_exception: bootstrap-release
+model_route: standard
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+skills:
+  - devos-init
+  - audit-deps
+  - ci-setup
+  - harden
+  - {name: commit, args: "--all"}
+  - release
+  - {name: commit, args: "--stage-only"}
+intent_keywords:
+  - release onboarding
+  - first release setup
+  - setup package release
+  - configure package publishing
+  - configure release workflow
+  - CI release setup
+  - onboard package release
+  - new package release project
+  - release infrastructure setup

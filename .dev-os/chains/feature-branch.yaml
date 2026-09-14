@@ -1,0 +1,66 @@
+schema_version: 1
+id: feature-branch
+name: Feature Branch
+mirror_skill: feature-branch
+description: "Full arc from planning to merge — spec, worktree, implement, and merge in one chain. Creates an isolated worktree as the first project-isolation step so each feature runs in its own directory from the start, enabling parallel agent work without file collisions. Checkpoint runs after worktrees to preserve workspace identity and actual path for mid-chain recovery. Refreshes the codebase map early, pulls current dependency knowledge, reviews architecture, and wires worktree-sessions for parallel execution after tasks exist. gap-analysis runs with --dalio --converge --fix after write-spec. commit --grouped --local-only captures every safe non-ignored worktree change before devos-code-review; files that should not be committed must be ignored or explicitly excluded before this step. A second commit --grouped --local-only runs after sync-completed-work so task-sync or review-fix dirtiness is not carried into create-pr or merge-feature. create-pr owns the branch push, upstream setup, pull request creation/update, and readiness handoff. IMPORTANT: Worktree cleanup is automatic inside merge-feature after a successful full merge. Cleanup remains intentionally omitted from this chain because the chain schema has no conditional execution and cleanup after a failed merge would destroy unmerged work. Mirrored by skill: ~/.dev-os/.claude/skills/feature-branch/SKILL.md"
+category: development
+work_intake_policy: runtime-aware
+skills:
+  - {name: work-intake-preflight, args: "--auto"}
+  - worktrees
+  - brainstorm
+  - checkpoint
+  - {name: map, args: "--update"}
+  - shape-spec
+  - audit-deps
+  - knowledge-pull
+  - architecture-creator
+  - ui-journey-audit
+  - frontend-design
+  - write-spec
+  - {name: gap-analysis, args: "--dalio --converge --fix"}
+  - create-tasks
+  - devos-verify
+  - worktree-sessions
+  - implement-tasks
+  - ai-slop-polish
+  - ui-design-system-audit
+  - harden
+  - devos-security-review
+  - e2e
+  - test
+  - devos-verify
+  - user-facing-docs
+  - docs-sync
+  - audit-docs
+  - {name: commit, args: "--grouped --local-only"}
+  - devos-code-review
+  - {name: devos-agent, args: "architect-review"}
+  - {name: sync-completed-work, args: "--unattended"}
+  - {name: commit, args: "--grouped --local-only"}
+  - create-pr
+  - {name: sync-completed-work, args: "--unattended"}
+  - merge-feature
+  - {name: post-deploy-qa, args: "--record-debt-only --reason pending_no_url --source-chain feature-branch"}
+  - {name: commit, args: "--stage-only"}
+  - summarize
+confirm: false
+model_route: standard
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+intent_keywords:
+  - feature lifecycle
+  - full feature
+  - plan and build
+  - spec to merge
+  - end to end feature
+  - worktree feature
+  - isolated feature
+  - multi agent feature
+source_doc: docs/guides/chains.md

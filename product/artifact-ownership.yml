@@ -1,0 +1,163 @@
+# Artifact Ownership Manifest
+# Project-local ownership contract for DevOS-generated context artifacts.
+
+schema_version: 1
+
+artifacts:
+  - path: docs/context/DEVOS_SKILLS_INDEX.json
+    class: index
+    owner: scripts/skills-registry.sh
+    upstream: [ .claude/skills/** ]
+    refresh: { command: "context-full-refresh --soft" }
+    verify: { command: "test -f docs/context/DEVOS_SKILLS_INDEX.json" }
+    stale_policy: { mode: lifecycle_verifier_v1 }
+  - path: docs/context/DEVOS_SKILLS_INDEX.md
+    class: generated_doc
+    owner: scripts/skills-registry.sh
+    upstream: [ .claude/skills/** ]
+    refresh: { command: "context-full-refresh --soft" }
+    verify: { command: "test -f docs/context/DEVOS_SKILLS_INDEX.md" }
+    stale_policy: { mode: lifecycle_verifier_v1 }
+  - path: docs/context/DEVOS_SKILLS_INDEX.schema.json
+    class: schema
+    owner: scripts/skills-registry.sh
+    upstream: [ .claude/skills/** ]
+    refresh: { command: "context-full-refresh --soft" }
+    verify: { command: "test -f docs/context/DEVOS_SKILLS_INDEX.schema.json" }
+    stale_policy: { mode: lifecycle_verifier_v1 }
+  - path: docs/context/DEVOS_CHAINS_INDEX.json
+    class: index
+    owner: scripts/chains-registry.sh
+    upstream: [ .dev-os/chains/** ]
+    refresh: { command: "context-full-refresh --soft" }
+    verify: { command: "test -f docs/context/DEVOS_CHAINS_INDEX.json" }
+    stale_policy: { mode: lifecycle_verifier_v1 }
+  - path: docs/context/DEVOS_CHAINS_INDEX.md
+    class: generated_doc
+    owner: scripts/chains-registry.sh
+    upstream: [ .dev-os/chains/** ]
+    refresh: { command: "context-full-refresh --soft" }
+    verify: { command: "test -f docs/context/DEVOS_CHAINS_INDEX.md" }
+    stale_policy: { mode: lifecycle_verifier_v1 }
+  - path: docs/context/DEVOS_CHAINS_INDEX.schema.json
+    class: schema
+    owner: scripts/chains-registry.sh
+    upstream: [ .dev-os/chains/** ]
+    refresh: { command: "context-full-refresh --soft" }
+    verify: { command: "test -f docs/context/DEVOS_CHAINS_INDEX.schema.json" }
+    stale_policy: { mode: lifecycle_verifier_v1 }
+  - path: docs/context/DEVOS_CAPABILITIES_INDEX.json
+    class: index
+    owner: scripts/lib/context-refresh.sh
+    upstream: [ .claude/skills/**, docs/context/DEVOS_SKILLS_INDEX.json ]
+    refresh: { command: "context-full-refresh --soft" }
+    verify: { command: "test -f docs/context/DEVOS_CAPABILITIES_INDEX.json" }
+    stale_policy: { mode: lifecycle_verifier_v1 }
+  - path: docs/context/DEVOS_CAPABILITIES_INDEX.md
+    class: generated_doc
+    owner: scripts/lib/context-refresh.sh
+    upstream: [ docs/context/DEVOS_CAPABILITIES_INDEX.json ]
+    refresh: { command: "context-full-refresh --soft" }
+    verify: { command: "test -f docs/context/DEVOS_CAPABILITIES_INDEX.md" }
+    stale_policy: { mode: lifecycle_verifier_v1 }
+  - path: docs/context/DEVOS_CONTEXT_BUNDLE.md
+    class: generated_doc
+    owner: scripts/lib/context-refresh.sh
+    upstream: [ CLAUDE.md, AGENTS.md, .claude/skills/** ]
+    refresh: { command: "context-full-refresh --soft" }
+    verify: { command: "test -f docs/context/DEVOS_CONTEXT_BUNDLE.md" }
+    stale_policy: { mode: lifecycle_verifier_v1 }
+  - path: docs/context/DEVOS_PUBLIC_SURFACE.md
+    class: generated_doc
+    owner: scripts/lib/context-refresh.sh
+    upstream: [ CLAUDE.md, AGENTS.md, docs/context/DEVOS_CAPABILITIES_INDEX.json ]
+    refresh: { command: "context-full-refresh --soft" }
+    verify: { command: "test -f docs/context/DEVOS_PUBLIC_SURFACE.md" }
+    stale_policy: { mode: lifecycle_verifier_v1 }
+  - path: docs/context/DEVOS_DEFERRED_TOOLS.md
+    class: generated_doc
+    owner: scripts/lib/context-refresh.sh
+    upstream: [ .dev-os/config.yml ]
+    refresh: { command: "context-full-refresh --soft" }
+    verify: { command: "test -f docs/context/DEVOS_DEFERRED_TOOLS.md" }
+    stale_policy: { mode: lifecycle_verifier_v1 }
+  - path: docs/context/DEVOS_WORKFLOWS_INDEX.md
+    class: generated_doc
+    owner: scripts/lib/context-refresh.sh
+    upstream: [ .dev-os/chains/**, docs/context/DEVOS_CHAINS_INDEX.json ]
+    refresh: { command: "context-full-refresh --soft" }
+    verify: { command: "test -f docs/context/DEVOS_WORKFLOWS_INDEX.md" }
+    stale_policy: { mode: lifecycle_verifier_v1 }
+  - path: docs/context/DEVOS_ARCHITECTURE.md
+    class: generated_doc
+    owner: scripts/lib/context-refresh.sh
+    upstream: [ .dev-os/config.yml, scripts/** ]
+    refresh: { command: "context-full-refresh --soft" }
+    verify: { command: "test -f docs/context/DEVOS_ARCHITECTURE.md" }
+    stale_policy: { mode: lifecycle_verifier_v1 }
+  - path: docs/context/DEVOS_USER_FLOWS_STALENESS.md
+    class: generated_doc
+    owner: scripts/lib/context-refresh.sh
+    upstream: [ docs/user-flows.md, docs/user-flows.manifest.json ]
+    refresh: { command: "context-full-refresh --soft" }
+    verify: { command: "test -f docs/context/DEVOS_USER_FLOWS_STALENESS.md" }
+    stale_policy: { mode: lifecycle_verifier_v1 }
+  - path: docs/context/DEVOS_OWNERSHIP_AUDIT.md
+    class: generated_doc
+    owner: scripts/lib/context-refresh.sh
+    upstream: [ product/artifact-ownership.yml, scripts/lib/artifact-ownership.sh ]
+    refresh: { command: "context-full-refresh --soft" }
+    verify: { command: "test -f docs/context/DEVOS_OWNERSHIP_AUDIT.md" }
+    stale_policy: { mode: lifecycle_verifier_v1 }
+  - path: docs/context/codebase-map.md
+    class: generated_doc
+    owner: scripts/lib/context-refresh.sh
+    upstream: [ src/**, Cargo.toml ]
+    refresh: { command: "map --update" }
+    verify: { command: "test -f docs/context/codebase-map.md" }
+    stale_policy: { mode: lifecycle_verifier_v1 }
+  - path: KIMI.md
+    class: generated_doc
+    owner: scripts/lib/cli-context-regen.sh
+    upstream: [ AGENTS.md ]
+    refresh: { command: "context-full-refresh --soft" }
+    verify: { command: "test -f KIMI.md" }
+    stale_policy: { mode: lifecycle_verifier_v1 }
+  - path: GEMINI.md
+    class: generated_doc
+    owner: scripts/lib/cli-context-regen.sh
+    upstream: [ AGENTS.md ]
+    refresh: { command: "context-full-refresh --soft" }
+    verify: { command: "test -f GEMINI.md" }
+    stale_policy: { mode: lifecycle_verifier_v1 }
+  - path: .dev-os/runtime/context-refresh-state.json
+    class: runtime_state
+    owner: scripts/lib/context-refresh.sh
+    upstream: [ CLAUDE.md, AGENTS.md, docs/context/** ]
+    refresh: { command: "context-full-refresh --soft" }
+    verify: { command: "bash -lc 'source \"$DEVOS_DIR/scripts/lib/runtime-state.sh\" && test -f \"$(devos_runtime_existing_path . .dev-os/runtime/context-refresh-state.json)\"'" }
+    stale_policy: { mode: lifecycle_verifier_v1 }
+  - path: .dev-os/reports/context-refresh-latest.md
+    class: runtime_state
+    owner: scripts/lib/context-refresh.sh
+    upstream: [ docs/context/** ]
+    refresh: { command: "context-full-refresh --soft" }
+    verify: { command: "test -f .dev-os/reports/context-refresh-latest.md" }
+    stale_policy: { mode: lifecycle_verifier_v1 }
+
+artifact_policy:
+  durable_stage:
+    - docs/context/DEVOS_*.md
+    - docs/context/DEVOS_*.json
+    - product/audits/**
+    - product/gap-analysis/*.md
+    - product/health-audit/**
+    - product/reports/**
+    - product/reviews/**
+  ephemeral_ignore:
+    - product/runtime/session-journal/
+    - product/runtime/agent-telemetry/
+    - product/runtime/*.json
+    - product/runtime/*.jsonl
+    - product/runtime/*.yml
+    - product/runtime/*.yaml

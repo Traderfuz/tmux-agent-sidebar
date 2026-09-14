@@ -1,0 +1,31 @@
+schema_version: 1
+id: cross-os-sync
+name: Cross-OS Sync
+mirror_skill: cross-os-sync
+description: Synchronize installed OS handoffs into evidence-stamped DevOS context from an isolated worktree, then verify handoff integrity.
+category: maintenance
+work_intake_policy: runtime-aware
+skills:
+  - {name: work-intake-preflight, args: "--auto"}
+  - worktrees
+  - cross-os-sync
+  - cross-os-verify
+  - generate-agents-md
+  - {name: commit, args: "--all"}
+  - {name: commit, args: "--stage-only"}
+confirm: false
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+intent_keywords:
+  - cross-os
+  - sync everything
+  - run the full handoff
+  - load all OS outputs
+  - reload OS context
+source_doc: docs/guides/chains.md

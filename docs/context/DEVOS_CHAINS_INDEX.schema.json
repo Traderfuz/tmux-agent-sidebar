@@ -1,0 +1,266 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "generated_by",
+    "source_dir",
+    "source_dirs",
+    "total",
+    "items"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer"
+    },
+    "generated_by": {
+      "type": "string"
+    },
+    "source_dir": {
+      "type": "string"
+    },
+    "source_dirs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "os_id",
+          "path",
+          "count"
+        ],
+        "properties": {
+          "os_id": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "count": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "total": {
+      "type": "integer"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "os_id",
+          "name",
+          "description",
+          "category",
+          "skills",
+          "confirm",
+          "clients",
+          "source",
+          "status"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]*$"
+          },
+          "os_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "skills": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "name"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "args": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "parameters": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": [
+                "name",
+                "type",
+                "repeatable",
+                "required"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "pattern": "^--[a-z][a-z0-9-]*$"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "string",
+                    "boolean"
+                  ]
+                },
+                "repeatable": {
+                  "type": "boolean"
+                },
+                "required": {
+                  "type": "boolean"
+                },
+                "description": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "confirm": {
+            "type": "boolean"
+          },
+          "clients": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "source": {
+            "type": "string"
+          },
+          "metadata": {
+            "type": "object",
+            "required": [
+              "owner",
+              "contract",
+              "category"
+            ],
+            "additionalProperties": false
+          },
+          "steps": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "phases": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": [
+                "depends_on",
+                "evidence_contract",
+                "failure_policy",
+                "id",
+                "owner_skill",
+                "parallel_safe",
+                "responsibility"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9][a-z0-9-]*$"
+                },
+                "responsibility": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "owner_skill": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "depends_on": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "parallel_safe": {
+                  "type": "boolean"
+                },
+                "failure_policy": {
+                  "type": "string",
+                  "enum": [
+                    "block",
+                    "continue-independent",
+                    "preserve-primary",
+                    "terminal"
+                  ]
+                },
+                "evidence_contract": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9-]*/v[0-9]+$"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "source_doc": {
+            "type": "string"
+          },
+          "model_route": {
+            "type": "string"
+          },
+          "worktree_policy_exception": {
+            "type": "string",
+            "enum": [
+              "bootstrap",
+              "bootstrap-deploy",
+              "bootstrap-release",
+              "branch-only",
+              "content-output",
+              "deploy",
+              "none",
+              "read-only"
+            ]
+          },
+          "mirror_skill": {
+            "type": "string"
+          },
+          "work_intake_policy": {
+            "type": "string",
+            "enum": [
+              "runtime-aware",
+              "autonomous"
+            ]
+          },
+          "status": {
+            "type": "string"
+          },
+          "intent_keywords": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

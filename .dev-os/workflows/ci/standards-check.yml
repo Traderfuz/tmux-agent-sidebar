@@ -1,0 +1,71 @@
+name: DevOS Standards Check
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  standards-check:
+    name: Security & Standards Compliance
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: No tracked .env files
+        run: |
+          if git ls-files | grep -qE '^\.env($|\.)'; then
+            echo "::error::Tracked .env file detected. Remove from git tracking: git rm --cached .env"
+            exit 1
+          fi
+          echo "✓ No tracked .env files"
+
+      - name: No hardcoded secrets
+        run: |
+          PATTERNS='(sk-[A-Za-z0-9]{20,}|ghp_[A-Za-z0-9]{36}|Bearer [A-Za-z0-9._~+/-]{20,}|PRIVATE KEY)'
+          if grep -rEn "$PATTERNS" --include="*.sh" --include="*.ts" --include="*.js" --include="*.py" \
+              --exclude-dir=".git" --exclude-dir="node_modules" . 2>/dev/null | grep -v "example\|placeholder\|your-.*-here\|<YOUR"; then
+            echo "::error::Potential hardcoded secret detected. Use environment variables."
+            exit 1
+          fi
+          echo "✓ No hardcoded secrets detected"
+
+      - name: No eval in shell scripts
+        run: |
+          if grep -rn '\beval\b' --include="*.sh" . --exclude-dir=".git" | grep -v '^\s*#'; then
+            echo "::warning::eval usage detected in shell scripts. Consider alternatives."
+          fi
+          echo "✓ eval check complete"
+
+      - name: No --no-verify git commits
+        run: |
+          if grep -rn '\-\-no-verify' --include="*.sh" --include="*.yml" --include="*.yaml" . --exclude-dir=".git" | grep -v '^\s*#'; then
+            echo "::error::--no-verify usage detected. Do not bypass git hooks."
+            exit 1
+          fi
+          echo "✓ No --no-verify usage"
+
+      - name: set -euo pipefail in lib scripts
+        run: |
+          MISSING=()
+          for f in scripts/lib/*.sh; do
+            [ -f "$f" ] || continue
+            if ! grep -q 'set -euo pipefail\|set -e' "$f"; then
+              MISSING+=("$f")
+            fi
+          done
+          if [ ${#MISSING[@]} -gt 0 ]; then
+            echo "::warning::Scripts missing set -euo pipefail: ${MISSING[*]}"
+          fi
+          echo "✓ Shell safety check complete"
+
+      - name: No force-push scripts
+        run: |
+          if grep -rn 'git push.*--force\b\|git push.*-f\b' --include="*.sh" . --exclude-dir=".git" | grep -v '^\s*#'; then
+            echo "::error::Force-push detected in shell scripts."
+            exit 1
+          fi
+          echo "✓ No force-push scripts"

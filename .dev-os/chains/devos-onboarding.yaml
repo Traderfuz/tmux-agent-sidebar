@@ -1,0 +1,51 @@
+schema_version: 2
+id: devos-onboarding
+name: DevOS Onboarding
+mirror_skill: devos-onboarding
+description: "Canonical first operation for a new DevOS project: initialize DevOS, derive standards, define the product, scaffold the deployable application, audit dependencies, configure deployment, development database, and auth, close setup gaps, validate readiness, and deploy. Completion means the project is configured to operate under DevOS. Mirrored by skill: ~/.dev-os/.claude/skills/devos-onboarding/SKILL.md"
+category: development
+metadata: {owner: devos-onboarding, contract: onboarding-step-check@v1, category: development}
+work_intake_policy: runtime-aware
+confirm: false
+worktree_policy_exception: bootstrap
+model_route: standard
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+skills:
+  - {step_id: init, name: devos-init, args: "", depends_on: "", parallel_safe: false, evidence_contract: "onboarding-step-check@v1:devos-init"}
+  - {step_id: standards, name: extract-standards, args: "", depends_on: init, parallel_safe: false, evidence_contract: "onboarding-step-check@v1:extract-standards"}
+  - {step_id: product, name: plan-product, args: "", depends_on: standards, parallel_safe: false, evidence_contract: "onboarding-step-check@v1:plan-product"}
+  - {step_id: scaffold, name: app-scaffold, args: "", depends_on: product, parallel_safe: false, evidence_contract: "onboarding-step-check@v1:app-scaffold"}
+  - {step_id: deps, name: audit-deps, args: "", depends_on: scaffold, parallel_safe: false, evidence_contract: "onboarding-step-check@v1:audit-deps"}
+  - {step_id: deploy-config, name: setup-deploy, args: "", depends_on: deps, parallel_safe: false, evidence_contract: "onboarding-step-check@v1:setup-deploy"}
+  - {step_id: database, name: dev-db-scaffold, args: "", depends_on: deploy-config, parallel_safe: false, evidence_contract: "onboarding-step-check@v1:dev-db-scaffold"}
+  - {step_id: auth, name: setup-auth-providers, args: "", depends_on: database, parallel_safe: false, evidence_contract: "onboarding-step-check@v1:setup-auth-providers"}
+  - {step_id: gaps, name: gap-analysis, args: "--dalio --converge --fix", depends_on: auth, parallel_safe: false, evidence_contract: "onboarding-step-check@v1:gap-analysis"}
+  - {step_id: verify, name: predeploy-check, args: "", depends_on: gaps, parallel_safe: false, evidence_contract: "onboarding-step-check@v1:predeploy-check"}
+  - {step_id: commit, name: commit, args: "--all", depends_on: verify, parallel_safe: false, evidence_contract: "onboarding-step-check@v1:commit"}
+  - {step_id: deploy, name: deploy, args: "", depends_on: commit, parallel_safe: false, evidence_contract: "onboarding-step-check@v1:deploy"}
+  - {step_id: stage, name: commit, args: "--stage-only", depends_on: deploy, parallel_safe: false, evidence_contract: "onboarding-step-check@v1:commit"}
+intent_keywords:
+  - devos onboarding
+  - configure project for devos
+  - initialize devos project
+  - first devos step
+  - first project setup
+  - bootstrap project
+  - new project from scratch
+  - scaffold project
+  - full project setup
+  - setup new project
+  - initialize everything
+  - project bootstrap
+  - start new project
+  - onboard new project
+  - new app setup
+  - full onboarding
+source_doc: docs/guides/chains.md

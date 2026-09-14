@@ -1,0 +1,45 @@
+schema_version: 1
+id: full-project-onboarding
+name: Full Project Onboarding
+description: "Complete new-project bootstrap: initialize DevOS, initialize installed OS packages, configure deploy infrastructure, register OAuth auth providers (Google, GitHub, Clerk), validate readiness, and deploy to production."
+category: development
+work_intake_policy: runtime-aware
+confirm: false
+worktree_policy_exception: bootstrap-deploy
+model_route: standard
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+skills:
+  - devos-init
+  - {name: os-init-all, args: "--run"}
+  - setup-deploy
+  - dev-db-scaffold
+  - setup-auth-providers
+  - predeploy-check
+  - {name: commit, args: "--all"}
+  - deploy
+  - {name: commit, args: "--stage-only"}
+source_doc: docs/guides/chains.md
+intent_keywords:
+  - onboard
+  - bootstrap
+  - new project
+  - initialize
+  - initialize installed oses
+  - init all oses
+  - setup auth
+  - auth providers
+  - OAuth
+  - Google OAuth
+  - GitHub OAuth
+  - Clerk
+  - full setup
+  - deploy new app
+  - scaffold dev database
+  - local dev db

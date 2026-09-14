@@ -1,0 +1,29 @@
+schema_version: 1
+id: system-ops-visibility
+name: System Ops Visibility
+description: "Read-only walking skeleton for Linux host + DevOS system operations visibility. Produces immutable Markdown/JSON reports, updates the local action-card inbox, and optionally exercises the Google Workspace Gmail delivery boundary."
+when_to_use: "Use for a manual read-only system operations visibility check across the Linux host and DevOS before broader OS package coverage is enabled."
+category: operations
+mirror_skill: system-ops-visibility
+work_intake_policy: runtime-aware
+worktree_policy_exception: read-only
+skills:
+  - {name: system-ops-visibility, args: "--mode check --target-root . --trigger manual"}
+command_boundary: "python3 scripts/lib/system_ops.py run --mode check --target-root . --trigger manual"
+confirm: false
+model_route: standard
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+intent_keywords:
+  - system ops
+  - system-ops visibility
+  - operations visibility
+  - health digest
+  - action inbox
+source_doc: product/specs/2026-08-08-system-ops-visibility/spec.md

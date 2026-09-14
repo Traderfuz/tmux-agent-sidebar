@@ -1,0 +1,52 @@
+name: BATS Tests
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  bats:
+    name: BATS Test Suite
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install BATS
+        run: |
+          git clone https://github.com/bats-core/bats-core.git /tmp/bats-core
+          sudo /tmp/bats-core/install.sh /usr/local
+          bats --version
+
+      - name: Install GNU Parallel
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y parallel
+          parallel --version
+
+      - name: Install BATS helpers
+        run: |
+          mkdir -p tests/bats/helpers
+          git clone https://github.com/bats-core/bats-support.git tests/bats/helpers/bats-support
+          git clone https://github.com/bats-core/bats-assert.git tests/bats/helpers/bats-assert
+
+      - name: Install DevOS canonical runner
+        continue-on-error: true
+        run: bash scripts/install.sh --yes --link "$GITHUB_WORKSPACE"
+
+      - name: Run BATS tests
+        run: |
+          if [ ! -d "tests/bats" ] || ! find tests/bats -name '*.bats' -print -quit | grep -q .; then
+            echo "No BATS test files found in tests/bats/"
+            exit 0
+          fi
+          canonical="${DEVOS_DIR:-$HOME/.dev-os}/scripts/run-bats.sh"
+          if [ -x "$canonical" ]; then
+            "$canonical" --project-root "$GITHUB_WORKSPACE"
+          else
+            echo "WARN: canonical DevOS runner unavailable; ADR-003 degraded raw-BATS fallback (no canonical receipt/isolation)" >&2
+            bats --tap --recursive tests/bats/
+          fi

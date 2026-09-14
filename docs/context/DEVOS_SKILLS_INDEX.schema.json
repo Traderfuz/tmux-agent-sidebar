@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "generated_by",
+    "precedence",
+    "sources",
+    "total",
+    "items"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer"
+    },
+    "generated_by": {
+      "type": "string"
+    },
+    "precedence": {
+      "type": "string"
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "scope",
+          "precedence",
+          "root"
+        ],
+        "properties": {
+          "scope": {
+            "type": "string"
+          },
+          "precedence": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "root": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "total": {
+      "type": "integer"
+    },
+    "warning_count": {
+      "type": "integer"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "description",
+          "status",
+          "entry_type",
+          "source",
+          "source_scope",
+          "source_precedence"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "entry_type": {
+            "type": "string"
+          },
+          "legacy_commands": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "clients": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "source": {
+            "type": "string"
+          },
+          "source_scope": {
+            "type": "string"
+          },
+          "source_precedence": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "title": {
+            "type": "string"
+          },
+          "metadata_warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

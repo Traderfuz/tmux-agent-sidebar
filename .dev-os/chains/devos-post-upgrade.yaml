@@ -1,0 +1,30 @@
+schema_version: 1
+id: devos-post-upgrade
+name: DevOS Post-Upgrade Convergence
+description: Plan, authorize, execute, resume, and verify only the affected layers after a successful DevOS update.
+category: maintenance
+work_intake_policy: runtime-aware
+skills:
+  - devos-post-upgrade
+confirm: false
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+intent_keywords:
+  - post-upgrade
+  - after update
+  - upgrade convergence
+source_doc: docs/guides/devos-post-upgrade.md
+phases:
+  - {id: resolve, responsibility: "Resolve handoff identity and canonical authorized targets.", owner_skill: devos-post-upgrade, depends_on: "", parallel_safe: false, failure_policy: block, evidence_contract: devos-post-upgrade-plan/v1}
+  - {id: select, responsibility: "Select interval and surface matched actions in dependency order.", owner_skill: devos-post-upgrade, depends_on: resolve, parallel_safe: false, failure_policy: block, evidence_contract: devos-post-upgrade-plan/v1}
+  - {id: authorize, responsibility: "Validate and consume approval for the exact plan digest.", owner_skill: devos-post-upgrade, depends_on: select, parallel_safe: false, failure_policy: block, evidence_contract: devos-post-upgrade-approval/v1}
+  - {id: execute, responsibility: "Dispatch canonical action owners and record correlated results.", owner_skill: devos-post-upgrade, depends_on: authorize, parallel_safe: true, failure_policy: continue-independent, evidence_contract: action-result/v1}
+  - {id: verify, responsibility: "Prove selected action and affected layer closure.", owner_skill: devos-post-upgrade, depends_on: execute, parallel_safe: false, failure_policy: block, evidence_contract: devos-post-upgrade-verification/v1}
+  - {id: cleanup, responsibility: "Release owned runtime resources without rewriting primary outcomes.", owner_skill: devos-post-upgrade, depends_on: verify, parallel_safe: false, failure_policy: preserve-primary, evidence_contract: devos-post-upgrade-cleanup/v1}
+  - {id: finalize, responsibility: "Append and render the terminal result from durable records.", owner_skill: devos-post-upgrade, depends_on: cleanup, parallel_safe: false, failure_policy: terminal, evidence_contract: terminal-result/v1}

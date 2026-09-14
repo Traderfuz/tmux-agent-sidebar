@@ -1,0 +1,33 @@
+schema_version: 1
+id: weekly-cadence
+name: Weekly Cadence
+mirror_skill: weekly-cadence
+description: "Dalio feedback loop in an isolated worktree — weekly review, gap analysis (--dalio --converge --fix), and next-action routing. Mirrored by skill: ~/.dev-os/.claude/skills/weekly-cadence/SKILL.md"
+category: maintenance
+work_intake_policy: runtime-aware
+skills:
+  - worktrees
+  - weekly-review
+  - {name: gap-analysis, args: "--dalio --converge --fix"}
+  - orchestrate
+  - project-cleanup
+  - monthly-retro
+  - {name: commit, args: "--all"}
+  - {name: commit, args: "--stage-only"}
+confirm: false
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+intent_keywords:
+  - weekly review
+  - weekly cadence
+  - weekly retro
+  - weekly
+  - dalio review
+  - weekly cycle
+source_doc: docs/guides/chains.md

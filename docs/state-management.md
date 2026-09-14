@@ -32,8 +32,7 @@ Each pane's runtime data is split into two buckets:
 Pane options written to tmux:
 
 | Tmux Option | Update Trigger | Description |
-|-------------|----------------|-------------|
-| `@pane_agent` | SessionStart | Agent type ("claude" / "codex" / "opencode") |
+| `@pane_agent` | SessionStart | Agent type (`claude` / `codex` / `omp` / `opencode`) |
 | `@pane_status` | Every event | Status ("running" / "background" / "waiting" / "idle" / "error") |
 | `@pane_cwd` | SessionStart, CwdChanged | Working directory |
 | `@pane_permission_mode` | SessionStart, hook event | Permission mode |
@@ -192,7 +191,7 @@ enum StatusFilter { All, Running, Background, Waiting, Idle, Error }
 enum RepoFilter { All, Repo(String) }
 enum BottomTab { Activity, GitStatus }
 enum PaneStatus { Running, Background, Waiting, Idle, Error, Unknown }
-enum AgentType { Claude, Codex, OpenCode, Unknown }
+enum AgentType { Claude, Codex, Omp, OpenCode, Unknown }
 enum PermissionMode { Default, Plan, AcceptEdits, Auto, DontAsk, BypassPermissions, Defer }
 
 /// At-most-one popup state. The enum encodes both which popup is open

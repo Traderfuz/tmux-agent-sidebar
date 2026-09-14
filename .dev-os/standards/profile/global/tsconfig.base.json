@@ -1,0 +1,52 @@
+<!-- source: profile:general -->
+<!-- EXTRACTED — do not edit directly. Edit source at profiles/general/standards/global/tsconfig.base.json and re-run profile-sync. -->
+<!-- source: profile:default -->
+<!-- EXTRACTED — do not edit directly. Edit source at profiles/default/standards/global/tsconfig.base.json and re-run profile-sync. -->
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "_comment": "Base TypeScript configuration for DevOS projects. Extend this in your tsconfig.json.",
+
+  "compilerOptions": {
+    // Strict mode (enables: noImplicitAny, strictNullChecks, strictFunctionTypes,
+    // strictBindCallApply, strictPropertyInitialization, noImplicitThis, alwaysStrict)
+    "strict": true,
+
+    // Additional strictness beyond base strict mode
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "exactOptionalPropertyTypes": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "forceConsistentCasingInFileNames": true,
+
+    // Module resolution
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+
+    // Emit options (use bundler for actual emit)
+    "noEmit": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+
+    // Interop
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+
+    // Other
+    "skipLibCheck": true,
+    "incremental": true
+  },
+
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build",
+    ".next",
+    ".turbo",
+    "coverage"
+  ]
+}

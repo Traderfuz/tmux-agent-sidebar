@@ -1,0 +1,36 @@
+schema_version: 1
+id: deploy-onboarding
+name: Deploy Onboarding
+mirror_skill: deploy-onboarding
+description: "New Project Deploy Onboarding: initialize DevOS, configure deployment infrastructure, validate readiness. Mirrored by skill: ~/.dev-os/.claude/skills/deploy-onboarding/SKILL.md"
+category: development
+work_intake_policy: runtime-aware
+confirm: false
+worktree_policy_exception: bootstrap-deploy
+model_route: standard
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+skills:
+  - devos-init
+  - setup-deploy
+  - dev-db-scaffold
+  - predeploy-check
+  - {name: commit, args: "--all"}
+  - {name: commit, args: "--stage-only"}
+intent_keywords:
+  - onboard
+  - bootstrap
+  - deploy
+  - setup
+  - initialize
+  - new project
+  - configure deploy
+  - deployment infra
+  - scaffold dev database
+  - local dev db

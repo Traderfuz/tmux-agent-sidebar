@@ -1,0 +1,51 @@
+schema_version: 1
+id: project-complete
+name: Project Complete
+mirror_skill: project-complete
+description: >-
+  Close out a feature spec or project end-to-end — runs completion checks
+  (usability, docs sync, user-facing docs), verifies all tasks are done,
+  commits final state, and produces a closure summary.
+  Use when a spec is fully implemented and you want to formally close it.
+category: development
+work_intake_policy: runtime-aware
+confirm: false
+model_route: standard
+skills:
+  - {name: work-intake-preflight, args: "--auto"}
+  - worktrees
+  - checkpoint
+  - worktree-sessions
+  - project-status
+  - devos-verify
+  - usability-audit
+  - ux-audit
+  - docs-coverage-audit
+  - docs-sync
+  - docs-verify
+  - audit-docs
+  - user-facing-docs
+  - standards-validator
+  - project-complete
+  - {name: commit, args: "--all"}
+  - {name: commit, args: "--stage-only"}
+  - summarize
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+intent_keywords:
+  - project complete
+  - close project
+  - finish spec
+  - spec done
+  - close out feature
+  - wrap up project
+  - complete the feature
+  - mark complete
+  - close this out
+source_doc: docs/guides/chains.md

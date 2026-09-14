@@ -1,0 +1,2555 @@
+{
+  "schema_version": 1,
+  "generated_by": "scripts/chains-registry.sh",
+  "source_dir": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains",
+  "source_dirs": [
+    {
+      "os_id": "dev-os",
+      "path": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains",
+      "count": 40
+    }
+  ],
+  "total": 40,
+  "items": [
+    {
+      "id": "autonomous-build-slice",
+      "os_id": "dev-os",
+      "name": "Autonomous Build Slice",
+      "description": "Run an approved feature slice autonomously from a preserved worktree through implementation, verification, PR creation, merge, and durable result reporting. The chain owns dirty-state preservation, worktree identity, checkpointing, runtime fallback, recovery handoff, and the canonical PR boundary.",
+      "category": "development",
+      "skills": [
+        {
+          "name": "work-intake-preflight",
+          "args": "--auto"
+        },
+        "worktrees",
+        "checkpoint",
+        "devos-verify",
+        {
+          "name": "autonomous",
+          "args": "--from tasks --no-pause"
+        },
+        {
+          "name": "pr-lifecycle",
+          "args": "--open"
+        },
+        {
+          "name": "sync-completed-work",
+          "args": "--unattended"
+        },
+        "merge-feature",
+        {
+          "name": "post-deploy-qa",
+          "args": "--record-debt-only --reason pending_no_url --source-chain autonomous-build-slice"
+        },
+        {
+          "name": "checkpoint",
+          "args": "--label autonomous-build-slice-final"
+        },
+        "summarize"
+      ],
+      "confirm": true,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/autonomous-build-slice.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "autonomous build",
+        "autonomous feature",
+        "autonomous slice",
+        "build autonomously",
+        "implement and open pr",
+        "autonomous pr"
+      ],
+      "model_route": "standard",
+      "source_doc": "docs/guides/chains.md",
+      "work_intake_policy": "autonomous"
+    },
+    {
+      "id": "build-slice",
+      "os_id": "dev-os",
+      "name": "Build Slice",
+      "description": "Implement, devos-verify, and review a product slice in an isolated worktree. Assumes an approved spec exists; if tasks.md is missing, runs the required gap-analysis --dalio --fix gate on the spec, creates tasks, verifies planning, then proceeds into implementation. work-intake-preflight preserves existing dirty work before worktrees; worktrees is the first branch-isolation step and owns branch/worktree creation; downstream steps consume the returned workspace identity and actual path instead of deriving layout. checkpoint runs after worktrees to preserve workspace identity and actual path for mid-chain recovery. Refreshes the codebase map before implementation. audit-deps output feeds knowledge-pull; architecture-creator runs after both for current dependency context. commit --grouped --local-only captures every safe non-ignored worktree change before devos-code-review; files that should not be committed must be ignored or explicitly excluded before this step. A second commit --grouped --local-only runs after sync-completed-work so task-sync or review-fix dirtiness is not carried into create-pr or merge-feature. create-pr owns branch push, upstream setup, pull request creation/update, and readiness handoff. IMPORTANT: Worktree cleanup is automatic inside merge-feature after a successful full merge. Cleanup remains omitted from this chain because the chain schema has no conditional execution; merge-feature owns cleanup so failed merges and MVP merges do not destroy active work. Mirrored by skill: ~/.dev-os/.claude/skills/build-slice/SKILL.md",
+      "category": "development",
+      "skills": [
+        {
+          "name": "work-intake-preflight",
+          "args": "--auto"
+        },
+        "worktrees",
+        "checkpoint",
+        {
+          "name": "gap-analysis",
+          "args": "--dalio --fix --spec <slug>"
+        },
+        {
+          "name": "create-tasks",
+          "args": "--spec <slug>"
+        },
+        "devos-verify",
+        {
+          "name": "map",
+          "args": "--update"
+        },
+        "audit-deps",
+        "knowledge-pull",
+        "architecture-creator",
+        "ui-journey-audit",
+        "implement-tasks",
+        "ai-slop-polish",
+        "ui-design-system-audit",
+        "harden",
+        "devos-security-review",
+        "e2e",
+        "test",
+        "devos-verify",
+        "user-facing-docs",
+        "docs-sync",
+        "audit-docs",
+        {
+          "name": "commit",
+          "args": "--grouped --local-only"
+        },
+        "devos-code-review",
+        {
+          "name": "devos-agent",
+          "args": "architect-review"
+        },
+        {
+          "name": "sync-completed-work",
+          "args": "--unattended"
+        },
+        {
+          "name": "commit",
+          "args": "--grouped --local-only"
+        },
+        "create-pr",
+        {
+          "name": "sync-completed-work",
+          "args": "--unattended"
+        },
+        "merge-feature",
+        {
+          "name": "post-deploy-qa",
+          "args": "--record-debt-only --reason pending_no_url --source-chain build-slice"
+        },
+        {
+          "name": "commit",
+          "args": "--stage-only"
+        },
+        "summarize"
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/build-slice.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "build",
+        "implement",
+        "slice",
+        "feature",
+        "build slice",
+        "worktree build"
+      ],
+      "model_route": "standard",
+      "source_doc": "docs/guides/chains.md",
+      "mirror_skill": "build-slice",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "context-full-refresh",
+      "os_id": "dev-os",
+      "name": "Context Full Refresh",
+      "description": "Rebuild DevOS context artifacts after source or standards changes from an isolated worktree.",
+      "category": "maintenance",
+      "skills": [
+        {
+          "name": "work-intake-preflight",
+          "args": "--auto"
+        },
+        "worktrees",
+        "worktree-sessions",
+        "context-full-refresh",
+        {
+          "name": "map",
+          "args": "--update"
+        },
+        "generate-agents-md",
+        {
+          "name": "commit",
+          "args": "--all"
+        },
+        {
+          "name": "commit",
+          "args": "--stage-only"
+        }
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/context-full-refresh.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "context",
+        "refresh",
+        "agents",
+        "map"
+      ],
+      "source_doc": "profiles/general/workflows/pipelines/context-full-refresh.md",
+      "mirror_skill": "context-full-refresh",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "convergence",
+      "os_id": "dev-os",
+      "name": "Convergence",
+      "description": "Close all gaps end-to-end. Invoke gap-analysis with --dalio --converge --fix, refresh codebase map before tasking, pull current knowledge, then use architecture-creator to resolve architectural gaps before implementation. Worktrees can isolate independent remediation tracks. Mirrored by skill: ~/.dev-os/.claude/skills/convergence/SKILL.md",
+      "category": "development",
+      "skills": [
+        {
+          "name": "work-intake-preflight",
+          "args": "--auto"
+        },
+        "worktrees",
+        "worktree-sessions",
+        {
+          "name": "gap-analysis",
+          "args": "--dalio --converge --fix"
+        },
+        "close-all-gaps",
+        {
+          "name": "map",
+          "args": "--update"
+        },
+        "knowledge-pull",
+        "architecture-creator",
+        "create-tasks",
+        "worktrees",
+        "implement-tasks",
+        {
+          "name": "commit",
+          "args": "--all"
+        },
+        "devos-verify",
+        "pr-lifecycle",
+        {
+          "name": "commit",
+          "args": "--stage-only"
+        }
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/convergence.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "convergence",
+        "close gaps",
+        "gap closure",
+        "converge",
+        "fix all gaps",
+        "gap analysis to implementation"
+      ],
+      "model_route": "standard",
+      "source_doc": "docs/guides/chains.md",
+      "mirror_skill": "convergence",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "cross-os-skill-audit",
+      "os_id": "dev-os",
+      "name": "Cross-OS Skill Utilization and Vendoring Audit",
+      "description": "Build an evidence-backed, approval-gated plan that audits global DevOS skills against every detected installable OS for activation, discoverability, command wiring, sync drift, skill quality, and justified vendoring opportunities.",
+      "category": "maintenance",
+      "skills": [
+        {
+          "name": "work-intake-preflight",
+          "args": "--auto"
+        },
+        "worktrees",
+        {
+          "name": "os-orchestrate",
+          "args": "--goal \"Run the Cross-OS Skill Utilization and Vendoring Audit with scope_origin={scope_origin} and selected_os_packages={selected_os_packages} supplied by the chain runner. For explicit scope, accept canonical IDs from installed entries in the consuming root os-registry.yml, the consuming root manifest.json canonical source package, or immediate sibling *-os/manifest.json source packages, resolve each selected source path from that evidence, and audit only selected package skill source, profile, installed mirror, command, registry, telemetry, ownership, synchronization, and benchmark surfaces; for default-all scope preserve existing detection and report exact detected IDs. Treat global DevOS skill catalog reads as comparison-only. Missing 30-day activation telemetry is unknown with evidence provenance, never zero. Produce one aggregate report exposing scope_origin, requested_package_ids, resolved_package_ids, rejected_package_ids, selected_package_count, exact ordered selected IDs, zero-selected state, per-package evidence references and findings classified only as vendor, shared, OS-exclusive, improve-routing, keep-global, or retire. Revision 1 is strictly read-only: do not invoke mutating modes or write any selected or unselected OS package source, profile, mirror, command, registry, or skill content. Any non-empty remediation candidate set is a material revision 2, invalidates revision 1 approval, and requires a second explicit approval naming selected owners; route command work to commands-to-skills or bx-command-creator, skill quality/discoverability to bx-skill-creator, synchronization/vendoring to sync-skills, and ownership/registry defects to ownership-audit. Record producer-owned verification and unknown/failed outcomes; never mark remediation complete without it. Do not dispatch or route back to the cross-os-skill-audit chain.\""
+        }
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/cross-os-skill-audit.yaml",
+      "status": "available",
+      "parameters": [
+        {
+          "name": "--os",
+          "type": "string",
+          "repeatable": true,
+          "required": false,
+          "description": "Limit the audit to one or more canonical OS package IDs; comma-separated values are accepted and normalized in first-seen order."
+        }
+      ],
+      "intent_keywords": [
+        "cross-os skill audit",
+        "skill utilization audit",
+        "skill vendoring audit",
+        "unused skills",
+        "underused skills",
+        "vendor global skills",
+        "cross os skill usage",
+        "skill activation audit",
+        "skill routing efficiency"
+      ],
+      "model_route": "complex",
+      "source_doc": "docs/guides/chains.md",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "cross-os-sync",
+      "os_id": "dev-os",
+      "name": "Cross-OS Sync",
+      "description": "Synchronize installed OS handoffs into evidence-stamped DevOS context from an isolated worktree, then verify handoff integrity.",
+      "category": "maintenance",
+      "skills": [
+        {
+          "name": "work-intake-preflight",
+          "args": "--auto"
+        },
+        "worktrees",
+        "cross-os-sync",
+        "cross-os-verify",
+        "generate-agents-md",
+        {
+          "name": "commit",
+          "args": "--all"
+        },
+        {
+          "name": "commit",
+          "args": "--stage-only"
+        }
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/cross-os-sync.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "cross-os",
+        "sync everything",
+        "run the full handoff",
+        "load all OS outputs",
+        "reload OS context"
+      ],
+      "source_doc": "docs/guides/chains.md",
+      "mirror_skill": "cross-os-sync",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "deliver-product-slice",
+      "os_id": "dev-os",
+      "name": "Deliver Product Slice",
+      "description": "Close one product slice end-to-end \u2014 from spec shaping through implementation, quality gates, PR handoff, and merge. Runs the canonical DevOS process: shape spec, write spec, close gaps, create tasks, implement, test, verify, review, push/create PR, merge. Distinct from feature-branch (which includes full planning and architecture phases) \u2014 use this when the spec is already partially understood and you want the shortest path from idea to merged slice.",
+      "category": "development",
+      "skills": [
+        {
+          "name": "work-intake-preflight",
+          "args": "--auto"
+        },
+        "worktrees",
+        "worktree-sessions",
+        "checkpoint",
+        "shape-spec",
+        "write-spec",
+        {
+          "name": "gap-analysis",
+          "args": "--dalio --converge --fix"
+        },
+        "create-tasks",
+        "devos-verify",
+        "implement-tasks",
+        "ai-slop-polish",
+        "harden",
+        "devos-security-review",
+        "test",
+        "devos-verify",
+        "user-facing-docs",
+        "docs-sync",
+        "audit-docs",
+        {
+          "name": "commit",
+          "args": "--grouped --local-only"
+        },
+        "devos-code-review",
+        {
+          "name": "sync-completed-work",
+          "args": "--unattended"
+        },
+        {
+          "name": "commit",
+          "args": "--grouped --local-only"
+        },
+        "create-pr",
+        {
+          "name": "sync-completed-work",
+          "args": "--unattended"
+        },
+        "merge-feature",
+        {
+          "name": "post-deploy-qa",
+          "args": "--record-debt-only --reason pending_no_url --source-chain deliver-product-slice"
+        },
+        "devos-review",
+        {
+          "name": "commit",
+          "args": "--stage-only"
+        },
+        "summarize"
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/deliver-product-slice.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "deliver slice",
+        "product slice",
+        "ship feature",
+        "finish this feature",
+        "deliver feature",
+        "close feature",
+        "ship this",
+        "end to end slice",
+        "slice to merge"
+      ],
+      "model_route": "standard",
+      "source_doc": "docs/guides/chains.md",
+      "mirror_skill": "deliver-product-slice",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "deploy-onboarding",
+      "os_id": "dev-os",
+      "name": "Deploy Onboarding",
+      "description": "New Project Deploy Onboarding: initialize DevOS, configure deployment infrastructure, validate readiness. Mirrored by skill: ~/.dev-os/.claude/skills/deploy-onboarding/SKILL.md",
+      "category": "development",
+      "skills": [
+        "devos-init",
+        "setup-deploy",
+        "dev-db-scaffold",
+        "predeploy-check",
+        {
+          "name": "commit",
+          "args": "--all"
+        },
+        {
+          "name": "commit",
+          "args": "--stage-only"
+        }
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/deploy-onboarding.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "onboard",
+        "bootstrap",
+        "deploy",
+        "setup",
+        "initialize",
+        "new project",
+        "configure deploy",
+        "deployment infra",
+        "scaffold dev database",
+        "local dev db"
+      ],
+      "model_route": "standard",
+      "worktree_policy_exception": "bootstrap-deploy",
+      "mirror_skill": "deploy-onboarding",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "design-discovery",
+      "os_id": "dev-os",
+      "name": "Design Discovery",
+      "description": "Shape a new UI direction before implementation by mapping journeys, drafting visual concepts, generating a design system, and validating the design baseline. Mirrored by skill: ~/.dev-os/.claude/skills/design-discovery/SKILL.md",
+      "category": "development",
+      "skills": [
+        {
+          "name": "work-intake-preflight",
+          "args": "--auto"
+        },
+        "worktrees",
+        "checkpoint",
+        "worktree-sessions",
+        "ui-journey-audit",
+        "frontend-design",
+        "ai-design-draft",
+        "ui-superdesign",
+        "ui-design-system",
+        "ui-review",
+        {
+          "name": "commit",
+          "args": "--all"
+        },
+        {
+          "name": "commit",
+          "args": "--stage-only"
+        }
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/design-discovery.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "design discovery",
+        "design this page",
+        "create visual direction",
+        "plan ui design",
+        "design before implementation",
+        "create design baseline",
+        "generate design system from brief"
+      ],
+      "model_route": "standard",
+      "source_doc": "docs/guides/chains.md",
+      "mirror_skill": "design-discovery",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "design-improvement",
+      "os_id": "dev-os",
+      "name": "Design Improvement",
+      "description": "Improve an implemented UI from an isolated worktree through journey and IA audit, live gap and placement analysis, iterative screenshot-based refinement, preflight validation, and design QA. Mirrored by skill: ~/.dev-os/.claude/skills/design-improvement/SKILL.md",
+      "category": "testing",
+      "skills": [
+        {
+          "name": "work-intake-preflight",
+          "args": "--auto"
+        },
+        "worktrees",
+        "checkpoint",
+        "worktree-sessions",
+        {
+          "name": "ui-journey-audit",
+          "args": "--mode audit --dalio --converge"
+        },
+        {
+          "name": "ui-gap-analysis",
+          "args": "--dalio --converge --fix"
+        },
+        {
+          "name": "ui-placement-audit",
+          "args": "--dalio --clickthrough --converge --fix"
+        },
+        "ux-audit",
+        "ui-design-iteration",
+        "ui-preflight",
+        "dev-server",
+        "playwright-cli",
+        "ui-design-qa",
+        "visual-regression-qa",
+        {
+          "name": "commit",
+          "args": "--all"
+        },
+        "dogfood",
+        {
+          "name": "commit",
+          "args": "--stage-only"
+        }
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/design-improvement.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "improve design",
+        "improve ui",
+        "make this page look better",
+        "design polish pass",
+        "ui polish",
+        "iterate on design",
+        "fix visual gaps",
+        "fix placement gaps",
+        "audit ui placement",
+        "audit ui journey",
+        "audit navigation flow",
+        "audit information architecture",
+        "improve frontend design"
+      ],
+      "source_doc": "docs/guides/chains.md",
+      "mirror_skill": "design-improvement",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "design-qa",
+      "os_id": "dev-os",
+      "name": "Design QA",
+      "description": "Full isolated-worktree design verification chain \u2014 component snapshot, design reference comparison, and visual regression check before shipping UI changes. Mirrored by skill: ~/.dev-os/.claude/skills/design-qa/SKILL.md",
+      "category": "testing",
+      "skills": [
+        {
+          "name": "work-intake-preflight",
+          "args": "--auto"
+        },
+        "worktrees",
+        "checkpoint",
+        "worktree-sessions",
+        "dev-server",
+        "playwright-cli",
+        "ui-design-qa",
+        "visual-regression-qa",
+        {
+          "name": "commit",
+          "args": "--all"
+        },
+        "dogfood",
+        {
+          "name": "commit",
+          "args": "--stage-only"
+        }
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/design-qa.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "design qa",
+        "visual qa",
+        "design verification",
+        "ui regression",
+        "pre-release design check",
+        "component visual check",
+        "design review before ship"
+      ],
+      "source_doc": "docs/guides/chains.md",
+      "mirror_skill": "design-qa",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "design-system-hardening",
+      "os_id": "dev-os",
+      "name": "Design System Hardening",
+      "description": "Audit, align, and devos-verify design-token adoption from an isolated worktree before release so UI changes stay consistent across brand, code, and visual regression baselines. Mirrored by skill: ~/.dev-os/.claude/skills/design-system-hardening/SKILL.md",
+      "category": "testing",
+      "skills": [
+        {
+          "name": "work-intake-preflight",
+          "args": "--auto"
+        },
+        "worktrees",
+        "checkpoint",
+        "worktree-sessions",
+        "ui-design-system-audit",
+        "ui-design-alignment",
+        "ui-preflight",
+        "dev-server",
+        "visual-regression-qa",
+        {
+          "name": "commit",
+          "args": "--all"
+        },
+        "devos-verify",
+        {
+          "name": "commit",
+          "args": "--stage-only"
+        }
+      ],
+      "confirm": true,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/design-system-hardening.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "harden design system",
+        "audit design system",
+        "token adoption audit",
+        "align design tokens",
+        "fix design drift",
+        "check visual consistency",
+        "design system release check"
+      ],
+      "source_doc": "docs/guides/chains.md",
+      "mirror_skill": "design-system-hardening",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "devos-onboarding",
+      "os_id": "dev-os",
+      "name": "DevOS Onboarding",
+      "description": "Canonical first operation for a new DevOS project: initialize DevOS, derive standards, define the product, scaffold the deployable application, audit dependencies, configure deployment, development database, and auth, close setup gaps, validate readiness, and deploy. Completion means the project is configured to operate under DevOS. Mirrored by skill: ~/.dev-os/.claude/skills/devos-onboarding/SKILL.md",
+      "category": "development",
+      "skills": [
+        "devos-init",
+        "extract-standards",
+        "plan-product",
+        "app-scaffold",
+        "audit-deps",
+        "setup-deploy",
+        "dev-db-scaffold",
+        "setup-auth-providers",
+        {
+          "name": "gap-analysis",
+          "args": "--dalio --converge --fix"
+        },
+        "predeploy-check",
+        {
+          "name": "commit",
+          "args": "--all"
+        },
+        "deploy",
+        {
+          "name": "commit",
+          "args": "--stage-only"
+        }
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/devos-onboarding.yaml",
+      "status": "available",
+      "metadata": {
+        "category": "development",
+        "contract": "onboarding-step-check@v1",
+        "owner": "devos-onboarding"
+      },
+      "steps": [
+        {
+          "id": "init",
+          "name": "devos-init",
+          "args": "",
+          "depends_on": [],
+          "parallel_safe": false,
+          "evidence_contract": "onboarding-step-check@v1:devos-init"
+        },
+        {
+          "id": "standards",
+          "name": "extract-standards",
+          "args": "",
+          "depends_on": [
+            "init"
+          ],
+          "parallel_safe": false,
+          "evidence_contract": "onboarding-step-check@v1:extract-standards"
+        },
+        {
+          "id": "product",
+          "name": "plan-product",
+          "args": "",
+          "depends_on": [
+            "standards"
+          ],
+          "parallel_safe": false,
+          "evidence_contract": "onboarding-step-check@v1:plan-product"
+        },
+        {
+          "id": "scaffold",
+          "name": "app-scaffold",
+          "args": "",
+          "depends_on": [
+            "product"
+          ],
+          "parallel_safe": false,
+          "evidence_contract": "onboarding-step-check@v1:app-scaffold"
+        },
+        {
+          "id": "deps",
+          "name": "audit-deps",
+          "args": "",
+          "depends_on": [
+            "scaffold"
+          ],
+          "parallel_safe": false,
+          "evidence_contract": "onboarding-step-check@v1:audit-deps"
+        },
+        {
+          "id": "deploy-config",
+          "name": "setup-deploy",
+          "args": "",
+          "depends_on": [
+            "deps"
+          ],
+          "parallel_safe": false,
+          "evidence_contract": "onboarding-step-check@v1:setup-deploy"
+        },
+        {
+          "id": "database",
+          "name": "dev-db-scaffold",
+          "args": "",
+          "depends_on": [
+            "deploy-config"
+          ],
+          "parallel_safe": false,
+          "evidence_contract": "onboarding-step-check@v1:dev-db-scaffold"
+        },
+        {
+          "id": "auth",
+          "name": "setup-auth-providers",
+          "args": "",
+          "depends_on": [
+            "database"
+          ],
+          "parallel_safe": false,
+          "evidence_contract": "onboarding-step-check@v1:setup-auth-providers"
+        },
+        {
+          "id": "gaps",
+          "name": "gap-analysis",
+          "args": "--dalio --converge --fix",
+          "depends_on": [
+            "auth"
+          ],
+          "parallel_safe": false,
+          "evidence_contract": "onboarding-step-check@v1:gap-analysis"
+        },
+        {
+          "id": "verify",
+          "name": "predeploy-check",
+          "args": "",
+          "depends_on": [
+            "gaps"
+          ],
+          "parallel_safe": false,
+          "evidence_contract": "onboarding-step-check@v1:predeploy-check"
+        },
+        {
+          "id": "commit",
+          "name": "commit",
+          "args": "--all",
+          "depends_on": [
+            "verify"
+          ],
+          "parallel_safe": false,
+          "evidence_contract": "onboarding-step-check@v1:commit"
+        },
+        {
+          "id": "deploy",
+          "name": "deploy",
+          "args": "",
+          "depends_on": [
+            "commit"
+          ],
+          "parallel_safe": false,
+          "evidence_contract": "onboarding-step-check@v1:deploy"
+        },
+        {
+          "id": "stage",
+          "name": "commit",
+          "args": "--stage-only",
+          "depends_on": [
+            "deploy"
+          ],
+          "parallel_safe": false,
+          "evidence_contract": "onboarding-step-check@v1:commit"
+        }
+      ],
+      "intent_keywords": [
+        "devos onboarding",
+        "configure project for devos",
+        "initialize devos project",
+        "first devos step",
+        "first project setup",
+        "bootstrap project",
+        "new project from scratch",
+        "scaffold project",
+        "full project setup",
+        "setup new project",
+        "initialize everything",
+        "project bootstrap",
+        "start new project",
+        "onboard new project",
+        "new app setup",
+        "full onboarding"
+      ],
+      "model_route": "standard",
+      "source_doc": "docs/guides/chains.md",
+      "worktree_policy_exception": "bootstrap",
+      "mirror_skill": "devos-onboarding",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "devos-post-upgrade",
+      "os_id": "dev-os",
+      "name": "DevOS Post-Upgrade Convergence",
+      "description": "Plan, authorize, execute, resume, and verify only the affected layers after a successful DevOS update.",
+      "category": "maintenance",
+      "skills": [
+        "devos-post-upgrade"
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/devos-post-upgrade.yaml",
+      "status": "available",
+      "phases": [
+        {
+          "id": "resolve",
+          "responsibility": "Resolve handoff identity and canonical authorized targets.",
+          "owner_skill": "devos-post-upgrade",
+          "depends_on": [],
+          "parallel_safe": false,
+          "failure_policy": "block",
+          "evidence_contract": "devos-post-upgrade-plan/v1"
+        },
+        {
+          "id": "select",
+          "responsibility": "Select interval and surface matched actions in dependency order.",
+          "owner_skill": "devos-post-upgrade",
+          "depends_on": [
+            "resolve"
+          ],
+          "parallel_safe": false,
+          "failure_policy": "block",
+          "evidence_contract": "devos-post-upgrade-plan/v1"
+        },
+        {
+          "id": "authorize",
+          "responsibility": "Validate and consume approval for the exact plan digest.",
+          "owner_skill": "devos-post-upgrade",
+          "depends_on": [
+            "select"
+          ],
+          "parallel_safe": false,
+          "failure_policy": "block",
+          "evidence_contract": "devos-post-upgrade-approval/v1"
+        },
+        {
+          "id": "execute",
+          "responsibility": "Dispatch canonical action owners and record correlated results.",
+          "owner_skill": "devos-post-upgrade",
+          "depends_on": [
+            "authorize"
+          ],
+          "parallel_safe": true,
+          "failure_policy": "continue-independent",
+          "evidence_contract": "action-result/v1"
+        },
+        {
+          "id": "verify",
+          "responsibility": "Prove selected action and affected layer closure.",
+          "owner_skill": "devos-post-upgrade",
+          "depends_on": [
+            "execute"
+          ],
+          "parallel_safe": false,
+          "failure_policy": "block",
+          "evidence_contract": "devos-post-upgrade-verification/v1"
+        },
+        {
+          "id": "cleanup",
+          "responsibility": "Release owned runtime resources without rewriting primary outcomes.",
+          "owner_skill": "devos-post-upgrade",
+          "depends_on": [
+            "verify"
+          ],
+          "parallel_safe": false,
+          "failure_policy": "preserve-primary",
+          "evidence_contract": "devos-post-upgrade-cleanup/v1"
+        },
+        {
+          "id": "finalize",
+          "responsibility": "Append and render the terminal result from durable records.",
+          "owner_skill": "devos-post-upgrade",
+          "depends_on": [
+            "cleanup"
+          ],
+          "parallel_safe": false,
+          "failure_policy": "terminal",
+          "evidence_contract": "terminal-result/v1"
+        }
+      ],
+      "intent_keywords": [
+        "post-upgrade",
+        "after update",
+        "upgrade convergence"
+      ],
+      "source_doc": "docs/guides/devos-post-upgrade.md",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "docs-full-maintenance",
+      "os_id": "dev-os",
+      "name": "Docs Full Maintenance",
+      "description": "Full documentation quality loop \u2014 inventory and create missing docs, repair structural drift, verify content accuracy against code, final audit, then summarize the work completed.",
+      "category": "maintenance",
+      "skills": [
+        {
+          "name": "work-intake-preflight",
+          "args": "--auto"
+        },
+        "worktrees",
+        "worktree-sessions",
+        "docs-coverage-audit",
+        "docs-sync",
+        "docs-verify",
+        "audit-docs",
+        {
+          "name": "commit",
+          "args": "--all"
+        },
+        {
+          "name": "commit",
+          "args": "--stage-only"
+        },
+        "summarize"
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/docs-full-maintenance.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "docs",
+        "documentation",
+        "maintenance",
+        "audit",
+        "coverage",
+        "verify",
+        "accuracy",
+        "drift"
+      ],
+      "source_doc": "profiles/general/workflows/pipelines/docs-full-maintenance.md",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "docs-full-sync",
+      "os_id": "dev-os",
+      "name": "Docs Full Sync",
+      "description": "Sync project docs and refresh generated agent context from an isolated worktree.",
+      "category": "maintenance",
+      "skills": [
+        {
+          "name": "work-intake-preflight",
+          "args": "--auto"
+        },
+        "worktrees",
+        "worktree-sessions",
+        "docs-sync",
+        "generate-agents-md",
+        "context-full-refresh",
+        {
+          "name": "commit",
+          "args": "--all"
+        },
+        {
+          "name": "commit",
+          "args": "--stage-only"
+        }
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/docs-full-sync.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "docs",
+        "documentation",
+        "sync",
+        "stale"
+      ],
+      "source_doc": "profiles/general/workflows/pipelines/docs-full-sync.md",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "feature-branch",
+      "os_id": "dev-os",
+      "name": "Feature Branch",
+      "description": "Full arc from planning to merge \u2014 spec, worktree, implement, and merge in one chain. Creates an isolated worktree as the first project-isolation step so each feature runs in its own directory from the start, enabling parallel agent work without file collisions. Checkpoint runs after worktrees to preserve workspace identity and actual path for mid-chain recovery. Refreshes the codebase map early, pulls current dependency knowledge, reviews architecture, and wires worktree-sessions for parallel execution after tasks exist. gap-analysis runs with --dalio --converge --fix after write-spec. commit --grouped --local-only captures every safe non-ignored worktree change before devos-code-review; files that should not be committed must be ignored or explicitly excluded before this step. A second commit --grouped --local-only runs after sync-completed-work so task-sync or review-fix dirtiness is not carried into create-pr or merge-feature. create-pr owns the branch push, upstream setup, pull request creation/update, and readiness handoff. IMPORTANT: Worktree cleanup is automatic inside merge-feature after a successful full merge. Cleanup remains intentionally omitted from this chain because the chain schema has no conditional execution and cleanup after a failed merge would destroy unmerged work. Mirrored by skill: ~/.dev-os/.claude/skills/feature-branch/SKILL.md",
+      "category": "development",
+      "skills": [
+        {
+          "name": "work-intake-preflight",
+          "args": "--auto"
+        },
+        "worktrees",
+        "brainstorm",
+        "checkpoint",
+        {
+          "name": "map",
+          "args": "--update"
+        },
+        "shape-spec",
+        "audit-deps",
+        "knowledge-pull",
+        "architecture-creator",
+        "ui-journey-audit",
+        "frontend-design",
+        "write-spec",
+        {
+          "name": "gap-analysis",
+          "args": "--dalio --converge --fix"
+        },
+        "create-tasks",
+        "devos-verify",
+        "worktree-sessions",
+        "implement-tasks",
+        "ai-slop-polish",
+        "ui-design-system-audit",
+        "harden",
+        "devos-security-review",
+        "e2e",
+        "test",
+        "devos-verify",
+        "user-facing-docs",
+        "docs-sync",
+        "audit-docs",
+        {
+          "name": "commit",
+          "args": "--grouped --local-only"
+        },
+        "devos-code-review",
+        {
+          "name": "devos-agent",
+          "args": "architect-review"
+        },
+        {
+          "name": "sync-completed-work",
+          "args": "--unattended"
+        },
+        {
+          "name": "commit",
+          "args": "--grouped --local-only"
+        },
+        "create-pr",
+        {
+          "name": "sync-completed-work",
+          "args": "--unattended"
+        },
+        "merge-feature",
+        {
+          "name": "post-deploy-qa",
+          "args": "--record-debt-only --reason pending_no_url --source-chain feature-branch"
+        },
+        {
+          "name": "commit",
+          "args": "--stage-only"
+        },
+        "summarize"
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/feature-branch.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "feature lifecycle",
+        "full feature",
+        "plan and build",
+        "spec to merge",
+        "end to end feature",
+        "worktree feature",
+        "isolated feature",
+        "multi agent feature"
+      ],
+      "model_route": "standard",
+      "source_doc": "docs/guides/chains.md",
+      "mirror_skill": "feature-branch",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "feature-planning",
+      "os_id": "dev-os",
+      "name": "Feature Planning",
+      "description": "Design and task a feature \u2014 create an isolated worktree, refresh the codebase map, audit deps, pull knowledge, architect, write spec, close gaps (gap-analysis --dalio --converge --fix), then create tasks. Include cleanup polish before final summary. Mirrored by skill: ~/.dev-os/.claude/skills/feature-planning/SKILL.md",
+      "category": "development",
+      "skills": [
+        {
+          "name": "work-intake-preflight",
+          "args": "--auto"
+        },
+        "worktrees",
+        "checkpoint",
+        "worktree-sessions",
+        "brainstorm",
+        {
+          "name": "map",
+          "args": "--update"
+        },
+        "shape-spec",
+        "audit-deps",
+        "knowledge-pull",
+        "architecture-creator",
+        "write-spec",
+        {
+          "name": "gap-analysis",
+          "args": "--dalio --converge --fix"
+        },
+        "devos-verify",
+        "create-tasks",
+        "ai-slop-polish",
+        {
+          "name": "commit",
+          "args": "--all"
+        },
+        {
+          "name": "commit",
+          "args": "--stage-only"
+        },
+        "summarize"
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/feature-planning.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "plan",
+        "spec",
+        "requirements",
+        "tasks"
+      ],
+      "model_route": "standard",
+      "source_doc": "docs/guides/chains.md",
+      "mirror_skill": "feature-planning",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "full-project-onboarding",
+      "os_id": "dev-os",
+      "name": "Full Project Onboarding",
+      "description": "Complete new-project bootstrap: initialize DevOS, initialize installed OS packages, configure deploy infrastructure, register OAuth auth providers (Google, GitHub, Clerk), validate readiness, and deploy to production.",
+      "category": "development",
+      "skills": [
+        "devos-init",
+        {
+          "name": "os-init-all",
+          "args": "--run"
+        },
+        "setup-deploy",
+        "dev-db-scaffold",
+        "setup-auth-providers",
+        "predeploy-check",
+        {
+          "name": "commit",
+          "args": "--all"
+        },
+        "deploy",
+        {
+          "name": "commit",
+          "args": "--stage-only"
+        }
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/full-project-onboarding.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "onboard",
+        "bootstrap",
+        "new project",
+        "initialize",
+        "initialize installed oses",
+        "init all oses",
+        "setup auth",
+        "auth providers",
+        "OAuth",
+        "Google OAuth",
+        "GitHub OAuth",
+        "Clerk",
+        "full setup",
+        "deploy new app",
+        "scaffold dev database",
+        "local dev db"
+      ],
+      "model_route": "standard",
+      "source_doc": "docs/guides/chains.md",
+      "worktree_policy_exception": "bootstrap-deploy",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "go-live",
+      "os_id": "dev-os",
+      "name": "Go Live",
+      "description": "Transition a project from pre-launch to live \u2014 runs the full quality gate (predeploy-check, security, tests), deploys safely via ship-safely, updates lifecycle posture, runs post-deploy QA, and finalizes evidence-backed user docs before docs-sync/audit-docs. Distinct from ship-safely (which is the deploy gate only) and package-release-readiness (which is for library/package publishing without deployment).",
+      "category": "development",
+      "skills": [
+        {
+          "name": "work-intake-preflight",
+          "args": "--auto"
+        },
+        "worktrees",
+        "checkpoint",
+        "worktree-sessions",
+        "predeploy-check",
+        "harden",
+        "devos-security-review",
+        "test",
+        "devos-verify",
+        "db-migrate",
+        "ship-safely",
+        "go-live",
+        "post-deploy-qa",
+        "user-facing-docs",
+        "docs-sync",
+        "audit-docs",
+        {
+          "name": "commit",
+          "args": "--all"
+        },
+        {
+          "name": "commit",
+          "args": "--stage-only"
+        },
+        "summarize"
+      ],
+      "confirm": true,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/go-live.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "go live",
+        "launch",
+        "ship to production",
+        "deploy to prod",
+        "take to production",
+        "launch the app",
+        "production deploy",
+        "release to production",
+        "make it live"
+      ],
+      "model_route": "complex",
+      "source_doc": "docs/guides/chains.md",
+      "mirror_skill": "go-live",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "maintenance-session",
+      "os_id": "dev-os",
+      "name": "Maintenance Session",
+      "description": "Inspect project health, diagnose drift, and close maintenance gaps from an isolated worktree. gap-analysis runs with --dalio --converge --fix at end of session. Mirrored by skill: ~/.dev-os/.claude/skills/maintenance-session/SKILL.md",
+      "category": "maintenance",
+      "skills": [
+        {
+          "name": "work-intake-preflight",
+          "args": "--auto"
+        },
+        "worktrees",
+        "checkpoint",
+        "worktree-sessions",
+        "project-status",
+        "health",
+        {
+          "name": "work-intake-reconcile",
+          "args": "--check"
+        },
+        "context-surface-audit",
+        "docs-coverage-audit",
+        "docs-sync",
+        "docs-verify",
+        "audit-docs",
+        {
+          "name": "project-artifacts-audit",
+          "args": "--apply --yes"
+        },
+        {
+          "name": "gap-analysis",
+          "args": "--dalio --converge --fix"
+        },
+        {
+          "name": "commit",
+          "args": "--all"
+        },
+        {
+          "name": "commit",
+          "args": "--stage-only"
+        },
+        "summarize",
+        "project-cleanup"
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/maintenance-session.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "maintenance",
+        "health",
+        "stale",
+        "gaps"
+      ],
+      "model_route": "standard",
+      "source_doc": "profiles/general/workflows/pipelines/maintenance-session.md",
+      "mirror_skill": "maintenance-session",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "os-init-all",
+      "os_id": "dev-os",
+      "name": "Initialize All OSes",
+      "description": "Initialize every installed DevOS OS package in one optimize-ordered run. Detect installed OSes, preserve Research \u2192 Marketing \u2192 Creative \u2192 Design dependencies, run each canonical initializer, stop on failure, and verify the resulting fleet.",
+      "category": "maintenance",
+      "skills": [
+        "os-init-all"
+      ],
+      "confirm": true,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/os-init-all.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "initialize all oses",
+        "init all oses",
+        "bootstrap all oses",
+        "initialize os fleet",
+        "run all os init",
+        "setup all operating systems",
+        "os init all"
+      ],
+      "model_route": "standard",
+      "source_doc": "docs/guides/chains.md",
+      "worktree_policy_exception": "bootstrap",
+      "mirror_skill": "os-init-all",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "os-update",
+      "os_id": "dev-os",
+      "name": "Update All OSes",
+      "description": "Update every OS package installed in a project to its current source version. Show per-OS drift first, sync each stale OS through its own delegate, invoke post-update backfill through the skill surface, record a resumable ledger, and verify the fleet. Project-scoped by default; --all-projects widens.",
+      "category": "maintenance",
+      "skills": [
+        "os-update"
+      ],
+      "confirm": true,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/os-update.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "update oses",
+        "update all oses",
+        "sync os versions",
+        "update content oses",
+        "refresh os installs",
+        "os versions stale",
+        "update os fleet",
+        "os update project"
+      ],
+      "model_route": "standard",
+      "source_doc": "docs/runbooks/os-version-sync.md",
+      "worktree_policy_exception": "none",
+      "mirror_skill": "os-update",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "package-release-readiness",
+      "os_id": "dev-os",
+      "name": "Package Release Readiness",
+      "description": "Verify a package, library, extension, GitHub Release, or DevOS OS package is ready to publish without publishing it. Runs project state, dependency, test, hardening, implementation, security, standards, and documentation gates, then finishes with release --dry-run. This is distinct from ship-safely, which deploys apps/servers, and release-onboarding, which sets up first-time release infrastructure. Mirrored by skill: ~/.dev-os/.claude/skills/package-release-readiness/SKILL.md",
+      "category": "development",
+      "skills": [
+        {
+          "name": "work-intake-preflight",
+          "args": "--auto"
+        },
+        "worktrees",
+        "checkpoint",
+        "worktree-sessions",
+        "project-status",
+        "audit-deps",
+        "test",
+        "harden",
+        "implementation-review",
+        "devos-security-review",
+        "standards-validator",
+        "docs-sync",
+        "audit-docs",
+        {
+          "name": "commit",
+          "args": "--all"
+        },
+        {
+          "name": "release",
+          "args": "--dry-run"
+        }
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/package-release-readiness.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "package release readiness",
+        "prepare package release",
+        "prepare release",
+        "pre-release",
+        "publish readiness",
+        "package release check",
+        "library release check",
+        "release dry run",
+        "cut release safely"
+      ],
+      "model_route": "standard",
+      "source_doc": "product/specs/2026-05-25-package-release-readiness-chain/spec.md",
+      "mirror_skill": "package-release-readiness",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "parallel-build-slice",
+      "os_id": "dev-os",
+      "name": "Parallel Build Slice",
+      "description": "Split a spec into independent implementation tracks, refresh the codebase map, pull current knowledge, review architecture, create isolated worktrees for multi-agent execution, implement, harden, test, devos-verify, refresh docs (user-facing-docs, docs-sync, audit-docs) inside the worktree, commit all changes, and merge. Merge-dependent artifacts (codebase map, user-flows, roadmap) are regenerated inline by merge-feature on merged main before its single push \u2014 main stays clean afterward. Use when several agents should work without file collisions. The worktrees step provisions all tracks in one invocation with per-track suffixes (for example, slug-track-1, slug-track-2) to prevent path collisions when multiple agents run concurrently. Checkpoint runs after worktrees to preserve track paths for mid-chain recovery. commit --grouped --local-only captures every safe non-ignored worktree change before devos-code-review; files that should not be committed must be ignored or explicitly excluded before this step. A second commit --grouped --local-only runs after sync-completed-work so task-sync or review-fix dirtiness is not carried into create-pr or merge-feature. create-pr owns the branch push, upstream setup, pull request creation/update, and readiness handoff. IMPORTANT: Worktree cleanup is automatic inside merge-feature after a successful full merge. Cleanup remains omitted from this chain because the chain schema has no conditional execution; failed merges and MVP merges preserve active track worktrees.",
+      "category": "development",
+      "skills": [
+        {
+          "name": "work-intake-preflight",
+          "args": "--auto"
+        },
+        "worktrees",
+        "orchestrate",
+        {
+          "name": "map",
+          "args": "--update"
+        },
+        "audit-deps",
+        "knowledge-pull",
+        "architecture-creator",
+        {
+          "name": "gap-analysis",
+          "args": "--dalio --converge --fix"
+        },
+        "create-tasks",
+        "checkpoint",
+        "worktree-sessions",
+        "agent-dispatch",
+        "implement-tasks",
+        "ai-slop-polish",
+        "harden",
+        "devos-security-review",
+        "test",
+        "devos-verify",
+        "user-facing-docs",
+        "docs-sync",
+        "audit-docs",
+        {
+          "name": "commit",
+          "args": "--grouped --local-only"
+        },
+        "devos-code-review",
+        {
+          "name": "sync-completed-work",
+          "args": "--unattended"
+        },
+        {
+          "name": "commit",
+          "args": "--grouped --local-only"
+        },
+        "create-pr",
+        {
+          "name": "sync-completed-work",
+          "args": "--unattended"
+        },
+        "merge-feature",
+        {
+          "name": "post-deploy-qa",
+          "args": "--record-debt-only --reason pending_no_url --source-chain parallel-build-slice"
+        },
+        "orchestrate",
+        {
+          "name": "commit",
+          "args": "--stage-only"
+        },
+        "summarize"
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/parallel-build-slice.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "parallel build",
+        "multi agent implementation",
+        "worktree slice",
+        "avoid collisions",
+        "split into tracks",
+        "worktree cleanup",
+        "agent worktrees"
+      ],
+      "model_route": "standard",
+      "source_doc": "product/gap-analysis/2026-05-21-chains-worktree-orchestration-dalio.md",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "post-deploy-qa",
+      "os_id": "dev-os",
+      "name": "Post-Deploy QA",
+      "description": "Live QA audit from an isolated worktree of a deployed or staging web app \u2014 exercises real flows, finds bugs via site-audit and functional testing via site-audit-tester, then produces structured issue documentation, closes matching QA debt from dogfood manifest evidence, finalizes evidence-backed user docs, and produces a verified summary. Runs after a deploy to confirm the production surface matches expected behavior. Distinct from design-qa (which runs against a local dev server) and e2e (which runs automated Playwright tests). Mirrored by skill: ~/.dev-os/.claude/skills/post-deploy-qa/SKILL.md",
+      "category": "testing",
+      "skills": [
+        {
+          "name": "work-intake-preflight",
+          "args": "--auto"
+        },
+        "worktrees",
+        "checkpoint",
+        "worktree-sessions",
+        "site-audit",
+        "site-audit-tester",
+        "dogfood",
+        "devos-verify",
+        "user-facing-docs",
+        "docs-sync",
+        "audit-docs",
+        {
+          "name": "commit",
+          "args": "--all"
+        },
+        {
+          "name": "commit",
+          "args": "--stage-only"
+        },
+        "summarize"
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/post-deploy-qa.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "post deploy qa",
+        "live qa",
+        "staging qa",
+        "qa deployed app",
+        "test deployed site",
+        "audit live app",
+        "production qa",
+        "smoke test production",
+        "test the live site"
+      ],
+      "model_route": "standard",
+      "source_doc": "docs/guides/chains.md",
+      "mirror_skill": "post-deploy-qa",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "post-merge-refresh",
+      "os_id": "dev-os",
+      "name": "Post-Merge Refresh",
+      "description": "Refresh docs, user flows, roadmap, and stale worktrees/branches after a feature merge from an isolated worktree.",
+      "category": "maintenance",
+      "skills": [
+        {
+          "name": "work-intake-preflight",
+          "args": "--auto"
+        },
+        "worktrees",
+        "checkpoint",
+        "docs-sync",
+        "audit-docs",
+        "generate-agents-md",
+        "generate-user-flows",
+        {
+          "name": "post-deploy-qa",
+          "args": "--record-debt-only --reason pending_no_url --source-chain post-merge-refresh"
+        },
+        "orchestrate",
+        {
+          "name": "commit",
+          "args": "--stage-only"
+        },
+        "summarize",
+        {
+          "name": "commit",
+          "args": "--all"
+        }
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/post-merge-refresh.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "post-merge",
+        "after merge",
+        "refresh docs",
+        "pmrq",
+        "merge refresh"
+      ],
+      "source_doc": "docs/guides/chains.md",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "pr-lifecycle",
+      "os_id": "dev-os",
+      "name": "PR Lifecycle",
+      "description": "Prepare an implemented branch for pull request review, choose flat versus stacked PR shape, run verification and code-review gates, commit review-ready state, create or update the PR, and report merge readiness without creating a new feature worktree.",
+      "category": "development",
+      "skills": [
+        {
+          "name": "work-intake-preflight",
+          "args": "--auto"
+        },
+        {
+          "name": "sync-completed-work",
+          "args": "--unattended"
+        },
+        "ai-slop-polish",
+        "harden",
+        "test",
+        "devos-verify",
+        "devos-code-review",
+        {
+          "name": "sync-completed-work",
+          "args": "--unattended"
+        },
+        {
+          "name": "commit",
+          "args": "--grouped --local-only"
+        },
+        "create-pr",
+        {
+          "name": "commit",
+          "args": "--stage-only"
+        },
+        "summarize"
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/pr-lifecycle.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "pr lifecycle",
+        "pull request lifecycle",
+        "pr sdl",
+        "agentic pr",
+        "prepare pr",
+        "open pr with gates",
+        "review ready pr",
+        "create review ready pr",
+        "pr readiness",
+        "branch to pr"
+      ],
+      "model_route": "standard",
+      "source_doc": "docs/guides/chains.md",
+      "worktree_policy_exception": "branch-only",
+      "mirror_skill": "pr-lifecycle",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "project-audit",
+      "os_id": "dev-os",
+      "name": "Project Audit",
+      "description": "Comprehensive isolated-worktree project audit chain covering state, runtime health, context drift, artifact coverage, standards, security, code quality, UI/UX, deployment readiness, and gap synthesis.",
+      "category": "maintenance",
+      "skills": [
+        {
+          "name": "work-intake-preflight",
+          "args": "--auto"
+        },
+        "worktrees",
+        "checkpoint",
+        "worktree-sessions",
+        "project-status",
+        "triage",
+        "health",
+        "devos-doctor",
+        "runtime-diagnostics",
+        "context-surface-audit",
+        "contract-drift-audit",
+        "ownership-audit",
+        "project-artifacts-audit",
+        "optimize-process",
+        "docs-coverage-audit",
+        "docs-sync",
+        "docs-verify",
+        "audit-docs",
+        "standards-validator",
+        "profile-standards-inheritance-audit",
+        "audit-deps",
+        "devos-security-review",
+        "test",
+        "devos-verify",
+        "devos-code-review",
+        "implementation-review",
+        "improve-codebase-architecture",
+        "project-health-audit",
+        "usability-audit",
+        "ux-audit",
+        "ui-design-system-audit",
+        "ui-preflight",
+        "predeploy-check",
+        {
+          "name": "gap-analysis",
+          "args": "--dalio --converge --fix"
+        },
+        {
+          "name": "commit",
+          "args": "--all"
+        },
+        {
+          "name": "commit",
+          "args": "--stage-only"
+        },
+        "summarize"
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/project-audit.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "project audit",
+        "audit project",
+        "process optimization",
+        "optimize process",
+        "comprehensive audit",
+        "full audit",
+        "project health audit",
+        "audit everything",
+        "readiness audit",
+        "quality audit",
+        "drift audit"
+      ],
+      "model_route": "complex",
+      "source_doc": "docs/guides/chains.md",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "project-complete",
+      "os_id": "dev-os",
+      "name": "Project Complete",
+      "description": "Close out a feature spec or project end-to-end \u2014 runs completion checks (usability, docs sync, user-facing docs), verifies all tasks are done, commits final state, and produces a closure summary. Use when a spec is fully implemented and you want to formally close it.",
+      "category": "development",
+      "skills": [
+        {
+          "name": "work-intake-preflight",
+          "args": "--auto"
+        },
+        "worktrees",
+        "checkpoint",
+        "worktree-sessions",
+        "project-status",
+        "devos-verify",
+        "usability-audit",
+        "ux-audit",
+        "docs-coverage-audit",
+        "docs-sync",
+        "docs-verify",
+        "audit-docs",
+        "user-facing-docs",
+        "standards-validator",
+        "project-complete",
+        {
+          "name": "commit",
+          "args": "--all"
+        },
+        {
+          "name": "commit",
+          "args": "--stage-only"
+        },
+        "summarize"
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/project-complete.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "project complete",
+        "close project",
+        "finish spec",
+        "spec done",
+        "close out feature",
+        "wrap up project",
+        "complete the feature",
+        "mark complete",
+        "close this out"
+      ],
+      "model_route": "standard",
+      "source_doc": "docs/guides/chains.md",
+      "mirror_skill": "project-complete",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "refactor",
+      "os_id": "dev-os",
+      "name": "Refactor",
+      "description": "Improve code structure from an isolated worktree while preserving behavior \u2014 systematic refactoring with scope detection, safety gates, complexity analysis, and full test verification before and after. Runs harden and devos-security-review to catch regressions introduced during restructuring.",
+      "category": "development",
+      "skills": [
+        {
+          "name": "work-intake-preflight",
+          "args": "--auto"
+        },
+        "worktrees",
+        "checkpoint",
+        "worktree-sessions",
+        {
+          "name": "map",
+          "args": "--update"
+        },
+        "improve-codebase-architecture",
+        "refactor",
+        "test",
+        "harden",
+        "devos-security-review",
+        "devos-verify",
+        "ai-slop-polish",
+        {
+          "name": "commit",
+          "args": "--all"
+        },
+        "devos-code-review",
+        "pr-lifecycle",
+        {
+          "name": "commit",
+          "args": "--stage-only"
+        },
+        "summarize"
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/refactor.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "refactor",
+        "clean up code",
+        "restructure code",
+        "improve code quality",
+        "code cleanup",
+        "refactoring pass",
+        "technical debt",
+        "simplify code",
+        "restructure module"
+      ],
+      "model_route": "standard",
+      "source_doc": "docs/guides/chains.md",
+      "mirror_skill": "refactor",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "release-onboarding",
+      "os_id": "dev-os",
+      "name": "Release Onboarding",
+      "description": "First-time package/library release onboarding: initialize DevOS, audit dependencies, configure CI/CD release workflows, devos-verify tests and build, then publish only as the final onboarding action. For recurring pre-publish verification without publishing, use package-release-readiness. Mirrored by skill: ~/.dev-os/.claude/skills/release-onboarding/SKILL.md",
+      "category": "development",
+      "skills": [
+        "devos-init",
+        "audit-deps",
+        "ci-setup",
+        "harden",
+        {
+          "name": "commit",
+          "args": "--all"
+        },
+        "release",
+        {
+          "name": "commit",
+          "args": "--stage-only"
+        }
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/release-onboarding.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "release onboarding",
+        "first release setup",
+        "setup package release",
+        "configure package publishing",
+        "configure release workflow",
+        "CI release setup",
+        "onboard package release",
+        "new package release project",
+        "release infrastructure setup"
+      ],
+      "model_route": "standard",
+      "worktree_policy_exception": "bootstrap-release",
+      "mirror_skill": "release-onboarding",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "repair-session",
+      "os_id": "dev-os",
+      "name": "Repair Session",
+      "description": "Diagnose, fix, and devos-verify a broken work session. Mirrored by skill: ~/.dev-os/.claude/skills/repair-session/SKILL.md",
+      "category": "recovery",
+      "skills": [
+        "diagnose-first",
+        "repair-hooks",
+        "systematic-debugging",
+        "quick-fix",
+        "devos-verify",
+        {
+          "name": "commit",
+          "args": "--all"
+        },
+        {
+          "name": "commit",
+          "args": "--stage-only"
+        }
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/repair-session.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "repair",
+        "debug",
+        "broken",
+        "fix"
+      ],
+      "source_doc": "docs/guides/chains.md",
+      "worktree_policy_exception": "branch-only",
+      "mirror_skill": "repair-session",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "security-hardening",
+      "os_id": "dev-os",
+      "name": "Security Hardening",
+      "description": "Full security posture pass from an isolated worktree \u2014 audit deps first to surface vulnerable packages, then review code with that context, validate standards, and devos-verify. Mirrored by skill: ~/.dev-os/.claude/skills/security-hardening/SKILL.md",
+      "category": "development",
+      "skills": [
+        {
+          "name": "work-intake-preflight",
+          "args": "--auto"
+        },
+        "worktrees",
+        "checkpoint",
+        "worktree-sessions",
+        "audit-deps",
+        "devos-security-review",
+        "standards-validator",
+        {
+          "name": "commit",
+          "args": "--all"
+        },
+        "devos-verify",
+        "pr-lifecycle",
+        {
+          "name": "commit",
+          "args": "--stage-only"
+        }
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/security-hardening.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "security",
+        "security review",
+        "security hardening",
+        "audit deps",
+        "harden security",
+        "security pass"
+      ],
+      "model_route": "complex",
+      "source_doc": "docs/guides/chains.md",
+      "mirror_skill": "security-hardening",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "session-start",
+      "os_id": "dev-os",
+      "name": "Session Start",
+      "description": "Orient a new session \u2014 daily review, project status, and next-action routing.",
+      "category": "maintenance",
+      "skills": [
+        "daily-start",
+        "project-status",
+        "orchestrate",
+        {
+          "name": "commit",
+          "args": "--stage-only"
+        }
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/session-start.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "session start",
+        "start session",
+        "orient",
+        "daily start",
+        "what to work on",
+        "begin work"
+      ],
+      "source_doc": "docs/guides/chains.md",
+      "worktree_policy_exception": "branch-only",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "ship-safely",
+      "os_id": "dev-os",
+      "name": "Ship Safely",
+      "description": "Run deployment confidence checks before promoting an app/server release; produce product/runtime/deploy/latest.json metadata for downstream post-deploy QA. Ship-safely remains the deploy gate only; standalone user-facing web deploys must leave QA debt if no caller runs post-deploy-qa.",
+      "category": "operations",
+      "skills": [
+        "test",
+        "harden",
+        "predeploy-check",
+        "db-migrate",
+        "deploy",
+        {
+          "name": "commit",
+          "args": "--stage-only"
+        }
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/ship-safely.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "ship",
+        "ship safely",
+        "gated deploy",
+        "safe deploy",
+        "deploy",
+        "deployment preflight",
+        "rollback deploy"
+      ],
+      "source_doc": "profiles/general/workflows/pipelines/ship-safely.md",
+      "worktree_policy_exception": "deploy",
+      "mirror_skill": "ship-safely",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "skill-authoring",
+      "os_id": "dev-os",
+      "name": "Skill Authoring",
+      "description": "Create, validate, and publish a new DevOS skill end-to-end from an isolated worktree.",
+      "category": "development",
+      "skills": [
+        {
+          "name": "work-intake-preflight",
+          "args": "--auto"
+        },
+        "worktrees",
+        "checkpoint",
+        "worktree-sessions",
+        "bx-skill-creator",
+        "skill-release-validator",
+        "sync-skills",
+        "audit-docs",
+        "context-full-refresh",
+        {
+          "name": "commit",
+          "args": "--all"
+        },
+        {
+          "name": "commit",
+          "args": "--stage-only"
+        }
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/skill-authoring.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "new skill",
+        "create skill",
+        "author skill",
+        "publish skill",
+        "skill authoring"
+      ],
+      "model_route": "standard",
+      "source_doc": "docs/guides/chains.md",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "standards-refresh",
+      "os_id": "dev-os",
+      "name": "Standards Refresh",
+      "description": "Re-extract and validate standards in an isolated worktree, then refresh generated context.",
+      "category": "maintenance",
+      "skills": [
+        {
+          "name": "work-intake-preflight",
+          "args": "--auto"
+        },
+        "worktrees",
+        "checkpoint",
+        "worktree-sessions",
+        "extract-standards",
+        "standards-validator",
+        "context-full-refresh",
+        {
+          "name": "commit",
+          "args": "--all"
+        },
+        {
+          "name": "commit",
+          "args": "--stage-only"
+        }
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/standards-refresh.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "standards",
+        "validate",
+        "refresh",
+        "profile"
+      ],
+      "source_doc": "profiles/general/workflows/pipelines/standards-refresh.md",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "system-ops-visibility",
+      "os_id": "dev-os",
+      "name": "System Ops Visibility",
+      "description": "Read-only walking skeleton for Linux host + DevOS system operations visibility. Produces immutable Markdown/JSON reports, updates the local action-card inbox, and optionally exercises the Google Workspace Gmail delivery boundary.",
+      "category": "operations",
+      "skills": [
+        {
+          "name": "system-ops-visibility",
+          "args": "--mode check --target-root . --trigger manual"
+        }
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/system-ops-visibility.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "system ops",
+        "system-ops visibility",
+        "operations visibility",
+        "health digest",
+        "action inbox"
+      ],
+      "model_route": "standard",
+      "source_doc": "product/specs/2026-08-08-system-ops-visibility/spec.md",
+      "worktree_policy_exception": "read-only",
+      "mirror_skill": "system-ops-visibility",
+      "work_intake_policy": "runtime-aware"
+    },
+    {
+      "id": "weekly-cadence",
+      "os_id": "dev-os",
+      "name": "Weekly Cadence",
+      "description": "Dalio feedback loop in an isolated worktree \u2014 weekly review, gap analysis (--dalio --converge --fix), and next-action routing. Mirrored by skill: ~/.dev-os/.claude/skills/weekly-cadence/SKILL.md",
+      "category": "maintenance",
+      "skills": [
+        "worktrees",
+        "weekly-review",
+        {
+          "name": "gap-analysis",
+          "args": "--dalio --converge --fix"
+        },
+        "orchestrate",
+        "project-cleanup",
+        "monthly-retro",
+        {
+          "name": "commit",
+          "args": "--all"
+        },
+        {
+          "name": "commit",
+          "args": "--stage-only"
+        }
+      ],
+      "confirm": false,
+      "clients": [
+        "omp",
+        "claude-code",
+        "codex",
+        "gemini",
+        "opencode",
+        "pi",
+        "zed"
+      ],
+      "source": "/home/tafadzwa/projects/os/dev-os/profiles/general/chains/weekly-cadence.yaml",
+      "status": "available",
+      "intent_keywords": [
+        "weekly review",
+        "weekly cadence",
+        "weekly retro",
+        "weekly",
+        "dalio review",
+        "weekly cycle"
+      ],
+      "source_doc": "docs/guides/chains.md",
+      "mirror_skill": "weekly-cadence",
+      "work_intake_policy": "runtime-aware"
+    }
+  ]
+}

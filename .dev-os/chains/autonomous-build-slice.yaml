@@ -1,0 +1,36 @@
+schema_version: 1
+id: autonomous-build-slice
+name: Autonomous Build Slice
+description: "Run an approved feature slice autonomously from a preserved worktree through implementation, verification, PR creation, merge, and durable result reporting. The chain owns dirty-state preservation, worktree identity, checkpointing, runtime fallback, recovery handoff, and the canonical PR boundary."
+category: development
+work_intake_policy: autonomous
+skills:
+  - {name: work-intake-preflight, args: "--auto"}
+  - worktrees
+  - checkpoint
+  - devos-verify
+  - {name: autonomous, args: "--from tasks --no-pause"}
+  - {name: pr-lifecycle, args: "--open"}
+  - {name: sync-completed-work, args: "--unattended"}
+  - merge-feature
+  - {name: post-deploy-qa, args: "--record-debt-only --reason pending_no_url --source-chain autonomous-build-slice"}
+  - {name: checkpoint, args: "--label autonomous-build-slice-final"}
+  - summarize
+confirm: true
+model_route: standard
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+intent_keywords:
+  - autonomous build
+  - autonomous feature
+  - autonomous slice
+  - build autonomously
+  - implement and open pr
+  - autonomous pr
+source_doc: docs/guides/chains.md
