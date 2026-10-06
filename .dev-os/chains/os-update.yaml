@@ -3,10 +3,11 @@ id: os-update
 name: Update All OSes
 mirror_skill: os-update
 description: >-
-  Update every OS package installed in a project to its current source version.
-  Show per-OS drift first, sync each stale OS through its own delegate, invoke
-  post-update backfill through the skill surface, record a resumable ledger,
-  and verify the fleet. Project-scoped by default; --all-projects widens.
+  Update every OS package installed in a project from an explicitly approved plan.
+  Prepare fetches metadata without moving HEAD. One operator decision supplies the
+  plan digest, operation id, and expected revision. Apply then fast-forwards only
+  to that pinned commit, syncs, and verifies. A changed plan, dirty or divergent
+  source, lock contention, stale revision, or unknown outcome stops before effects.
 category: maintenance
 work_intake_policy: runtime-aware
 confirm: true

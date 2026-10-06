@@ -13,7 +13,7 @@ skills:
   - {name: map, args: "--update"}
   - generate-agents-md
   - {name: commit, args: "--all"}
-  - {name: commit, args: "--stage-only"}
+  - {name: commit, args: "--all"}
 confirm: false
 clients:
   - omp

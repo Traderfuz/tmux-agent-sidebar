@@ -22,7 +22,7 @@ skills:
   - dev-db-scaffold
   - predeploy-check
   - {name: commit, args: "--all"}
-  - {name: commit, args: "--stage-only"}
+  - {name: commit, args: "--all"}
 intent_keywords:
   - onboard
   - bootstrap

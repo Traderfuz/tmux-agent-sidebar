@@ -13,7 +13,7 @@ skills:
   - docs-verify
   - audit-docs
   - {name: commit, args: "--all"}
-  - {name: commit, args: "--stage-only"}
+  - {name: commit, args: "--all"}
   - summarize
 confirm: false
 clients:

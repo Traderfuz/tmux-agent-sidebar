@@ -21,8 +21,8 @@ skills:
   - devos-code-review
   - {name: sync-completed-work, args: "--unattended"}
   - {name: commit, args: "--grouped --local-only"}
-  - create-pr
-  - {name: commit, args: "--stage-only"}
+  - {name: create-pr, args: "--spec <slug>"}
+  - {name: commit, args: "--all"}
   - summarize
 clients:
   - omp

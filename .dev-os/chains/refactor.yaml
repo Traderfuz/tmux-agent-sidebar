@@ -27,7 +27,7 @@ skills:
   - {name: commit, args: "--all"}
   - devos-code-review
   - pr-lifecycle
-  - {name: commit, args: "--stage-only"}
+  - {name: commit, args: "--all"}
   - summarize
 clients:
   - omp

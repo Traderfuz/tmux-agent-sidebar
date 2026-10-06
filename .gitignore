@@ -90,3 +90,18 @@ node_modules/
 dist/
 build/
 target/
+# >>> DevOS managed agent links (machine-local; relinked by devos-init) >>>
+/.dev-os/agents/architect-review
+/.dev-os/agents/code-reviewer
+/.dev-os/agents/gap-analysis
+/.dev-os/agents/implementer
+/.dev-os/agents/performance-review
+/.dev-os/agents/proactive-orchestrator
+/.dev-os/agents/security-review
+# <<< DevOS managed agent links <<<
+
+# DevOS runtime artifacts refresh (generated — do not track)
+.dev-os/notepad.md
+.dev-os/backups/
+.dev-os/.conflicts/
+product/runtime/deliver-product-slice/

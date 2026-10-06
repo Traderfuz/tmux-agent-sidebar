@@ -74,23 +74,23 @@ Interactive runs pause for human approve/revise on the artifact; headless autono
 
 ### Step 4: Architect Review
 
-**Command:** `review --mode architect`
+**Skill:** `devos-agent` (architect agent)
 **Input:** `spec.md`, `planning/gap-analysis-report.md`
 **Output:** `product/specs/[spec]/planning/architect-review.md`
 **Gate to next step:** Review recorded; BLOCK status requires spec update before continuing
 **Skip if:** `--skip-reviews` flag was passed
 
-> When using autonomous mode (`autonomous`), this phase runs automatically as part of the planning pipeline. For standalone use, invoke `review --mode architect --spec [spec]`.
+> When using autonomous mode (`autonomous`), this phase runs automatically as part of the planning pipeline. For standalone use, invoke `devos-agent` with the architect agent for `--spec [spec]`.
 
 ### Step 5: Process Optimizer Review
 
-**Command:** `review --mode process-optimizer`
+**Skill:** `devos-agent` (process-optimizer agent)
 **Input:** `spec.md`, `planning/architect-review.md`
 **Output:** `product/specs/[spec]/planning/process-optimizer-review.md`
 **Gate to next step:** Review recorded; BLOCK status requires spec update before continuing
 **Skip if:** `--skip-reviews` flag was passed
 
-> When using autonomous mode, this phase runs automatically. For standalone use, invoke `review --mode process-optimizer --spec [spec]`.
+> When using autonomous mode, this phase runs automatically. For standalone use, invoke `devos-agent` with the process-optimizer agent for `--spec [spec]`.
 
 ### Step 5b: Source Reality Check
 
@@ -167,7 +167,7 @@ scripts/devos-dev-server-registry.sh list 2>/dev/null | grep -q "healthy" \
 
 ### Step 8a: Security Review (conditional)
 
-**Command:** `security-review --area [spec]`
+**Skill:** `devos-security-review --area [spec]`
 **Trigger:** The slice touches auth, access control, secrets, external inputs, shell execution, or data exposure.
 **Input:** Implemented code and changed paths
 **Output:** Security review report under `product/security/`
@@ -204,7 +204,7 @@ Skip entirely only when none of the above are feasible AND the slice is a non-vi
 
 ### Step 9: Review Quality
 
-**Command:** `review`
+**Skill:** `devos-code-review`
 **Input:** Implemented code, spec for comparison
 **Output:** Review findings with severity ratings
 **Gate to next step:** Review clean, or user confirms proceed despite warnings

@@ -33,11 +33,12 @@ skills:
   - {name: devos-agent, args: "architect-review"}
   - {name: sync-completed-work, args: "--unattended"}
   - {name: commit, args: "--grouped --local-only"}
-  - create-pr
+  - {name: create-pr, args: "--spec <slug>"}
   - {name: sync-completed-work, args: "--unattended"}
   - merge-feature
+  - {name: dogfood, args: "--post-merge --non-blocking --surface auto --source-chain build-slice"}
   - {name: post-deploy-qa, args: "--record-debt-only --reason pending_no_url --source-chain build-slice"}
-  - {name: commit, args: "--stage-only"}
+  - {name: commit, args: "--all"}
   - summarize
 confirm: false
 model_route: standard

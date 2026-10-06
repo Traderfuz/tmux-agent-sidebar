@@ -24,7 +24,7 @@ skills:
   - predeploy-check
   - {name: commit, args: "--all"}
   - deploy
-  - {name: commit, args: "--stage-only"}
+  - {name: commit, args: "--all"}
 source_doc: docs/guides/chains.md
 intent_keywords:
   - onboard

@@ -29,7 +29,7 @@ Iterative review-refactor-test loop that progressively improves code quality unt
 
 ### Step 1: Review
 
-**Command:** `review`
+**Skill:** `devos-code-review`
 **Input:** Current codebase (focused on changed files in this feature)
 **Output:** Review findings with severity ratings (CRITICAL, HIGH, MEDIUM, LOW)
 **Gate to next step:** At least one issue found above severity threshold
@@ -44,7 +44,7 @@ Review dimensions:
 
 If the review surfaces obvious AI slop, note that `polish` owns the cleanup pass before refactor begins.
 If the review surfaces repeated build/type/test failures or broad reliability issues, escalate to `harden` instead of staying in the loop indefinitely.
-If the review surfaces auth, secrets, or injection issues, route to `security-review` before continuing the refactor loop.
+If the review surfaces auth, secrets, or injection issues, route to `devos-security-review` before continuing the refactor loop.
 
 ### Step 2: Refactor
 
@@ -66,7 +66,7 @@ Address issues in severity order: CRITICAL first, then HIGH, then MEDIUM. Do not
 
 ### Step 4: Re-Review
 
-**Command:** `review` (same as Step 1)
+**Skill:** `devos-code-review` (same as Step 1)
 **Input:** Refactored codebase
 **Output:** Updated review findings
 **Decision:**

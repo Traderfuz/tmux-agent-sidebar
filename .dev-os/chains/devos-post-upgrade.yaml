@@ -3,7 +3,9 @@ id: devos-post-upgrade
 name: DevOS Post-Upgrade Convergence
 description: Plan, authorize, execute, resume, and verify only the affected layers after a successful DevOS update.
 category: maintenance
+worktree_policy_exception: none
 work_intake_policy: runtime-aware
+mirror_skill: devos-post-upgrade
 skills:
   - devos-post-upgrade
 confirm: false

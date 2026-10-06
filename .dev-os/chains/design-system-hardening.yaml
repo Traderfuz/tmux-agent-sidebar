@@ -17,7 +17,7 @@ skills:
   - visual-regression-qa
   - {name: commit, args: "--all"}
   - devos-verify
-  - {name: commit, args: "--stage-only"}
+  - {name: commit, args: "--all"}
 confirm: true
 clients:
   - omp

@@ -1,7 +1,8 @@
 schema_version: 1
 id: session-start
 name: Session Start
-description: Orient a new session — daily review, project status, and next-action routing.
+mirror_skill: session-start
+description: Orient a new session — daily review, project status, and next-action routing. Mirrored by skill ~/.dev-os/.claude/skills/session-start/SKILL.md.
 category: maintenance
 work_intake_policy: runtime-aware
 worktree_policy_exception: branch-only
@@ -9,7 +10,7 @@ skills:
   - daily-start
   - project-status
   - orchestrate
-  - {name: commit, args: "--stage-only"}
+  - {name: commit, args: "--all"}
 confirm: false
 clients:
   - omp

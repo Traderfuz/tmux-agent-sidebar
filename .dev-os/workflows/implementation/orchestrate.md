@@ -40,7 +40,7 @@ Categorize each spec found:
 | **Needs Tasking** | Has spec.md but no tasks.md |
 | **Needs Spec** | In backlog but no spec dir exists |
 | **Maintenance** | No spec — detected via stale docs, failing tests, or drift warnings |
-| **Complete** | `vbs_verify_spec` returns `resolved_in_code`, OR all tasks checked, OR backlog shows "Completed" |
+| **Complete** | `vbs_verify_spec` returns `resolved_in_code` or `not_actionable`, OR the delivery branch already landed on `origin/main` |
 
 ### Step 3: Score by Shipping Impact
 
@@ -62,7 +62,8 @@ Before issuing a recommendation, verify the top-scoring spec's artifact state re
 
 Use **Navigator mode** against every surfaced candidate, not only the top candidate. Run `vbs_verify_spec "$spec_dir"` and, for partial specs, consume `vbs_audit_spec_code_reality "$spec_dir"` evidence. Verdict handling is blocking:
 
-- `resolved_in_code` → suppress from implementation recommendations and classify Complete.
+- `resolved_in_code` or `not_actionable` → suppress from implementation and delivery recommendations and classify Complete.
+- Backlog says only review/PR/merge remains → check `origin/main..<branch>`; zero unique commits or a merge/squash commit naming the branch or slug means Complete and a backlog reconciliation finding, never `create-pr` or `merge-feature`.
 - `resolved_in_code_manual_validation` → suppress implementation; surface only manual/operator proof if relevant.
 - `hardening_only` → do not emit `implement-tasks`; route to hardening/spec update.
 - `needs_reconciliation` → do not emit `implement-tasks`; route to `sync-completed-work --spec {spec_name}` or `project-status --spec {spec_name}`.
@@ -161,7 +162,7 @@ Categorize each spec:
 | **Needs Tasking** | Has spec.md but no tasks.md |
 | **Needs Spec** | In backlog but no spec dir exists |
 | **Blocked** | Explicitly marked blocked in backlog or spec |
-| **Complete** | Source verdict `resolved_in_code` OR all tasks checked OR backlog shows "Completed" |
+| **Complete** | Source verdict `resolved_in_code` or `not_actionable` OR the delivery branch already landed on `origin/main` |
 
 ### Step 3: Dependency Analysis
 
@@ -324,7 +325,7 @@ Each row maps to a formal pipeline definition in `workflows/pipelines/`. The pip
 | Goal type | Starting point | Constraint | Pipeline | Entry point |
 |-----------|---------------|------------|----------|-------------|
 | Ambiguous request | Broad or unclear | Planning | `clarify` → `shape-spec` → {{workflows/pipelines/feature-delivery}} | Step 1 (clarify interview) |
-| Research-heavy goal | Unfamiliar domain | Planning | `devos-autoresearch` → `clarify` → `shape-spec` → {{workflows/pipelines/feature-delivery}} | Step 1 (research loop) |
+| Research-heavy goal | Unfamiliar domain | Planning | `devos-research` → `clarify` → `shape-spec` → {{workflows/pipelines/feature-delivery}} | Step 1 (research loop) |
 | Clone existing UI | URL / screenshot / Figma | Design | `ui-clone` → `ui-review` → {{workflows/pipelines/feature-delivery}} | Step 1 (clone scaffold) |
 | New feature | Nothing | Any | {{workflows/pipelines/feature-delivery}} | Step 1 (shape-spec) |
 | New feature | Has rough idea | MVP | {{workflows/pipelines/feature-delivery}} | Step 2 (write-spec), `--mvp` |
@@ -344,7 +345,7 @@ Constraint: <user constraint>
 
 ### Recommended Command Sequence:
 1. clarify — resolve ambiguity into a scoped brief (if needed)
-2. devos-autoresearch — deepen unfamiliar domain context (if needed)
+2. devos-research — deepen unfamiliar domain context (if needed)
 3. shape-spec — gather requirements (estimated: interactive)
 4. write-spec — draft specification
 5. gap-analysis --mode 6 --converge — multi-angle gap analysis with convergence (always runs)
@@ -376,7 +377,7 @@ Command: <first routed command>
 Status: Starting
 
 ## Routing Decision
-Sequence: clarify* -> devos-autoresearch* -> shape-spec -> write-spec -> gap-analysis (mode 6 --converge) -> gap-closure* -> architect-review -> process-optimizer -> create-tasks -> implement-tasks
+Sequence: clarify* -> devos-research* -> shape-spec -> write-spec -> gap-analysis (mode 6 --converge) -> gap-closure* -> architect-review -> process-optimizer -> create-tasks -> implement-tasks
 Constraint: <constraint>
 
 ## Context

@@ -30,7 +30,7 @@ skills:
   - {step_id: verify, name: predeploy-check, args: "", depends_on: gaps, parallel_safe: false, evidence_contract: "onboarding-step-check@v1:predeploy-check"}
   - {step_id: commit, name: commit, args: "--all", depends_on: verify, parallel_safe: false, evidence_contract: "onboarding-step-check@v1:commit"}
   - {step_id: deploy, name: deploy, args: "", depends_on: commit, parallel_safe: false, evidence_contract: "onboarding-step-check@v1:deploy"}
-  - {step_id: stage, name: commit, args: "--stage-only", depends_on: deploy, parallel_safe: false, evidence_contract: "onboarding-step-check@v1:commit"}
+  - {step_id: stage, name: commit, args: "--all", depends_on: deploy, parallel_safe: false, evidence_contract: "onboarding-step-check@v1:commit"}
 intent_keywords:
   - devos onboarding
   - configure project for devos

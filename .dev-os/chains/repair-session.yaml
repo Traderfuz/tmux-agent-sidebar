@@ -14,7 +14,6 @@ skills:
   - {step_id: fix, name: quick-fix, args: "", depends_on: investigate, parallel_safe: false, evidence_contract: "repair-step-check@v1:quick-fix", excluded_scope: "migrations, API changes, or work outside the approved repair"}
   - {step_id: verify, name: devos-verify, args: "", depends_on: fix, parallel_safe: false, evidence_contract: "repair-step-check@v1:devos-verify", excluded_scope: "stale or unrelated verification"}
   - {step_id: commit, name: commit, args: "--all", depends_on: verify, parallel_safe: false, evidence_contract: "repair-step-check@v1:commit", applicability: "closeout_mode=commit", excluded_scope: "stage-only closeout"}
-  - {step_id: stage, name: commit, args: "--stage-only", depends_on: verify, parallel_safe: false, evidence_contract: "repair-step-check@v1:commit", applicability: "closeout_mode=stage", excluded_scope: "commit closeout"}
 confirm: false
 clients:
   - omp

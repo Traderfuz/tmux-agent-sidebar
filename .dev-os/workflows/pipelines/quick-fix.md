@@ -27,7 +27,7 @@ Before starting, verify the change qualifies. Redirect to the feature-delivery p
 
 If the change is small but actually belongs in a richer path, escalate instead of forcing quick-fix:
 - UI or visible layout change -> `ui-review` or full feature delivery
-- Security-sensitive input / auth / secrets change -> `security-review`
+- Security-sensitive input / auth / secrets change -> `devos-security-review`
 - AI slop cleanup / noisy diffs -> `polish`
 - Repeated test/typecheck/build failures or cross-file fallout -> `harden` or feature delivery
 

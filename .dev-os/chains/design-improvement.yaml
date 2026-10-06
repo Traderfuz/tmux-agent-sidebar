@@ -17,12 +17,12 @@ skills:
   - ui-design-iteration
   - ui-preflight
   - dev-server
-  - playwright-cli
+  - playwright-axi
   - ui-design-qa
   - visual-regression-qa
   - { name: commit, args: "--all" }
   - dogfood
-  - {name: commit, args: "--stage-only"}
+  - {name: commit, args: "--all"}
 confirm: false
 clients:
   - omp

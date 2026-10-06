@@ -10,6 +10,14 @@
           {
             "type": "command",
             "command": "bash \"\\$(git rev-parse --show-toplevel)/.claude/hooks/verification-gate.sh\""
+          },
+          {
+            "type": "command",
+            "command": "bash \"$(git rev-parse --show-toplevel)/.claude/hooks/review-gate-stop-hook.sh\""
+          },
+          {
+            "type": "command",
+            "command": "bash \"$(git rev-parse --show-toplevel)/.claude/hooks/verification-gate.sh\""
           }
         ]
       }
@@ -21,6 +29,10 @@
           {
             "type": "command",
             "command": "bash \"\\$(git rev-parse --show-toplevel)/.claude/hooks/systematic-debugging-gate.sh\""
+          },
+          {
+            "type": "command",
+            "command": "bash \"$(git rev-parse --show-toplevel)/.claude/hooks/systematic-debugging-gate.sh\""
           }
         ]
       }
@@ -36,6 +48,14 @@
           {
             "type": "command",
             "command": "bash \"\\$(git rev-parse --show-toplevel)/.claude/hooks/posttooluse-session-state-refresh.sh\""
+          },
+          {
+            "type": "command",
+            "command": "bash \"$(git rev-parse --show-toplevel)/.claude/hooks/posttooluse-session-state-refresh.sh\""
+          },
+          {
+            "type": "command",
+            "command": "bash \"$(git rev-parse --show-toplevel)/.claude/hooks/visual-review-gate-posttooluse.sh\""
           }
         ]
       }

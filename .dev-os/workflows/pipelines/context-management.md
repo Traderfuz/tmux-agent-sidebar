@@ -1,6 +1,6 @@
 # Context Management Pipeline
 
-<!-- status: aspirational — step commands (context-size-audit, debug-context, context-reset, ask-context) not yet implemented. Steps 4/5 use status --refresh / generate-agents-md as interim commands. This pipeline is reachable via orchestrate for goals: "Fix context", "Context stale", "Debug context", "Shrink context". -->
+<!-- This pipeline is reachable via orchestrate for goals: "Fix context", "Context stale", "Debug context", "Shrink context". -->
 
 Diagnose, repair, and optimize the DevOS context layer — covering context size, staleness, drift, and corruption — without triggering a full context rebuild.
 
@@ -24,7 +24,7 @@ Diagnose, repair, and optimize the DevOS context layer — covering context size
 
 ### Step 1: Size Audit
 
-**Command:** `context-size-audit`
+**Skill:** `context-surface-audit` (size and context-artifact audit)
 **Input:** Current context artifacts (`docs/context/`, `AGENTS.md`, `.dev-os/standards/`)
 **Output:** Size report — total tokens, largest files, files above threshold
 **Gate to next step:** Report written; proceed regardless of findings
@@ -37,7 +37,7 @@ Size thresholds (from DevOS defaults):
 
 ### Step 2: Debug Context State
 
-**Command:** `debug-context`
+**Skill:** `context-surface-audit` (context drift and freshness audit)
 **Input:** `.dev-os/runtime/context-refresh-state.json`, `AGENTS.md`, `docs/context/DEVOS_CAPABILITIES_INDEX.md`
 **Output:** Diagnostic summary — context age, which files are stale, which are current
 **Gate to next step:** Diagnostic complete; findings recorded
@@ -50,21 +50,21 @@ Staleness thresholds:
 
 ### Step 3: Reset Context State (conditional)
 
-**Command:** `context-reset`
+**Skill:** `devos-clear`
 **Input:** `.dev-os/runtime/context-refresh-state.json`
 **Output:** Context state cleared; ready for fresh context generation
 **Gate to next step:** State file reset; `context-refresh-state.json` shows clean state
-**Skip if:** Only regeneration is needed (not a full state reset); skip unless `debug-context` found corruption or irrecoverable staleness
+**Skip if:** Only regeneration is needed (not a full state reset); skip unless Step 2 found corruption or irrecoverable staleness
 
 Context reset removes cached state but does NOT delete source artifacts. It forces the next context generation step to recompute from scratch.
 
 ### Step 4: Regenerate Context Bundle
 
-**Skill:** `project-status --refresh` (interim — replaces aspirational `context-bundle`)
+**Skill:** `context-full-refresh`
 **Input:** Project source artifacts, `docs/`, `profiles/general/`, `.dev-os/standards/`
 **Output:** `docs/context/DEVOS_CONTEXT_BUNDLE.md`, `docs/context/DEVOS_CAPABILITIES_INDEX.md` regenerated
 **Gate to next step:** Bundle files updated with current date in header
-**Skip if:** Bundle files are already current (debug-context confirmed no staleness, and size is the only concern)
+**Skip if:** Bundle files are already current (Step 2 confirmed no staleness, and size is the only concern)
 
 ### Step 5: Regenerate AGENTS.md
 
@@ -76,7 +76,7 @@ Context reset removes cached state but does NOT delete source artifacts. It forc
 
 ### Step 6: Verify Context
 
-**Command:** `ask-context` — ask 2-3 questions that should be answerable from context
+**Skill:** Inline verification — ask 2-3 questions answerable from current context
 **Input:** Regenerated `AGENTS.md` and context bundle
 **Output:** Confirmation that context answers known questions correctly
 **Gate to completion:** At least 2 of 3 context questions answered correctly
@@ -95,8 +95,7 @@ Run Step 1 only (size audit). Report which files are oversized without making ch
 Use when investigating why sessions are slow without committing to a full repair.
 
 ### Staleness Check Only (`--check-staleness`)
-
-Run Steps 1-2 only (size + debug). Report context age and staleness without regenerating.
+Run Steps 1-2 only (size + context audit). Report context age and staleness without regenerating.
 Use before deciding whether to run context-full-refresh or this lighter pipeline.
 
 ### Force Regen (`--force`)
@@ -108,8 +107,7 @@ Use when context is known to be stale and you want to skip diagnosis.
 
 | Artifact | Indicates | Resume at |
 |----------|-----------|-----------|
-| `product/runtime/reports/context-size-{date}.md` | Size audit done | Step 2 (debug context state) |
-| `debug-context` output recorded | Debug done | Step 3 (reset if needed) or Step 4 (regen) |
+| `context-surface-audit` output recorded | Size and context audit done | Step 3 (reset if needed) or Step 4 (refresh) |
 | `.dev-os/runtime/context-refresh-state.json` shows clean state | Reset done | Step 4 (regen bundle) |
 | `docs/context/DEVOS_CONTEXT_BUNDLE.md` header date today | Bundle regenerated | Step 5 (regen AGENTS.md) |
 | `AGENTS.md` header date today | AGENTS.md current | Step 6 (verify) |
@@ -118,12 +116,12 @@ Use when context is known to be stale and you want to skip diagnosis.
 
 | Step | Failure | Action |
 |------|---------|--------|
-| Step 1 | Context size audit fails (files missing) | Run `start` to reinitialize DevOS project structure |
-| Step 2 | `debug-context` finds corruption | Escalate to context-full-refresh pipeline for complete rebuild |
-| Step 3 | Context reset fails | Delete `.dev-os/runtime/context-refresh-state.json` manually; re-run Step 3 |
-| Step 4 | Bundle generation fails (missing source files) | Check that `docs/`, `profiles/general/`, `.dev-os/standards/` exist; run `extract-standards` first |
-| Step 5 | AGENTS.md generation fails | Check template in `.dev-os/templates/agents-md/`; run `generate-agents-md --force` |
-| Step 6 | Verification fails (context answers wrong) | Context is regenerated but incorrect — escalate to context-full-refresh for full rebuild |
+| Step 1 | Context surface audit fails (files missing) | Run `start` to reinitialize DevOS project structure |
+| Step 2 | Context audit finds corruption | Escalate to `context-full-refresh` for complete rebuild |
+| Step 3 | Context reset fails | Run `devos-clear` again after confirming the state path |
+| Step 4 | Context refresh fails (missing source files) | Check that `docs/`, `profiles/general/`, `.dev-os/standards/` exist; run `extract-standards` first |
+| Step 5 | AGENTS.md generation fails | Run `generate-agents-md --force` |
+| Step 6 | Verification fails (context answers wrong) | Context refreshed but incorrect — escalate to `context-full-refresh` |
 
 ## Display Format
 

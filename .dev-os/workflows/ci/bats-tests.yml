@@ -39,7 +39,9 @@ jobs:
 
       - name: Run BATS tests
         run: |
-          if [ ! -d "tests/bats" ] || ! find tests/bats -name '*.bats' -print -quit | grep -q .; then
+          # Project tests only: the bats-support/bats-assert helpers cloned above ship their own .bats suites.
+          mapfile -t project_tests < <(find tests/bats -path tests/bats/helpers -prune -o -name '*.bats' -print 2>/dev/null | sort)
+          if [ "${#project_tests[@]}" -eq 0 ]; then
             echo "No BATS test files found in tests/bats/"
             exit 0
           fi
@@ -48,5 +50,5 @@ jobs:
             "$canonical" --project-root "$GITHUB_WORKSPACE"
           else
             echo "WARN: canonical DevOS runner unavailable; ADR-003 degraded raw-BATS fallback (no canonical receipt/isolation)" >&2
-            bats --tap --recursive tests/bats/
+            bats --tap "${project_tests[@]}"
           fi

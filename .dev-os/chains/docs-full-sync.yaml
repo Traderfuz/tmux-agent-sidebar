@@ -12,7 +12,7 @@ skills:
   - generate-agents-md
   - context-full-refresh
   - {name: commit, args: "--all"}
-  - {name: commit, args: "--stage-only"}
+  - {name: commit, args: "--all"}
 confirm: false
 clients:
   - omp

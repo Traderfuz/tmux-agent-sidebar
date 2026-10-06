@@ -1,0 +1,41 @@
+schema_version: 1
+id: skill-maintenance
+name: Skill Maintenance
+mirror_skill: skill-maintenance
+description: "Upgrade an existing DevOS skill end-to-end from an isolated worktree and merge it. start-feature --herdr --attach owns worktree creation, the start-state checkpoint, and explicitly retained supervised cockpit dispatch in one step, so the feature agent runs the upgrade while the initiating session supervises. bx-skill-creator --mode 2 performs the upgrade; skill-release-validator gates release readiness; sync-skills and context-full-refresh propagate the change through the installed mirrors and generated registries before review. commit --grouped --local-only captures every safe non-ignored worktree change before devos-code-review, then create-pr and merge-feature close the arc. Distinct from skill-authoring, which creates a new skill; keyword sets do not overlap."
+category: development
+work_intake_policy: runtime-aware
+skills:
+  - {name: work-intake-preflight, args: "--auto"}
+  - {name: start-feature, args: "--herdr --attach"}
+  - {name: bx-skill-creator, args: "--mode 2"}
+  - skill-release-validator
+  - sync-skills
+  - context-full-refresh
+  - {name: sync-completed-work, args: "--unattended"}
+  - {name: commit, args: "--grouped --local-only"}
+  - devos-code-review
+  - create-pr
+  - {name: sync-completed-work, args: "--unattended"}
+  - merge-feature
+  - post-merge-refresh
+  - {name: commit, args: "--all"}
+  - summarize
+confirm: false
+model_route: standard
+clients:
+  - omp
+  - claude-code
+  - codex
+  - gemini
+  - opencode
+  - pi
+  - zed
+intent_keywords:
+  - upgrade this skill
+  - skill upgrade
+  - mode 2 upgrade
+  - harden this skill
+  - skill maintenance
+  - upgrade and merge skill
+source_doc: docs/guides/chains.md

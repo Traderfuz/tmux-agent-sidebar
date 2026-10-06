@@ -110,11 +110,6 @@ Full guidance: `docs/context/DEVOS_PROJECT_GUIDANCE.md`
 - **Tech Stack:** Primary implementation language is Rust.
 - **Development Commands:** Run tests with `cargo test`.
 - **Architecture Anchors:** `docs/context/codebase-map.md` describes file roles and hotspots; start there.
-- **Operating Rules:** Before removing or overwriting config files, create a backup first
-- **Operating Rules:** Never bulk-delete files without explicit approval
-- **Operating Rules:** Do not commit secrets (`.env`, credentials, API keys) to git
-- **Operating Rules:** Before staging files for a commit, verify they are inside the git repository root
-- **Operating Rules:** Do not force-push to main/master
 - **Operating Rules:** Project is prelaunch: prefer forward-compatible simplification; no legacy shims unless explicitly requested.
 - **Operating Rules:** Preserve user-authored content outside DevOS managed blocks.
 - **Gotchas:** No gotcha signal detected yet; record traps here as they surface.
@@ -142,44 +137,30 @@ Full guidance: `docs/context/DEVOS_PROJECT_GUIDANCE.md`
 <!-- DevOS:section:skill-invocation -->
 ## Skill Invocation Contract
 
-DevOS capabilities are registry-routed skills, not executables or shell commands.
-When a skill is invoked, read its `SKILL.md` and execute the workflow directly in
-the current active session.
+Skills are workflows, not executables. Invoke the skill through its declared skill route; the active session reads its contract and executes the workflow directly.
+
+This rule applies to skills only. Declared executable tools keep their exact registry invocation route; do not rewrite tool names as `-axi` suffixes or substitute guessed commands.
 
 - A line such as `map --update` is a **skill invocation with arguments**. Do not
   search for a binary, runner, wrapper, `runner.sh`, `run.sh`, or `map.sh`.
-- Bare names are not `$PATH` commands. Never use `command -v`, `which`, or bare
-  `--help` to decide availability. Resolve `docs/context/DEVOS_SKILLS_INDEX.json`;
-  an absent registry entry is unavailable.
+- For skill lookup, do not use `command -v`, `which`, or bare `--help`;
+  resolve `docs/context/DEVOS_SKILLS_INDEX.json`. Tool routes come from the tool
+  catalog and remain exact.
 - Use only flags and positional arguments declared by `SKILL.md` or the called
-  helper's parser. Never invent flags or confuse accepted arguments with
-  downstream arguments.
-- The active session owns the full workflow. For an inter-skill dependency,
-  read the target skill and continue executing its instructions in the same
-  session. Do not look for a dispatch API, submit a nested slash command, or
-  require a dispatch receipt.
-- A delegated worker cannot invoke parent-session skills or probe `$PATH`. It
-  returns `dependency_required` with the exact skill, arguments, dependent gate,
-  and artifact. The active session then executes that dependency directly.
-- Explicit skill or autonomous intent suppresses only a redundant generic
-  confirmation. Present named operator/human/policy gates verbatim; never
-  self-approve them.
+  helper's parser.
+- The active session owns the full workflow. Inter-skill dependencies continue
+  in the same session unless delegation is explicitly requested.
 - A script named by `SKILL.md` is a helper step, not a substitute for the skill.
-  Run helpers only as instructed. Source DevOS shell libraries under Bash:
-  `bash -lc 'source "$DEVOS_DIR/scripts/lib/<lib>.sh" && <fn>'`.
-- In OMP, `/skill:<name> [args]` is the user-facing entry that loads a skill into
-  the current session. `skill://<name>` only reads instructions.
-- Execution evidence is the current session's tool output, artifacts, and
-  required verification. Never fabricate provenance or claim success from a
-  read alone.
+  Run helpers only as instructed.
 <!-- /DevOS:section:skill-invocation -->
 
 <!-- DevOS:section:orca-control -->
 ## Orca Control
 
 When Orca is the requested control plane, use the public `orca` CLI (`orca-ide`
-on Linux) and the `orca-cli` / `computer-use` skills before falling back to ad
-hoc desktop tools.
+on Linux) and the `orca-cli` skill before falling back to desktop tools.
+General desktop tasks use the cua-driver-backed `computer-use` skill; it does
+not replace the public Orca CLI when Orca is explicitly requested.
 
 - Codex and similar sandboxed sessions may be unable to reach Orca's runtime
   socket under the user's application-support directory. If `orca status --json`
@@ -278,7 +259,10 @@ not whether a `session-end-context-commit` Stop hook might fire later:
 - `--none`: stage only; no commit. For preflight or deferred decisions.
 
 The pre-commit hook rejects a staged set mixing batch and operator files unless
-`DEVOS_CONTEXT_COMMIT_MODE` authorizes it. Env controls: `DEVOS_CONTEXT_COMMIT_FORCE=1`
+`DEVOS_CONTEXT_COMMIT_MODE` authorizes it, and rejects any `all` commit that leaves a
+committable safe path unstaged — `--all` is semantic-all, so provenance is never grounds
+to exclude a file; a scoped commit must drop the mode or use `split`/`none`.
+Env controls: `DEVOS_CONTEXT_COMMIT_FORCE=1`
 flushes an active debounce immediately, `DEVOS_SKIP_CONTEXT_BATCH=1` disables the
 hook batch for the session, `DEVOS_CONTEXT_BATCH_DEBOUNCE_SECONDS` overrides the
 window. This block is generated from the registry — hand edits are lost on the
@@ -335,6 +319,20 @@ Inspect with `notepad_show_history "WORKING MEMORY" 7` (last week) or
 Do not hand-edit `.dev-os/notepad.md` — always go through the helpers to keep
 the file layout and atomic-write guarantees intact.
 <!-- /DevOS:section:notepad-discipline -->
+<!-- DevOS:section:tool-discovery -->
+## Tool Discovery
+
+agent-reach-axi | dev-os | ["profiles/default/skills/agent-reach-axi/scripts/agent-reach-axi"]
+apify-axi | dev-os | ["apify-axi"]
+beehiiv | dev-os | ["beehiiv"]
+bundle-axi | dev-os | ["bundle-axi"]
+chrome-devtools-axi | dev-os | ["chrome-devtools-axi"]
+clerk-axi | dev-os | ["clerk-axi"]
+omitted=27
+Full: devos-help tools; devos-help axi; devos-help search
+Index: docs/context/DEVOS_CAPABILITIES_INDEX.md
+<!-- /DevOS:section:tool-discovery -->
+
 <!-- DEVOS_CANONICAL_END -->
 
 <!-- DEVOS_BUNDLE_INDEX_START -->

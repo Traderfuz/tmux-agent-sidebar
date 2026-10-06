@@ -33,7 +33,7 @@ Claude Code session. They are installed by `scripts/install.sh`. Examples: `lear
 | `.claude/hooks/verification-gate.sh` | `Stop` | Completion-signal keywords detected in last assistant turn | Injects verification gate block; exits 0 (non-blocking) |
 
 Source files live in `profiles/general/hooks/` and are installed to `$project/.claude/hooks/` by
-`_install_project_hooks()` in `scripts/lib/command-router.sh`, called during `start`.
+`hook_repair_check_claude_hooks()` in `${DEVOS_DIR:-$HOME/.dev-os}/scripts/lib/hook-repair.sh`, called by `devos-init` Phase 6.
 Registration is written to `$project/.claude/settings.json` (project-relative) under
 `hooks.PreToolUse` and `hooks.Stop`.
 

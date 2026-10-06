@@ -24,7 +24,7 @@ It does NOT manage:
 
 Invoke this workflow:
 1. After a spec is merged (`merge-feature`) — to reflect new capabilities
-2. After `ground-truth-recon` detects narrative drift — as the repair action
+2. After `devos-ground-truth` detects narrative drift — as the repair action
 3. On-demand via `docs-sync --scope product`
 
 Do not use to sync technical docs, command counts, or version strings — use `docs-sync` without product scope for that. Do not use to author new product strategy — use `plan-product`.
@@ -87,7 +87,7 @@ Product docs sync complete:
 ## Relationship to Other Systems
 
 - **`docs-sync`** — handles README, CLAUDE.md, profile, and command parity. Not product narrative.
-- **`ground-truth-recon`** — detects drift and reconciles mismatches. May recommend running `docs-sync --scope product` as the repair action, but is not the primary producer.
+- **`devos-ground-truth`** — detects drift and reconciles mismatches. May recommend running `docs-sync --scope product` as the repair action, but is not the primary producer.
 - **`plan-product`** — authors `mission.md`, `roadmap.md`, and `tech-stack.md` via guided interview. Those are strategic inputs, not current-state narrative.
 
 ## Display

@@ -31,7 +31,7 @@ skills:
   - docs-sync
   - audit-docs
   - {name: commit, args: "--all"}
-  - {name: commit, args: "--stage-only"}
+  - {name: commit, args: "--all"}
   - summarize
 clients:
   - omp

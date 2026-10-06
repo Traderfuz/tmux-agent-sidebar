@@ -42,7 +42,8 @@ jobs:
 
       - name: No --no-verify git commits
         run: |
-          if grep -rn '\-\-no-verify' --include="*.sh" --include="*.yml" --include="*.yaml" . --exclude-dir=".git" | grep -v '^\s*#'; then
+          # Match git invocations that bypass hooks; the bare flag would match this check's own text.
+          if grep -rnE 'git[[:space:]]+(commit|push|merge|rebase|am|cherry-pick)[^#]*--no-verify' --include="*.sh" --include="*.yml" --include="*.yaml" . --exclude-dir=".git" | grep -vE '^[^:]+:[0-9]+:[[:space:]]*#'; then
             echo "::error::--no-verify usage detected. Do not bypass git hooks."
             exit 1
           fi

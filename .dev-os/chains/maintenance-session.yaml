@@ -22,7 +22,7 @@ skills:
   - {name: project-artifacts-audit, args: "--apply --yes"}
   - {name: gap-analysis, args: "--dalio --converge --fix"}
   - {name: commit, args: "--all"}
-  - {name: commit, args: "--stage-only"}
+  - {name: commit, args: "--all"}
   - summarize
   - project-cleanup
 confirm: false

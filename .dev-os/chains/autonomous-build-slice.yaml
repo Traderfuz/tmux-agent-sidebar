@@ -13,6 +13,7 @@ skills:
   - {name: pr-lifecycle, args: "--open"}
   - {name: sync-completed-work, args: "--unattended"}
   - merge-feature
+  - {name: dogfood, args: "--post-merge --non-blocking --surface auto --source-chain autonomous-build-slice"}
   - {name: post-deploy-qa, args: "--record-debt-only --reason pending_no_url --source-chain autonomous-build-slice"}
   - {name: checkpoint, args: "--label autonomous-build-slice-final"}
   - summarize

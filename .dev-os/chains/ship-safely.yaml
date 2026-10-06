@@ -12,7 +12,7 @@ skills:
   - predeploy-check
   - db-migrate
   - deploy
-  - {name: commit, args: "--stage-only"}
+  - {name: commit, args: "--all"}
 confirm: false
 clients:
   - omp

@@ -12,8 +12,8 @@ description: >-
   The worktrees step provisions all tracks in one invocation with per-track suffixes
   (for example, slug-track-1, slug-track-2) to prevent path collisions when multiple agents run concurrently.
   Checkpoint runs after worktrees to preserve track paths for mid-chain recovery.
-  commit --grouped --local-only captures every safe non-ignored worktree change before devos-code-review; files that should not be
-  committed must be ignored or explicitly excluded before this step. A second commit --grouped --local-only runs after sync-completed-work
+  The `commit --grouped --local-only` step captures every safe non-ignored worktree change before devos-code-review; files that should not be
+  committed must be ignored or explicitly excluded before this step. A second `commit --grouped --local-only` step runs after sync-completed-work
   so task-sync or review-fix dirtiness is not carried into create-pr or merge-feature.
   create-pr owns the branch push, upstream setup, pull request creation/update, and readiness handoff.
   IMPORTANT: Worktree cleanup is automatic inside merge-feature after a successful full merge.
@@ -47,12 +47,13 @@ skills:
   - devos-code-review
   - {name: sync-completed-work, args: "--unattended"}
   - {name: commit, args: "--grouped --local-only"}
-  - create-pr
+  - {name: create-pr, args: "--spec <slug>"}
   - {name: sync-completed-work, args: "--unattended"}
   - merge-feature
+  - {name: dogfood, args: "--post-merge --non-blocking --surface auto --source-chain parallel-build-slice"}
   - {name: post-deploy-qa, args: "--record-debt-only --reason pending_no_url --source-chain parallel-build-slice"}
   - orchestrate
-  - {name: commit, args: "--stage-only"}
+  - {name: commit, args: "--all"}
   - summarize
 confirm: false
 model_route: standard

@@ -61,8 +61,8 @@ Reports are written to:
 
 ## Integration
 
-- Does not replace `docs-sync`, `docs-sync --scope product`, `ground-truth-recon`, or `context-refresh`
-- Respects the "repair first, refresh last" rule from ground-truth-recon
+- Does not replace `docs-sync`, `docs-sync --scope product`, `devos-ground-truth`, or `context-refresh`
+- Respects the "repair first, refresh last" rule from devos-ground-truth
 - Treats the skill/chain registry surface, public surface inventory, and project index as governed artifacts rather than incidental outputs
 - May recommend refresh actions but does not execute them
 

@@ -16,7 +16,7 @@ skills:
   - {name: commit, args: "--all"}
   - devos-verify
   - pr-lifecycle
-  - {name: commit, args: "--stage-only"}
+  - {name: commit, args: "--all"}
 confirm: false
 model_route: complex
 clients:

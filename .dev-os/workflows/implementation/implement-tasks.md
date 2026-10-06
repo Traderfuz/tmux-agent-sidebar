@@ -60,6 +60,7 @@ If the current task group introduced obvious AI slop, run `polish` on the change
    - Payload carries: declared outcome, exact/subtree path rules for the task group's file set, mutation classes, non-goals, acceptance criteria, verification digest, `approval_source: spec-task` bound to the spec id + task group.
    - Enroll only after `activate` succeeds; the enrollment marker plus active read model is what turns out-of-scope mutation attempts in an enrolled session into hard blocks. Unenrolled sessions honestly report `bypassed`.
    - If a needed widening fails with `SCOPE_WIDENING_REQUIRES_APPROVAL`: stop the scope (`scripts/lib/implementation-scope.sh stop LEDGER.jsonl SCOPE_ID PROJECT_ID`), mutate nothing further, and disclose non-success naming the operator action — an operator-approved revision (`approval_source: operator`) is required to widen.
+   - After the group's verification passes, complete the scope (`scripts/lib/implementation-scope.sh complete LEDGER.jsonl SCOPE_ID PROJECT_ID [STATE_DIR]`) before committing; `complete` and `stop` release the enrollment the scope owns, so the session is not left enforcing a finished scope. Declare the exact `complete` command in the payload's `operations` so the enforcing hook admits it.
    - Delegated workers never issue scope authority; child-authorization/v1 receipts are evidence-only in this slice.
 3. Implement code changes for the current subtask.
 

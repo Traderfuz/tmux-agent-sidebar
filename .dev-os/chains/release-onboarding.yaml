@@ -23,7 +23,7 @@ skills:
   - harden
   - {name: commit, args: "--all"}
   - release
-  - {name: commit, args: "--stage-only"}
+  - {name: commit, args: "--all"}
 intent_keywords:
   - release onboarding
   - first release setup

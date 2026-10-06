@@ -3,11 +3,12 @@ id: deliver-product-slice
 name: Deliver Product Slice
 mirror_skill: deliver-product-slice
 description: >-
-  Close one product slice end-to-end — from spec shaping through implementation,
-  quality gates, PR handoff, and merge. Runs the canonical DevOS process: shape spec, write spec,
-  close gaps, create tasks, implement, test, verify, review, push/create PR, merge. Distinct from feature-branch
-  (which includes full planning and architecture phases) — use this when the spec is
-  already partially understood and you want the shortest path from idea to merged slice.
+  Close one product slice end-to-end — from shape-spec planning through implementation,
+  quality gates, PR handoff, and merge. Shape-spec owns architecture approval, converged
+  gap analysis, write-spec, and create-tasks exactly once; lifecycle steps consume its
+  durable outputs. Distinct from feature-branch (which includes full planning and
+  architecture phases) — use this when the spec is already partially understood and
+  you want the shortest path from idea to merged slice.
 category: development
 work_intake_policy: runtime-aware
 confirm: false
@@ -18,9 +19,6 @@ skills:
   - worktree-sessions
   - checkpoint
   - shape-spec
-  - write-spec
-  - {name: gap-analysis, args: "--dalio --converge --fix"}
-  - create-tasks
   - devos-verify
   - implement-tasks
   - ai-slop-polish
@@ -35,12 +33,13 @@ skills:
   - devos-code-review
   - {name: sync-completed-work, args: "--unattended"}
   - {name: commit, args: "--grouped --local-only"}
-  - create-pr
+  - {name: create-pr, args: "--spec <slug>"}
   - {name: sync-completed-work, args: "--unattended"}
   - merge-feature
+  - {name: dogfood, args: "--post-merge --non-blocking --surface auto --source-chain deliver-product-slice"}
   - {name: post-deploy-qa, args: "--record-debt-only --reason pending_no_url --source-chain deliver-product-slice"}
   - devos-review
-  - {name: commit, args: "--stage-only"}
+  - {name: commit, args: "--all"}
   - summarize
 clients:
   - omp

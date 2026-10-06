@@ -12,21 +12,14 @@ Do not use this workflow to handle lifecycle flags (--status, --resume) — thos
 
 1. product context check
 2. brainstorm / design gate
-3. shape-spec
-4. architecture-creator
-5. knowledge-pull
-6. write spec
-7. gap analysis          ← always runs, see planning-pipeline
-8. gap closure           ← runs on any gap — all gaps closed before proceeding
-9. verify                ← validates current artifacts before reviews/tasks/resume
-10. architect review
-11. process optimizer review
-12. create tasks
-13. verify               ← validates implementation readiness
-14. implement tasks
-15. completion handoff
+3. shape-spec (requirements, architecture approval, converged gap analysis, write-spec, and create-tasks exactly once)
+4. verify implementation-readiness artifacts
+5. architect and process-optimizer reviews
+6. verify implementation readiness
+7. implement tasks
+8. completion handoff
 
-The planning pipeline is governed by `{{workflows/specification/planning-pipeline}}`. Refer to that file for phase definitions, gate rules, skip conditions, and handoff contracts.
+The planning pipeline is governed by `{{workflows/specification/planning-pipeline}}`. Shape-spec is the single owner of architecture, write-spec, requirements gap convergence, and task creation; lifecycle phases consume its durable outputs and must not repeat those operations.
 
 Automatic orchestrator modes may resume from any point, but they do not get to trust the resume point blindly. Before skipping earlier phases, run `verify` against the artifacts required for the target phase. If verification finds missing or stale evidence, route back to the earliest failed canonical operation.
 
@@ -57,60 +50,22 @@ This makes `autonomous`, `checkpoint`, `resume`, and `recover` converge on the s
 
 ### Shape Spec
 
-- skip when resuming at `spec`, `tasks`, or a later recorded phase
-- include `{{workflows/_shared/knowledge/knowledge-pull-step}}` unless `--skip-docs` is set
+- skip only when resuming from verified durable artifacts
 - route into `shape-spec`
+- shape-spec owns architecture approval, write-spec, converged requirements gap analysis, and create-tasks continuations exactly once
+- if any owned gate is missing or stale, resume shape-spec at the earliest incomplete gate
 
-### Architecture Creator
-
-- route into `architecture-creator` after shaped requirements and before spec authoring
-- produce `product/specs/<slug>/planning/architecture.md`
-- interactive sessions pause for human approve/revise; headless autonomous runs record canonical `auto-approved` only after persisting the artifact, with headless context in approval provenance
-- automatic resume may reuse it only when `verify` confirms the architecture artifact is current for the active requirements
-
-### Write Spec
-
-- skip when starting from `spec`, `tasks`, or a later recorded phase
-- route into `write-spec`
-- pause for review unless `--no-pause` is set
-
-### Gap Analysis
-
-- always runs after write-spec — not skippable, not affected by `--skip-reviews`
-- route into `gap-analysis --mode 6 --converge` (Multi-Angle with convergence) on `spec.md`
-- override with `--mode N` to force a specific mode (e.g., `--mode 2` for process-only on simple specs)
-- any gap (CRITICAL, HIGH, MEDIUM, or LOW) triggers gap-closure — all gaps are closed before reviews
-- convergence loop re-analyzes after closure until 0 new gaps per pass
-
-### Gap Closure
-
-- **close ALL gaps** — every severity (CRITICAL, HIGH, MEDIUM, LOW) is closed before proceeding. If a gap is real enough to be flagged by the evidence standard, it gets closed. No exceptions.
-- update spec.md, re-run verify-spec — the convergence loop re-runs gap analysis automatically to confirm closure and catch newly unmasked gaps
-- update each closed gap's status to `"closed"` in `product/gap-analysis/gap-registry.jsonl`
-- verify/review phases cannot begin while any gap is unresolved
-
-### Verify
-
-- run before reviews/tasks when resuming from a spec or later phase
-- run before implementation when resuming from tasks or later phase
-- inspect the actual artifacts required by the target phase; do not treat `tasks.md` existence as proof that planning completed
-- if verification fails, resume at the earliest missing canonical operation instead of continuing forward
+### Planning Handoffs
+- lifecycle workflows do not invoke `architecture-creator`, `write-spec`, `gap-analysis`, or `create-tasks` as separate phases
+- `shape-spec` presents the approved architecture artifact before the review verdict and blocks handoff when approval is missing or stale
 
 ### Reviews
 
 - architect review then process optimizer review
 - full review definitions in `{{workflows/specification/planning-pipeline}}`
-- skip both when `--skip-reviews` is set (gap analysis still runs)
+- skip both when `--skip-reviews` is set; this does not bypass shape-spec gates
 - after review completion, pause unless `--no-pause` is set
-
-### Create Tasks
-
-- run `{{workflows/implementation/source-reality-check}}` before generating tasks — grep source files to confirm each gap still exists; exclude `exists` claims from task list, keep `missing` and `partial`
-- generate executable tasks from the approved spec
-- if tasks already exist and are current, resume at implementation instead of rewriting blindly
-
-### Pre-Implementation Gate (mandatory)
-
+### Pre-Implementation Gate
 Before routing to `implement-tasks`, verify the following artifacts exist:
 
 1. `product/specs/<slug>/spec.md` — the approved spec contract
@@ -123,9 +78,7 @@ Before routing to `implement-tasks`, verify the following artifacts exist:
 **If any check fails:** stop. Do not implement. Report exactly which artifact is missing and what command creates it:
 
 ```
-Spec gate failed:
-  ✗ spec.md missing — run write-spec
-  ✗ tasks.md missing — run create-tasks
+  ✗ spec.md or tasks.md missing — resume shape-spec
 ```
 
 **This gate cannot be bypassed by `--no-pause`, `--skip-reviews`, `--skip-gap-analysis`, or any other skip flag.** The only bypass is `--force-skip-spec-gate`, which is reserved for retroactive spec creation (e.g., when a session created artifacts correctly but spec.md/tasks.md were written after implementation). Using this bypass logs a `[WARN]` and triggers post-session accounting.

@@ -31,11 +31,45 @@ Collect the following from the user or source material:
 7. **Constraints** — Technical, timeline, or resource limitations?
 
 Write output to `product/specs/[this-spec]/planning/requirements.md`.
+Before the sweep, write exactly one explicit declaration to the requirements:
+
+```html
+<!-- contract-surface-seeds/v1 {"paths":["path/from/repo/root"],"symbols":["path/from/repo/root::symbol"]} -->
+```
+
+Only this declaration and validated operator `--surface` / `--symbol` inputs
+may seed discovery. Ordinary Markdown code spans are prose. Missing keys,
+non-array values, non-string members, unresolved paths, and malformed symbols
+are invalid.
+
+## Step 1a: Pre-plan consumer sweep
+
+Before the first `contract_impact_preflight --mode plan` call, source
+`scripts/lib/contract-surface-sweep.sh` from the implementation target (fall
+back to `${DEVOS_DIR:-$HOME/.dev-os}`, exported inside the subshell because the
+sweep's Python reads it from the environment), then run
+`contract_surface_sweep --requirements planning/requirements.md --out
+planning/consumer-sweep.md --output argv0` inside a scoped subshell. Capture
+stdout in a temporary file, preserve the producer exit status, parse it with
+`mapfile -d '' -t`, and remove it with an `EXIT` trap.
+
+Call `contract_surface_sweep_assert_argv` immediately before planning. Missing
+or mismatched sweep evidence blocks. Forward only the returned repeated
+`--proposed-path` and `--symbol` pairs; reserve `--actual-path` and
+`--actual-symbol` for implementation reconciliation.
+The helper owns validation, bounded discovery, and the default 250-row cap. A
+cap breach stops planning: show the sweep diagnostic inline and offer narrow,
+split, or authorize. Never self-authorize; headless runs stop with
+`blocked: planning-pin`. On explicit authorization, record the operator's
+verbatim reply with `contract_surface_authorize` and rerun the bootstrap.
+
 ## Contract impact final handoff
 
-Before handing requirements and architecture to `write-spec`, call the shared
-`contract_impact_preflight` port in `plan` mode with the owner artifact and
-canonical implementation target. Reuse only a fresh target-matched record.
+Before handing requirements and architecture to `write-spec`, re-run the Step 1a
+sweep and planning pin unchanged: the same record, owner lineage, change summary,
+and sweep arguments. Unchanged inputs reuse the record at the same revision; a
+plan call with a different owner, record, summary, or seed set reports
+`STALE_FINGERPRINT` against a valid pin.
 Ambiguous targets, missing required classes, stale evidence, invalid records,
 and failed required adapters block. A complete evidenced not-applicable result
 passes without creating a ledger.
@@ -87,17 +121,18 @@ Before prompting for emotion-first fields, check whether upstream OS handoff sta
 
 ```python
 import json, os
+from pathlib import Path
 
+devos_root = Path(os.environ.get("DEVOS_DIR") or (Path.home() / ".dev-os"))
+state_root = devos_root / "state"
+marketing_path = state_root / "marketing-handoff.json"
+creative_path = state_root / "creative-handoff.json"
 handoff_context = {}
-
-marketing_path = ".dev-os/state/marketing-handoff.json"
-creative_path  = ".dev-os/state/creative-handoff.json"
-
-if os.path.exists(marketing_path):
+if marketing_path.exists():
     with open(marketing_path) as f:
         m = json.load(f)
     handoff_context["has_marketing"]   = True
-    handoff_context["marketing_path"]  = m.get("handoff_path", marketing_path)
+    handoff_context["marketing_path"]  = m.get("handoff_path", str(marketing_path))
     handoff_context["marketing_source_root"] = m.get("source_root")
     counts = m.get("artifact_counts", {})
     handoff_context["has_brand_voice"] = counts.get("brand_voice", 0) > 0
@@ -105,12 +140,11 @@ if os.path.exists(marketing_path):
     handoff_context["has_keywords"]    = counts.get("keywords", 0) > 0
 else:
     handoff_context["has_marketing"] = False
-
 if os.path.exists(creative_path):
     with open(creative_path) as f:
         c = json.load(f)
     handoff_context["has_creative"]      = True
-    handoff_context["creative_path"]     = c.get("handoff_path", creative_path)
+    handoff_context["creative_path"]     = c.get("handoff_path", str(creative_path))
     handoff_context["creative_source_root"]  = c.get("source_root")
     counts = c.get("artifact_counts", {})
     handoff_context["has_brand_assets"]  = counts.get("brand_assets", 0) > 0

@@ -33,6 +33,7 @@ distribution logic will prefer the leaf profile's version.
 |---|---|---|
 | `deploy-prod.sh` | Full production deploy flow: pre-flight → prisma migrate status preflight → bounded prisma migrate deploy retry → vercel build → vercel deploy --prebuilt → smoke test. Auto-detects package manager (bun / pnpm / npm) from lockfile. | `DEPLOY_DOPPLER_PROJECT`, `DEPLOY_DOPPLER_CONFIG`, `DEPLOY_PROD_URL`, optionally `DEPLOY_PKG_MANAGER=bun\|pnpm\|npm` to override detection |
 | `contract-impact-preflight.sh` | Shared contract-impact lifecycle port for planning, enforcement, reconciliation, and verification. Resolves one canonical target and delegates record mutation to the record engine. | `DEVOS_DIR` |
+| `verify-os-content-sources.mjs` | Verifies declared foreign OS content sources, producer handoffs, pinned digests, and nested output roots. The webapp-profile script is copied to consumer `.dev-os/scripts/` on profile activation. | `--root`, `--out`, `--max-age-days` |
 
 ### Prisma migration safety (`deploy-prod.sh`)
 

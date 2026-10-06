@@ -32,11 +32,6 @@
 
 ## Operating Rules
 
-- Before removing or overwriting config files, create a backup first
-- Never bulk-delete files without explicit approval
-- Do not commit secrets (`.env`, credentials, API keys) to git
-- Before staging files for a commit, verify they are inside the git repository root
-- Do not force-push to main/master
 - Project is prelaunch: prefer forward-compatible simplification; no legacy shims unless explicitly requested.
 - Preserve user-authored content outside DevOS managed blocks.
 

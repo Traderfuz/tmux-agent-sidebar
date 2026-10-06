@@ -18,7 +18,7 @@ skills:
   - contract-drift-audit
   - ownership-audit
   - project-artifacts-audit
-  - optimize-process
+  - optimize
   - docs-coverage-audit
   - docs-sync
   - docs-verify
@@ -40,7 +40,7 @@ skills:
   - predeploy-check
   - {name: gap-analysis, args: "--dalio --converge --fix"}
   - {name: commit, args: "--all"}
-  - {name: commit, args: "--stage-only"}
+  - {name: commit, args: "--all"}
   - summarize
 confirm: false
 model_route: complex

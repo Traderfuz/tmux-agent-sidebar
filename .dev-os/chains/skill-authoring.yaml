@@ -1,21 +1,27 @@
 schema_version: 1
 id: skill-authoring
 name: Skill Authoring
-description: Create, validate, and publish a new DevOS skill end-to-end from an isolated worktree.
+mirror_skill: skill-authoring
+description: "Create, validate, publish, and merge a new DevOS skill end-to-end from an isolated worktree. start-feature --herdr --attach owns worktree creation, the start-state checkpoint, and explicitly retained supervised cockpit dispatch in one step. bx-skill-creator writes the new skill; skill-release-validator gates release readiness; sync-skills, audit-docs, and context-full-refresh propagate it through installed mirrors, docs, and generated registries before review; commit --grouped --local-only, devos-code-review, create-pr, and merge-feature close the arc. Distinct from skill-maintenance, which upgrades an existing skill; keyword sets do not overlap."
 category: development
 work_intake_policy: runtime-aware
 skills:
   - {name: work-intake-preflight, args: "--auto"}
-  - worktrees
-  - checkpoint
-  - worktree-sessions
+  - {name: start-feature, args: "--herdr --attach"}
   - bx-skill-creator
   - skill-release-validator
   - sync-skills
   - audit-docs
   - context-full-refresh
+  - {name: sync-completed-work, args: "--unattended"}
+  - {name: commit, args: "--grouped --local-only"}
+  - devos-code-review
+  - create-pr
+  - {name: sync-completed-work, args: "--unattended"}
+  - merge-feature
+  - post-merge-refresh
   - {name: commit, args: "--all"}
-  - {name: commit, args: "--stage-only"}
+  - summarize
 confirm: false
 model_route: standard
 clients:

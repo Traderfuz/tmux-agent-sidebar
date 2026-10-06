@@ -33,12 +33,12 @@ Do not run this workflow on specs that are still being written — it is a gate 
 
 For a contract-relevant spec, invoke the shared
 `contract_impact_preflight --mode verify --phase planning` port using the deterministic
-metadata assembly in the write-spec contract: extract the first non-empty line under
-`## Problem statement` as `--change-summary`, use the spec path as the proposed path,
-extract the sole consumer class and `coverage_intent` from the planning record, and
-pass them as `--required-consumer-class` and `--coverage-intent`. If extraction is
-ambiguous or capability is explicitly pending, fail/append `--coverage-pending`
-respectively; never invent metadata. The record must be valid, fresh, target-matched,
+metadata assembly in the write-spec contract: read the pinned owner artifact
+(`owning_artifact.path`), `proposed_summary`, `proposed_paths`, `proposed_symbols`,
+`coverage_intent`, and every `required_consumer_classes` entry from the planning
+record and pass them unchanged. A shape-spec pin is owned by
+`planning/requirements.md` with several classes; never substitute `spec.md` or a
+single derived class. Missing metadata fails; never invent it. The record must be valid, fresh, target-matched,
 and cover every required consumer class; the spec must include `## Contract Impact`.
 
 Persist only stable ID/path/revision/digest/fingerprint and blocker references.

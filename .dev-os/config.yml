@@ -1,7 +1,7 @@
 profile: cli
 project: tmux-agent-sidebar
 version: 1.0.0
-devos_version: 1.133.2
+devos_version: 1.142.30
 runtime_state_root: null
 mode: advisor
 model_posture: sonnet
@@ -157,6 +157,7 @@ chain_routes:
   release-onboarding: standard
   skill-authoring: standard
   system-ops-visibility: standard
+  skill-maintenance: standard
 visual_review_gate:
   enabled: true
   emit_events: true
@@ -294,3 +295,15 @@ capture:
     on_next: reconcile
     on_delete: completion
     on_repair: reconcile
+  sync_mode: bidirectional
+  conflict_resolution: last_write_wins_capture_tiebreak
+  inbound:
+    github:
+      enabled: true
+      interval_minutes: 10
+    linear:
+      enabled: true
+      interval_minutes: 10
+    flowstate:
+      enabled: true
+      interval_minutes: 15
