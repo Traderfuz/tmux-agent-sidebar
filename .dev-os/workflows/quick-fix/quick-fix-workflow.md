@@ -53,6 +53,8 @@ scripts/lib/implementation-scope.sh activate LEDGER.jsonl SCOPE_ID PROJECT_ID
 scripts/lib/implementation-scope.sh enroll   LEDGER.jsonl SCOPE_ID PROJECT_ID STATE_DIR
 ```
 
+Omit `baselines` from the payload: `issue` captures them from `repo_identity.root` on a genesis scope and inherits the prior revision's baselines on renewal or widening; supplied baselines are stored untouched.
+
 If a needed widening fails with `SCOPE_WIDENING_REQUIRES_APPROVAL`: stop the scope, disclose non-success, and obtain an operator-approved revision (`approval_source: operator`) before any mutation.
 
 ### Step 3: Implement the Fix

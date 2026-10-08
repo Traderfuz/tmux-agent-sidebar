@@ -6,7 +6,7 @@
 | Runbook type | Operational |
 | Severity | P2 |
 | Owner team | DevOS operator |
-| Last reviewed | 2026-04-03 |
+| Last reviewed | 2026-10-06 |
 | Automation status | Semi-automated (`scripts/install.sh --upgrade`) |
 
 ---
@@ -45,6 +45,13 @@
 
 Run all of these before starting the upgrade. Do not skip any step.
 
+Commands below use `DEVOS_SRC` for your DevOS source checkout. For the usual symlink
+install it is the target of `~/.dev-os`; set it once per shell:
+
+```bash
+DEVOS_SRC="$(readlink -f ~/.dev-os)"
+```
+
 ### Step 1: Record current version
 
 ```bash
@@ -56,7 +63,7 @@ cat ~/.dev-os/VERSION
 ### Step 2: Check git status (clean working tree required)
 
 ```bash
-cd /home/tafadzwa/projects/os/dev-os
+cd "$DEVOS_SRC"
 git status
 ```
 
@@ -78,7 +85,7 @@ ls ~/.claude/commands/dev-os/*.md | wc -l
 ### Step 4: Record current tag
 
 ```bash
-cd /home/tafadzwa/projects/os/dev-os
+cd "$DEVOS_SRC"
 git describe --tags --abbrev=0
 # Save this tag name for rollback (e.g. v1.70.0)
 ```
@@ -87,7 +94,7 @@ git describe --tags --abbrev=0
 
 ```bash
 readlink ~/.dev-os
-# Expected: /home/tafadzwa/projects/os/dev-os
+# Expected: your source checkout ($DEVOS_SRC)
 
 ls ~/.dev-os/profiles/ >/dev/null && echo "Symlink OK" || echo "BROKEN"
 ```
@@ -101,7 +108,7 @@ If the symlink is broken, run the symlink-repair runbook first before upgrading.
 ### Step 1: Fetch and pull latest
 
 ```bash
-cd /home/tafadzwa/projects/os/dev-os
+cd "$DEVOS_SRC"
 git fetch --tags
 git pull origin main
 ```
@@ -109,7 +116,7 @@ git pull origin main
 ### Step 2: Run the install script
 
 ```bash
-bash /home/tafadzwa/projects/os/dev-os/scripts/install.sh
+bash "$DEVOS_SRC/scripts/install.sh"
 ```
 
 The install script is idempotent. It will:
@@ -121,7 +128,7 @@ The install script is idempotent. It will:
 **Alternative — upgrade flag (pulls + installs):**
 
 ```bash
-bash /home/tafadzwa/projects/os/dev-os/scripts/install.sh --upgrade
+bash "$DEVOS_SRC/scripts/install.sh" --upgrade
 ```
 
 ### Step 3: Review install output
@@ -168,7 +175,7 @@ It must display categorized command output without errors.
 ```bash
 # Global symlink
 readlink ~/.dev-os
-# Expected: /home/tafadzwa/projects/os/dev-os
+# Expected: your source checkout ($DEVOS_SRC)
 
 # Command directory symlink
 readlink ~/.claude/commands/dev-os
@@ -206,7 +213,7 @@ Use when the upgrade introduced regressions that cannot be quickly fixed forward
 ### Step 1: Identify the previous good version
 
 ```bash
-cd /home/tafadzwa/projects/os/dev-os
+cd "$DEVOS_SRC"
 git tag --sort=-v:refname | head -5
 # Pick the tag you recorded in the pre-upgrade checklist
 # Example: v1.70.0
@@ -215,7 +222,7 @@ git tag --sort=-v:refname | head -5
 ### Step 2: Check out the previous tag
 
 ```bash
-cd /home/tafadzwa/projects/os/dev-os
+cd "$DEVOS_SRC"
 git checkout v1.70.0
 # Replace v1.70.0 with your target version
 ```
@@ -225,7 +232,7 @@ This puts the repo in detached HEAD state at the known-good version.
 ### Step 3: Re-run install
 
 ```bash
-bash /home/tafadzwa/projects/os/dev-os/scripts/install.sh
+bash "$DEVOS_SRC/scripts/install.sh"
 ```
 
 ### Step 4: Verify rollback
@@ -251,16 +258,16 @@ ls ~/.claude/commands/dev-os/dev-os/ 2>/dev/null && echo "NESTED" || echo "OK"
 When the issue is fixed upstream, return to main:
 
 ```bash
-cd /home/tafadzwa/projects/os/dev-os
+cd "$DEVOS_SRC"
 git checkout main
 git pull origin main
-bash /home/tafadzwa/projects/os/dev-os/scripts/install.sh
+bash "$DEVOS_SRC/scripts/install.sh"
 ```
 
 ### Step 6: Restore stashed changes (if applicable)
 
 ```bash
-cd /home/tafadzwa/projects/os/dev-os
+cd "$DEVOS_SRC"
 git stash list
 # Find your pre-upgrade stash
 git stash pop
@@ -281,7 +288,7 @@ git stash pop
 ```bash
 # Remove all command symlinks and re-create from scratch
 /usr/bin/rm -f ~/.claude/commands/dev-os/*.md
-bash /home/tafadzwa/projects/os/dev-os/scripts/install.sh
+bash "$DEVOS_SRC/scripts/install.sh"
 
 # Verify
 ls ~/.claude/commands/dev-os/*.md | wc -l
@@ -297,10 +304,10 @@ ls ~/.claude/commands/dev-os/*.md | wc -l
 
 ```bash
 # Run the parity check directly for detailed output
-bash /home/tafadzwa/projects/os/dev-os/scripts/lib/command-surface-parity.sh
+bash "$DEVOS_SRC/scripts/lib/command-surface-parity.sh"
 
 # Then re-run install to fix
-bash /home/tafadzwa/projects/os/dev-os/scripts/install.sh
+bash "$DEVOS_SRC/scripts/install.sh"
 ```
 
 In symlink mode (dev repo), parity warnings are non-fatal but should still be investigated.
@@ -318,7 +325,7 @@ In symlink mode (dev repo), parity warnings are non-fatal but should still be in
 cat ~/.claude/settings.json | python3 -m json.tool | grep -A 5 "hooks"
 
 # Re-run install — hook registration is part of the install flow
-bash /home/tafadzwa/projects/os/dev-os/scripts/install.sh
+bash "$DEVOS_SRC/scripts/install.sh"
 
 # If hooks are still missing, manually verify the hook scripts exist
 ls ~/.dev-os/.claude/hooks/
@@ -356,7 +363,7 @@ If both upgrade and rollback fail:
 3. If the repo itself is corrupted, re-clone:
 
 ```bash
-cd /home/tafadzwa/projects/os
+cd "$(dirname "$DEVOS_SRC")"
 git clone git@github.com:Traderfuz/dev-os.git dev-os-fresh
 # Compare with existing repo, then replace if needed
 ```

@@ -1,7 +1,7 @@
 profile: cli
 project: tmux-agent-sidebar
 version: 1.0.0
-devos_version: 1.142.30
+devos_version: 1.144.0
 runtime_state_root: null
 mode: advisor
 model_posture: sonnet

@@ -53,8 +53,9 @@ planning/consumer-sweep.md --output argv0` inside a scoped subshell. Capture
 stdout in a temporary file, preserve the producer exit status, parse it with
 `mapfile -d '' -t`, and remove it with an `EXIT` trap.
 
-Call `contract_surface_sweep_assert_argv` immediately before planning. Missing
-or mismatched sweep evidence blocks. Forward only the returned repeated
+Call `contract_surface_sweep_assert_argv` immediately before planning, and
+`contract_surface_sweep_assert_record` after the plan and on resume. Missing,
+invalid, or mismatched sweep evidence blocks. Forward only the returned repeated
 `--proposed-path` and `--symbol` pairs; reserve `--actual-path` and
 `--actual-symbol` for implementation reconciliation.
 The helper owns validation, bounded discovery, and the default 250-row cap. A

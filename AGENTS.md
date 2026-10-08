@@ -146,6 +146,9 @@ This rule applies to skills only. Declared executable tools keep their exact reg
 - For skill lookup, do not use `command -v`, `which`, or bare `--help`;
   resolve `docs/context/DEVOS_SKILLS_INDEX.json`. Tool routes come from the tool
   catalog and remain exact.
+- Host skill routes: in OMP, load a skill by reading `skill://<skill-name>`
+  (files inside it: `skill://<skill-name>/<path>`); never search the filesystem
+  for SKILL.md.
 - Use only flags and positional arguments declared by `SKILL.md` or the called
   helper's parser.
 - The active session owns the full workflow. Inter-skill dependencies continue
@@ -328,7 +331,7 @@ beehiiv | dev-os | ["beehiiv"]
 bundle-axi | dev-os | ["bundle-axi"]
 chrome-devtools-axi | dev-os | ["chrome-devtools-axi"]
 clerk-axi | dev-os | ["clerk-axi"]
-omitted=27
+omitted=28
 Full: devos-help tools; devos-help axi; devos-help search
 Index: docs/context/DEVOS_CAPABILITIES_INDEX.md
 <!-- /DevOS:section:tool-discovery -->

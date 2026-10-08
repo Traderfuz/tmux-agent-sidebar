@@ -32,7 +32,7 @@ Claude Code session. They are installed by `scripts/install.sh`. Examples: `lear
 | `.claude/hooks/systematic-debugging-gate.sh` | `PreToolUse` (Bash / Edit / Write) | Fix-intent keywords AND error-context keywords both present in tool input | Injects Phase 1 diagnostic checklist; exits 0 (non-blocking) |
 | `.claude/hooks/verification-gate.sh` | `Stop` | Completion-signal keywords detected in last assistant turn | Injects verification gate block; exits 0 (non-blocking) |
 
-Source files live in `profiles/general/hooks/` and are installed to `$project/.claude/hooks/` by
+Source files live in `profiles/default/hooks/` and are installed to `$project/.claude/hooks/` by
 `hook_repair_check_claude_hooks()` in `${DEVOS_DIR:-$HOME/.dev-os}/scripts/lib/hook-repair.sh`, called by `devos-init` Phase 6.
 Registration is written to `$project/.claude/settings.json` (project-relative) under
 `hooks.PreToolUse` and `hooks.Stop`.
@@ -386,14 +386,17 @@ all errors and exit 0 — a non-zero exit means the trap is missing or broken.
    If unexpected (`SYNTAX ERROR`): the hook file is corrupt — reinstall from the profile
    source.
 
-3. Compare the installed hook against the profile source.
+3. Compare the installed hook against the profile source in your DevOS checkout
+   (`DEVOS_SRC`, the target of the `~/.dev-os` symlink).
 
    ```bash
+   DEVOS_SRC="$(readlink -f ~/.dev-os)"
+
    diff .claude/hooks/systematic-debugging-gate.sh \
-        /home/tafadzwa/projects/os/dev-os/profiles/general/hooks/systematic-debugging-gate.sh
+        "$DEVOS_SRC/profiles/default/hooks/systematic-debugging-gate.sh"
 
    diff .claude/hooks/verification-gate.sh \
-        /home/tafadzwa/projects/os/dev-os/profiles/general/hooks/verification-gate.sh
+        "$DEVOS_SRC/profiles/default/hooks/verification-gate.sh"
    ```
 
    Expected output: no output (files are identical).
@@ -403,11 +406,11 @@ all errors and exit 0 — a non-zero exit means the trap is missing or broken.
 
    ```bash
    /usr/bin/cp \
-     /home/tafadzwa/projects/os/dev-os/profiles/general/hooks/systematic-debugging-gate.sh \
+     "$DEVOS_SRC/profiles/default/hooks/systematic-debugging-gate.sh" \
      .claude/hooks/systematic-debugging-gate.sh
 
    /usr/bin/cp \
-     /home/tafadzwa/projects/os/dev-os/profiles/general/hooks/verification-gate.sh \
+     "$DEVOS_SRC/profiles/default/hooks/verification-gate.sh" \
      .claude/hooks/verification-gate.sh
 
    chmod +x .claude/hooks/*.sh
@@ -423,7 +426,7 @@ all errors and exit 0 — a non-zero exit means the trap is missing or broken.
    Expected output: `exit: 0` for both (hooks are non-blocking by contract).
 
    If unexpected (still non-zero): escalate — the hook source in
-   `profiles/general/hooks/` itself may be broken and needs a code fix.
+   `profiles/default/hooks/` itself may be broken and needs a code fix.
 
 5. Validate with Section 4.
 
@@ -509,7 +512,7 @@ the last known-good state.
 1. Identify the last known-good hook version in git.
 
    ```bash
-   git log --oneline profiles/general/hooks/ | head -5
+   git log --oneline profiles/default/hooks/ | head -5
    ```
 
    Expected output: list of recent commits touching hook source files.
@@ -517,10 +520,10 @@ the last known-good state.
 2. Restore the hook source files from a known-good commit.
 
    ```bash
-   git show <COMMIT_SHA>:profiles/general/hooks/systematic-debugging-gate.sh \
+   git show <COMMIT_SHA>:profiles/default/hooks/systematic-debugging-gate.sh \
      > .claude/hooks/systematic-debugging-gate.sh
 
-   git show <COMMIT_SHA>:profiles/general/hooks/verification-gate.sh \
+   git show <COMMIT_SHA>:profiles/default/hooks/verification-gate.sh \
      > .claude/hooks/verification-gate.sh
 
    chmod +x .claude/hooks/*.sh
@@ -596,7 +599,7 @@ Escalate when:
   git post-commit hooks and broken Claude Code discipline hooks.
 - **Check T1 and T2 at the start of each new project setup.** The triage checklist takes
   under 30 seconds and catches missing registrations before they silently bypass the gates.
-- **Keep hook source files in `profiles/general/hooks/` authoritative.** Never edit the
+- **Keep hook source files in `profiles/default/hooks/` authoritative.** Never edit the
   installed copies in `.claude/hooks/` directly — edit the source and let `start`
   propagate the change.
 
@@ -617,7 +620,7 @@ C         hook fires → Permission denied              chmod +x .claude/hooks/*
           (ls -la shows -rw-r--r--)                   OR repair-hooks --claude-hooks
 
 D         hook exits non-zero                         bash -n hook.sh (syntax check)
-          (echo '{}' | bash hook.sh; echo $? → != 0)  diff vs profiles/general/hooks/
+          (echo '{}' | bash hook.sh; echo $? → != 0)  diff vs profiles/default/hooks/
                                                        cp + chmod if drifted
 
 VALIDATION (all 5 must pass — run from project root):
@@ -644,8 +647,8 @@ VALIDATION (all 5 must pass — run from project root):
 
 | Resource | Path |
 |----------|------|
-| systematic-debugging-gate hook source | `profiles/general/hooks/systematic-debugging-gate.sh` |
-| verification-gate hook source | `profiles/general/hooks/verification-gate.sh` |
+| systematic-debugging-gate hook source | `profiles/default/hooks/systematic-debugging-gate.sh` |
+| verification-gate hook source | `profiles/default/hooks/verification-gate.sh` |
 | Installed hook files (project-level) | `.claude/hooks/` |
 | Hook registration format | `~/.claude/settings.json` → `hooks.PreToolUse`, `hooks.Stop` |
 | Repair hooks command | `repair-hooks` |

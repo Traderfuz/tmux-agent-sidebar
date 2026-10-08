@@ -2,7 +2,7 @@ schema_version: 1
 id: design-discovery
 name: Design Discovery
 mirror_skill: design-discovery
-description: "Shape a new UI direction before implementation by mapping journeys, drafting visual concepts, generating a design system, and validating the design baseline. Mirrored by skill: ~/.dev-os/.claude/skills/design-discovery/SKILL.md"
+description: "Shape a new UI direction before implementation by approving the feature direction, selecting an aesthetic, mapping and auditing the planned journey, drafting concepts, generating tokens from the approved concept, and reviewing the design baseline. Mirrored by skill: ~/.dev-os/.claude/skills/design-discovery/SKILL.md"
 category: development
 work_intake_policy: runtime-aware
 skills:
@@ -10,13 +10,13 @@ skills:
   - worktrees
   - checkpoint
   - worktree-sessions
-  - ui-journey-audit
-  - frontend-design
+  - brainstorm
+  - ai-style-system
+  - ui-journey-design
+  - {name: ui-journey-audit, args: "--mode audit --planned"}
   - ai-design-draft
-  - ui-superdesign
   - ui-design-system
   - ui-review
-  - {name: commit, args: "--all"}
   - {name: commit, args: "--all"}
 confirm: false
 model_route: standard

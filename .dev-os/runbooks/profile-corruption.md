@@ -73,6 +73,13 @@ ls ~/.dev-os/profiles/
 
 Work through each path in order. Stop at the first path that explains the symptom.
 
+Commands below use `DEVOS_SRC` for your DevOS source checkout (the target of the
+`~/.dev-os` symlink). Set it once per shell:
+
+```bash
+DEVOS_SRC="$(readlink -f ~/.dev-os)"
+```
+
 ---
 
 ### Path A: Profile YAML malformed
@@ -85,7 +92,7 @@ Work through each path in order. Stop at the first path that explains the sympto
 python3 -c "
 import yaml, sys
 try:
-    yaml.safe_load(open('/home/tafadzwa/projects/os/dev-os/profiles/general/profile-config.yml'))
+    yaml.safe_load(open('$DEVOS_SRC/profiles/general/profile-config.yml'))
     print('OK')
 except yaml.YAMLError as e:
     print('PARSE ERROR:', e)
@@ -103,7 +110,7 @@ except yaml.YAMLError as e:
 #### Step A2 — Inspect the raw YAML
 
 ```bash
-cat /home/tafadzwa/projects/os/dev-os/profiles/general/profile-config.yml
+cat "$DEVOS_SRC/profiles/general/profile-config.yml"
 ```
 
 Look for:
@@ -118,7 +125,7 @@ Look for:
 python3 -c "
 import yaml, sys
 profile = '<profile>'
-path = f'/home/tafadzwa/projects/os/dev-os/profiles/{profile}/profile-config.yml'
+path = f'$DEVOS_SRC/profiles/{profile}/profile-config.yml'
 try:
     data = yaml.safe_load(open(path))
     print('inherits_from:', data.get('inherits_from', '(not set)'))
@@ -169,7 +176,7 @@ ls ~/.claude/commands/dev-os/*.md | wc -l
 
 ```bash
 bash -c "
-source /home/tafadzwa/projects/os/dev-os/scripts/lib/profile-resolver.sh
+source '$DEVOS_SRC/scripts/lib/profile-resolver.sh'
 get_inheritance_chain general
 "
 ```
@@ -179,7 +186,7 @@ get_inheritance_chain general
 For a child profile like `cli`:
 ```bash
 bash -c "
-source /home/tafadzwa/projects/os/dev-os/scripts/lib/profile-resolver.sh
+source '$DEVOS_SRC/scripts/lib/profile-resolver.sh'
 get_inheritance_chain cli
 "
 ```
@@ -194,7 +201,7 @@ If `get_inheritance_chain` hangs or returns an error mentioning a loop, a circul
 
 ```bash
 # Check for self-referencing inherits_from
-grep -r "inherits_from" /home/tafadzwa/projects/os/dev-os/profiles/*/profile-config.yml
+grep -r "inherits_from" "$DEVOS_SRC"/profiles/*/profile-config.yml
 ```
 
 Visually confirm no profile lists itself or a descendant as a parent.
@@ -266,7 +273,7 @@ python3 -c "import yaml; yaml.safe_load(open('profiles/<profile>/profile-config.
 
 ```bash
 bash -c "
-source /home/tafadzwa/projects/os/dev-os/scripts/lib/profile-resolver.sh
+source '$DEVOS_SRC/scripts/lib/profile-resolver.sh'
 get_inheritance_chain <profile>
 "
 ```
@@ -280,7 +287,7 @@ get_inheritance_chain <profile>
 #### Step 1 — Run the install script (idempotent)
 
 ```bash
-bash /home/tafadzwa/projects/os/dev-os/scripts/install.sh
+bash "$DEVOS_SRC/scripts/install.sh"
 ```
 
 **Expected output:** Install completes without errors. Profile directories are restored under `~/.dev-os/profiles/`.
@@ -288,7 +295,7 @@ bash /home/tafadzwa/projects/os/dev-os/scripts/install.sh
 #### Step 2 — Re-activate the project-local profile
 
 ```bash
-bash /home/tafadzwa/projects/os/dev-os/scripts/lib/profile-distribution.sh \
+bash "$DEVOS_SRC/scripts/lib/profile-distribution.sh" \
   activate <profile> $(pwd) ~/.dev-os
 ```
 
@@ -326,7 +333,7 @@ This command runs `activate_local_profile()` for the current project, updates `.
 /usr/bin/rm .dev-os/standards/.profile-sync
 
 # Step 2: Re-run profile distribution
-bash /home/tafadzwa/projects/os/dev-os/scripts/lib/profile-distribution.sh \
+bash "$DEVOS_SRC/scripts/lib/profile-distribution.sh" \
   activate <profile> $(pwd) ~/.dev-os
 
 # Step 3: Confirm .profile-sync was recreated
@@ -343,12 +350,12 @@ If `get_inheritance_chain` detected a loop:
 
 ```bash
 # 1. Find which profile-config.yml introduced the loop
-grep -r "inherits_from" /home/tafadzwa/projects/os/dev-os/profiles/*/profile-config.yml
+grep -r "inherits_from" "$DEVOS_SRC"/profiles/*/profile-config.yml
 
 # 2. Edit the offending profile-config.yml and correct the inherits_from value
 # 3. Re-run chain check
 bash -c "
-source /home/tafadzwa/projects/os/dev-os/scripts/lib/profile-resolver.sh
+source '$DEVOS_SRC/scripts/lib/profile-resolver.sh'
 get_inheritance_chain <profile>
 "
 ```
@@ -369,12 +376,12 @@ ls ~/.claude/commands/dev-os/*.md | wc -l
 # Expected: 100 or higher
 
 # 3. YAML parses cleanly
-python3 -c "import yaml; yaml.safe_load(open('/home/tafadzwa/projects/os/dev-os/profiles/general/profile-config.yml')); print('OK')"
+python3 -c "import yaml; yaml.safe_load(open('$DEVOS_SRC/profiles/general/profile-config.yml')); print('OK')"
 # Expected: OK
 
 # 4. Inheritance chain resolves
 bash -c "
-source /home/tafadzwa/projects/os/dev-os/scripts/lib/profile-resolver.sh
+source '$DEVOS_SRC/scripts/lib/profile-resolver.sh'
 get_inheritance_chain general
 "
 # Expected: general default
@@ -398,7 +405,7 @@ All six checks must pass. If any check fails, re-read the relevant diagnosis pat
 If recovery steps do not resolve the issue after two attempts:
 
 1. Run `triage` and capture the full output
-2. Run `git log --oneline -20` in `/home/tafadzwa/projects/os/dev-os` — note any recent commits to `scripts/lib/profile-resolver.sh` or `profile-distribution.sh`
+2. Run `git -C "$DEVOS_SRC" log --oneline -20` — note any recent commits to `scripts/lib/profile-resolver.sh` or `profile-distribution.sh`
 3. Check `product/runtime/learnings-log.jsonl` for recent session errors related to profile resolution
 4. If the corruption is reproducible, open an issue with: the `profile-config.yml` content, the `get_inheritance_chain` output, and the `.profile-sync` content
 
@@ -421,7 +428,7 @@ For `~/.dev-os` symlink issues that underlie the profile failure, switch to `sym
 | Failure | First command |
 |---------|--------------|
 | YAML parse error | `python3 -c "import yaml; yaml.safe_load(open('profiles/<profile>/profile-config.yml')); print('OK')"` |
-| Missing parent profile | `bash /home/tafadzwa/projects/os/dev-os/scripts/install.sh` |
+| Missing parent profile | `bash "$DEVOS_SRC/scripts/install.sh"` |
 | Stale cache / wrong artifacts | `sync` |
 | Command count too low | `ls ~/.claude/commands/dev-os/*.md \| wc -l` → then reinstall |
 | Circular inheritance detected | `grep -r "inherits_from" profiles/*/profile-config.yml` |

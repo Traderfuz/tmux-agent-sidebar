@@ -54,7 +54,7 @@ Every step below names the chain step it executes. Phase numbers match the opera
 
 8. **Phase 9–10 — Polish, harden, secure, test** (`ai-slop-polish` → `harden` → `devos-security-review` → `test`)
    - `harden` is the canonical test → typecheck → build → validate loop; `devos-security-review` runs whenever the slice touches auth, access, secrets, shell, or external inputs.
-   - For frontend/UI slices, run `ui-design-check` on the live URL or a representative screenshot during polish.
+   - For frontend/UI slices, run `ui-review --scope page` on the live URL or a representative screenshot during polish.
 
 9. **Phase 11 — Second verify gate** (`devos-verify`)
    - Drain test debt to zero (`test_debt_drain_sync`), then verify all tasks checked, tests pass, build clean.
@@ -64,7 +64,7 @@ Every step below names the chain step it executes. Phase numbers match the opera
     - Apply the client artifact review gate before any delivery claim on a durable client/operator-facing artifact.
 
 11. **Phase 12 — Local commits, review phase, reconciliation** (`commit --grouped --local-only` → `devos-code-review` → `sync-completed-work --unattended` → `commit --grouped --local-only`)
-    - The review phase R0–R5 runs here, once: R0 URL pre-collection (interactive prompts once; headless records a no-URL skip) → R1 `devos-code-review` → R2 `predeploy-check` → R3 `ui-design-check` / `ui-design-verify` (frontend + URL + approved-preview HTML) → R4 handoff fidelity (handoff state present) → R5 `e2e` (unless `--skip-e2e`). Full logic: `.claude/skills/deliver-product-slice/references/review-phase.md`.
+    - The review phase R0–R5 runs here, once: R0 URL pre-collection (interactive prompts once; headless records a no-URL skip) → R1 `devos-code-review` → R2 `predeploy-check` → R3 `ui-review --scope page` / `ui-design-qa --mode verify` (frontend + URL + approved-preview HTML) → R4 handoff fidelity (handoff state present) → R5 `e2e` (unless `--skip-e2e`). Full logic: `.claude/skills/deliver-product-slice/references/review-phase.md`.
     - Fix every blocking finding through its owning workflow, reconcile task evidence, then make the second grouped local commit.
 
 12. **Phase 13 — PR and merge** (`create-pr` → `sync-completed-work --unattended` → `merge-feature`)

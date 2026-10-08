@@ -1,40 +1,26 @@
 # Design Verify
 
-Reference-based implementation verification flow for `design-verify`. This workflow owns approved-artifact discovery, matched viewport capture, optional diff scoring, and report generation.
+This compatibility workflow delegates approved-reference verification to `ui-design-qa --mode verify`.
 
 ## When to Use
 
-- Verify a frontend implementation against an approved design artifact
-- Produce final pre-merge visual confirmation
-- Capture implementation parity evidence at matching viewports
+- Verify a frontend implementation against an approved design artifact.
+- Produce final pre-merge visual confirmation.
+- Do not use it when no approved design artifact exists; use `ui-review --scope page` or `ui-review --scope full`.
+- Avoid it for exploratory visual review.
 
-**Do NOT use when:** no approved artifact exists or only a manual heuristic page review is needed.
+## Delegation
 
-## Process
+1. Run `ui-design-qa --mode verify` with the approved artifact and the implementation.
+2. Let the replacement skill find the approved artifact, capture matched viewports, compare, and write the report.
+3. Follow its fallback handling when capture tooling is unavailable.
 
-### Step 1 — Resolve the approved artifact
-Search in the canonical priority order and warn when only a draft reference exists.
-
-### Step 2 — Resolve implementation target
-Confirm the live URL and stop if it is missing.
-
-### Step 3 — Capture matched viewports
-Capture approved and implementation screenshots at desktop, tablet, and mobile viewports.
-
-### Step 4 — Compare
-Use automatic diff scoring when available; otherwise write manual-review-required output.
-
-### Step 5 — Write report
-Write the design-verify report under `product/design-verify/<spec>/report.md`.
+The replacement skill owns approved-artifact discovery, matched viewport capture, comparison, fallback handling, and report generation.
 
 ## Display Format
 
 ```text
-Design Verify Complete
+Design Verify Delegated
 ─────────────────────────────────────────────
-Spec: <spec>
-Reference: <artifact>
-URL: <url>
-Result: <PASS | FAIL | MANUAL REVIEW REQUIRED>
-Report: product/design-verify/<spec>/report.md
+Replacement: ui-design-qa --mode verify
 ```

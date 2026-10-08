@@ -2,7 +2,7 @@
 
 | Field | Value |
 |-------|-------|
-| Service | Design verification pipeline — `ui-design-verify`, `ui-design-qa` workflow, `ui-design-handoff` workflow |
+| Service | Design verification pipeline — `ui-design-qa --mode verify` workflow, `ui-design-handoff` workflow |
 | Runbook type | Operational |
 | Severity | P3 (blocks frontend slice completion but not production) |
 | Owner team | DevOS operator |
@@ -13,10 +13,10 @@
 
 ## 1. Trigger & Detection
 
-**Trigger:** `ui-design-verify` fails, exits with an error, or produces a FAIL score below threshold.
+**Trigger:** `ui-design-qa --mode verify` fails, exits with an error, or produces a FAIL score below threshold.
 
 **Symptoms:**
-- "No approved design artifact found" error on `ui-design-verify` Step 1
+- "No approved design artifact found" error on `ui-design-qa --mode verify` Step 1
 - Playwright not found or not functional
 - ImageMagick not available (scoring falls back to MANUAL REVIEW REQUIRED)
 - FAIL score below threshold (default 95%) despite implementation looking correct
@@ -85,10 +85,10 @@ echo "Approved artifact written to: product/specs/${SPEC}/design/design-preview-
 **Recovery — path B (ui-design-handoff was never completed):**
 
 ```
-1. Run ui-design-review to evaluate the design
-2. If APPROVED or APPROVED WITH CONDITIONS → run the ui-design-handoff workflow
+1. Run `ui-review --scope full` to evaluate the design
+2. If APPROVED or APPROVED WITH CONDITIONS → run the `ui-design-handoff` workflow
 3. After handoff Step 5 checklist passes, rename design-preview.html → design-preview-approved.html
-4. Re-run ui-design-verify
+4. Re-run `ui-design-qa --mode verify`
 ```
 
 **Recovery — path C (Design OS handoff.json present but consume-design not run):**
@@ -97,7 +97,7 @@ echo "Approved artifact written to: product/specs/${SPEC}/design/design-preview-
 # Design OS export exists — consume it
 consume-design
 # This writes .dev-os/state/design-preview-approved.html automatically
-# Then re-run ui-design-verify
+# Then re-run ui-design-qa --mode verify
 ```
 
 ---
@@ -106,7 +106,7 @@ consume-design
 
 **Error message:**
 ```
-✗ Playwright is required for ui-design-verify.
+✗ Playwright is required for ui-design-qa --mode verify.
 ```
 
 **Cause:** Playwright is not installed in this project.
@@ -133,10 +133,10 @@ playwright-cli --version 2>/dev/null \
 ```
 
 **Alternative — skip pixel-diff and use manual screenshot comparison:**
-If Playwright cannot be installed, use `ui-design-check` instead:
+If Playwright cannot be installed, use `ui-review --scope page` instead:
 
 ```bash
-ui-design-check --screenshot <path-to-screenshot> --spec <spec-name>
+ui-review --scope page --screenshot <path-to-screenshot> --spec <spec-name>
 ```
 
 This provides a heuristic visual review without pixel-diff scoring.
@@ -145,7 +145,7 @@ This provides a heuristic visual review without pixel-diff scoring.
 
 ## 4. Failure Scenario C — ImageMagick not available
 
-**Symptom:** `ui-design-verify` runs but outputs `MANUAL REVIEW REQUIRED` with no match score.
+**Symptom:** `ui-design-qa --mode verify` runs but outputs `MANUAL REVIEW REQUIRED` with no match score.
 
 **Cause:** ImageMagick (`magick` or `convert` CLI) is not installed. Screenshots are captured but diff scoring is not possible.
 
@@ -177,7 +177,7 @@ If ImageMagick cannot be installed, compare the screenshots manually:
 
 ## 5. Failure Scenario D — FAIL score below threshold
 
-**Symptom:** `ui-design-verify` runs successfully but reports FAIL with overall score <95% (or custom threshold).
+**Symptom:** `ui-design-qa --mode verify` runs successfully but reports FAIL with overall score <95% (or custom threshold).
 
 **Cause:** Visual differences exist between the approved design and the implementation. May be regressions, intentional changes, or rendering environment differences.
 
@@ -191,7 +191,7 @@ If ImageMagick cannot be installed, compare the screenshots manually:
 
 ```bash
 # Raise the threshold slightly to account for rendering variance
-ui-design-verify --spec <spec> --url <url> --threshold 90
+ui-design-qa --mode verify --spec <spec> --url <url> --threshold 90
 ```
 
 **Recovery — genuine regressions found:**
@@ -199,7 +199,7 @@ ui-design-verify --spec <spec> --url <url> --threshold 90
 ```
 1. Identify which component/section has the regression (check diff screenshots)
 2. Fix the implementation to match the approved design
-3. Re-run ui-design-verify
+3. Re-run ui-design-qa --mode verify
 ```
 
 **Recovery — intentional improvements (not regressions):**
@@ -208,7 +208,7 @@ ui-design-verify --spec <spec> --url <url> --threshold 90
 1. Update the approved design artifact to reflect the intentional improvement:
    - Re-run ui-design-handoff workflow to regenerate design-preview.html
    - Rename to design-preview-approved.html at the canonical location
-2. Re-run ui-design-verify
+2. Re-run ui-design-qa --mode verify
 ```
 
 ---
@@ -227,8 +227,8 @@ ui-design-verify --spec <spec> --url <url> --threshold 90
 
 ## 7. Prevention
 
-- Always complete the `ui-design-handoff` workflow before running `ui-design-verify` (Step 5 checklist enforces this)
+- Always complete the `ui-design-handoff` workflow before running `ui-design-qa --mode verify` (Step 5 checklist enforces this)
 - Ensure `design-preview-approved.html` is written at the end of `ui-design-handoff` (Step 5 checklist item)
 - Install Playwright in any project that uses frontend-design or design-iteration (`bun add -D playwright`)
 - Install ImageMagick on the development machine (one-time setup)
-- Run `ui-design-check` first as a fast heuristic pass before the full `ui-design-verify` pixel-diff
+- Run `ui-review --scope page` first as a fast heuristic pass before the full `ui-design-qa --mode verify` pixel-diff

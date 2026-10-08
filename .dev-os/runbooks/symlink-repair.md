@@ -44,7 +44,7 @@ ls -la ~/.dev-os
 readlink ~/.dev-os
 
 # Expected output:
-# ~/.dev-os -> /home/tafadzwa/projects/os/dev-os
+# ~/.dev-os -> <your DevOS checkout>, e.g. ~/projects/os/dev-os
 
 # Check command symlinks
 ls ~/.claude/commands/dev-os/ | wc -l
@@ -58,6 +58,13 @@ ls ~/.claude/commands/dev-os/dev-os/ 2>/dev/null && echo "NESTED STRUCTURE DETEC
 
 ## 4. Recovery Steps
 
+The `~/.dev-os` symlink may be broken, so set `DEVOS_SRC` to your DevOS checkout by hand —
+the clone `~/.dev-os` should point to (`readlink ~/.dev-os` shows the old target):
+
+```bash
+DEVOS_SRC=~/projects/os/dev-os   # adjust to your checkout
+```
+
 ### Scenario A: Symlink points to wrong/missing path
 
 ```bash
@@ -65,7 +72,7 @@ ls ~/.claude/commands/dev-os/dev-os/ 2>/dev/null && echo "NESTED STRUCTURE DETEC
 rm ~/.dev-os
 
 # 2. Re-create symlink to the correct repo location
-ln -s /home/tafadzwa/projects/os/dev-os ~/.dev-os
+ln -s "$DEVOS_SRC" ~/.dev-os
 
 # 3. Verify
 ls ~/.dev-os/profiles/ && echo "Symlink OK"
@@ -76,7 +83,7 @@ readlink ~/.dev-os
 
 ```bash
 # Re-run the install script — it is idempotent
-bash /home/tafadzwa/projects/os/dev-os/scripts/install.sh
+bash "$DEVOS_SRC/scripts/install.sh"
 
 # Verify command count
 ls ~/.claude/commands/dev-os/*.md | wc -l
@@ -92,7 +99,7 @@ This happens when `start` is run inside the dev-os repo itself, creating a neste
 rm -rf ~/.claude/commands/dev-os/dev-os/
 
 # Re-run install to restore correct symlinks
-bash /home/tafadzwa/projects/os/dev-os/scripts/install.sh
+bash "$DEVOS_SRC/scripts/install.sh"
 
 # Verify — should NOT exist after fix
 ls ~/.claude/commands/dev-os/dev-os/ 2>/dev/null && echo "STILL NESTED — investigate" || echo "Fixed"
@@ -102,24 +109,23 @@ ls ~/.claude/commands/dev-os/dev-os/ 2>/dev/null && echo "STILL NESTED — inves
 
 ```bash
 # If the repo was deleted, restore from git
-cd /home/tafadzwa/projects/os
-git clone https://github.com/Traderfuz/dev-os dev-os
+mkdir -p "$(dirname "$DEVOS_SRC")"
+git clone https://github.com/Traderfuz/dev-os "$DEVOS_SRC"
 
 # Re-establish symlink
 rm -f ~/.dev-os
-ln -s /home/tafadzwa/projects/os/dev-os ~/.dev-os
+ln -s "$DEVOS_SRC" ~/.dev-os
 
 # Re-run install
-bash /home/tafadzwa/projects/os/dev-os/scripts/install.sh
+bash "$DEVOS_SRC/scripts/install.sh"
 ```
 
 ### Scenario E: Repo was relocated (safest migration path)
 
 ```bash
-# Use the migration script — handles symlink + all path updates
-bash /home/tafadzwa/projects/os/dev-os/scripts/relocate-dev-os.sh \
-  --old-path /home/tafadzwa/projects/b-labs/dev-os \
-  --new-path /home/tafadzwa/projects/os/dev-os
+# Moves the checkout at $DEVOS_SRC to <new-path>, re-points ~/.dev-os, and fixes
+# absolute references. Takes one positional argument: the new location.
+bash "$DEVOS_SRC/scripts/relocate-dev-os.sh" <new-path>
 ```
 
 ---
@@ -131,7 +137,7 @@ After any repair:
 ```bash
 # 1. Symlink resolves
 readlink -f ~/.dev-os
-# Expected: /home/tafadzwa/projects/os/dev-os
+# Expected: your DevOS checkout ($DEVOS_SRC)
 
 # 2. Commands visible
 ls ~/.claude/commands/dev-os/*.md | wc -l
